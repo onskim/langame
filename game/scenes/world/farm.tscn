@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/trough.png" id="9_trough"]
 [ext_resource type="Texture2D" path="res://assets/sprites/npc_anna.png" id="10_anna"]
 [ext_resource type="Texture2D" path="res://assets/sprites/pig.png" id="11_pig"]
+[ext_resource type="PackedScene" path="res://scenes/actors/npc.tscn" id="12_npc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/phone/phone.tscn" id="13_phone"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
@@ -26,17 +28,6 @@ script = ExtResource("1_farm")
 [node name="Fence" type="TileMapLayer" parent="."]
 
 [node name="Decor" type="Node2D" parent="."]
-
-[node name="Trough" type="Sprite2D" parent="Decor"]
-position = Vector2(600, 328)
-texture = ExtResource("9_trough")
-
-[node name="Anna" type="Sprite2D" parent="Decor"]
-position = Vector2(480, 200)
-texture = ExtResource("10_anna")
-hframes = 4
-vframes = 4
-offset = Vector2(0, -8)
 
 [node name="Cow" type="Node2D" parent="." groups=["world_object"]]
 position = Vector2(616, 368)
@@ -96,6 +87,90 @@ texture = ExtResource("7_bed")
 [node name="Shape" type="CollisionShape2D" parent="Bed/Area2D"]
 shape = SubResource("RectangleShape2D_big")
 
+[node name="Locations" type="Node2D" parent="."]
+
+[node name="farm_yard" type="Marker2D" parent="Locations"]
+position = Vector2(432, 336)
+
+[node name="field" type="Marker2D" parent="Locations"]
+position = Vector2(176, 464)
+
+[node name="farmhouse" type="Marker2D" parent="Locations"]
+position = Vector2(208, 168)
+
+[node name="village_square" type="Marker2D" parent="Locations"]
+position = Vector2(720, 320)
+
+[node name="bakery" type="Marker2D" parent="Locations"]
+position = Vector2(768, 176)
+
+[node name="shop" type="Marker2D" parent="Locations"]
+position = Vector2(640, 128)
+
+[node name="stream" type="Marker2D" parent="Locations"]
+position = Vector2(304, 560)
+
+[node name="Field" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(192, 464)
+script = ExtResource("5_worldobj")
+object_id = "obj_field"
+action = "water"
+requires_item = "wasser"
+consumes_item = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Field"]
+texture = ExtResource("8_hay")
+modulate = Color(0.55, 0.78, 0.45, 1)
+scale = Vector2(3, 3)
+
+[node name="Area2D" type="Area2D" parent="Field"]
+
+[node name="Shape" type="CollisionShape2D" parent="Field/Area2D"]
+shape = SubResource("RectangleShape2D_big")
+
+[node name="Trough" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(600, 328)
+script = ExtResource("5_worldobj")
+object_id = "obj_trough"
+is_pickup = true
+grants_item = "wasser"
+
+[node name="Sprite2D" type="Sprite2D" parent="Trough"]
+texture = ExtResource("9_trough")
+
+[node name="Area2D" type="Area2D" parent="Trough"]
+
+[node name="Shape" type="CollisionShape2D" parent="Trough/Area2D"]
+shape = SubResource("RectangleShape2D_small")
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Anna" parent="NPCs" instance=ExtResource("12_npc")]
+position = Vector2(432, 336)
+npc_id = "npc_anna"
+placeholder_tint = Color(1, 0.85, 0.85, 1)
+
+[node name="Karl" parent="NPCs" instance=ExtResource("12_npc")]
+position = Vector2(768, 176)
+npc_id = "npc_karl"
+placeholder_tint = Color(0.82, 0.88, 1, 1)
+
+[node name="Petra" parent="NPCs" instance=ExtResource("12_npc")]
+position = Vector2(640, 128)
+npc_id = "npc_petra"
+placeholder_tint = Color(1, 0.95, 0.72, 1)
+
+[node name="Weber" parent="NPCs" instance=ExtResource("12_npc")]
+position = Vector2(720, 320)
+npc_id = "npc_weber"
+placeholder_tint = Color(0.78, 1, 0.85, 1)
+
+[node name="Mila" parent="NPCs" instance=ExtResource("12_npc")]
+position = Vector2(432, 336)
+npc_id = "npc_mila"
+placeholder_tint = Color(0.92, 0.8, 1, 1)
+scale = Vector2(0.8, 0.8)
+
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(384, 336)
 
@@ -130,6 +205,16 @@ theme_override_colors/font_color = Color(0.29, 0.71, 0.48, 1)
 theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 1)
 theme_override_constants/outline_size = 5
 
+[node name="Task" type="Label" parent="HUD/Root"]
+offset_left = 10.0
+offset_top = 48.0
+offset_right = 400.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.95, 0.9, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+
 [node name="Hint" type="Label" parent="HUD/Root"]
 offset_left = 10.0
 offset_top = 336.0
@@ -138,3 +223,5 @@ offset_bottom = 354.0
 theme_override_colors/font_color = Color(0.85, 0.88, 0.95, 0.85)
 
 [node name="DialogueRunner" parent="." instance=ExtResource("3_dialogue")]
+
+[node name="Phone" parent="." instance=ExtResource("13_phone")]

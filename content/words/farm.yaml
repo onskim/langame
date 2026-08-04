@@ -123,3 +123,39 @@
   cefr: A1.1
   intro_quest: q01
   draft: true
+
+- word_id: wasser
+  concept: water
+  lemma: Wasser
+  article: das
+  pos: noun
+  english: water
+  family: farm
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [heu, gras]
+  draft: true
+
+- word_id: giessen
+  concept: to_water
+  lemma: gießen
+  pos: verb
+  forms: {ich: gieße, du: gießt, er_sie: gießt, imperativ: gieße}
+  english: to water
+  family: farm
+  cefr: A1.1
+  intro_quest: q03
+  draft: true
+
+- word_id: feld
+  concept: field
+  lemma: Feld
+  article: das
+  plural: Felder
+  pos: noun
+  english: field
+  family: farm
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [gras, heu]
+  draft: true

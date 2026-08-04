@@ -5,7 +5,7 @@ extends Node
 ##
 ## Dev tooling only. Never shipped.
 
-const OUT_DIR := "user://shots2"
+const OUT_DIR := "user://shots3"
 
 var _farm: Node2D
 
@@ -51,6 +51,22 @@ func _run() -> void:
 	cow.interact()
 	await _settle(10)
 	await _shoot("14-q02-complete")
+
+	# 5. Phone: Aufgaben app showing the active task.
+	runner.close()
+	await _settle(6)
+	_farm.get_node("Phone").open()
+	await _settle(8)
+	await _shoot("15-phone-aufgaben")
+	_farm.get_node("Phone").close()
+
+	# 6. Midday: the cast has walked to their scheduled posts.
+	DayCycle.hour = 15.0
+	DayCycle.time_changed.emit(15.0)
+	player.global_position = Vector2(660, 300)
+	for i in range(240):
+		await get_tree().physics_frame
+	await _shoot("16-npcs-on-schedule")
 
 	print("[harness] shots -> %s" % ProjectSettings.globalize_path(OUT_DIR))
 	print("[harness] rep=%d money=%d done=%s"

@@ -77,6 +77,60 @@
    ],
    "line_id": "anna_q02_hint_hay",
    "npc_id": "npc_anna"
+  },
+  "anna_q03_ask": {
+   "de": "Bitte gieß das Feld.",
+   "draft": true,
+   "en": "Please water the field.",
+   "focus_words": [
+    "feld",
+    "giessen"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_field",
+     "word": "feld"
+    }
+   ],
+   "line_id": "anna_q03_ask",
+   "npc_id": "npc_anna",
+   "recasts": {
+    "repeat_slow": "Bitte … gieß … das Feld.",
+    "wrong_action": "Nein — das FELD, bitte."
+   },
+   "response": {
+    "tier_1": {
+     "action": "water",
+     "target": "obj_field"
+    }
+   }
+  },
+  "anna_q03_done": {
+   "de": "Sehr gut! Danke.",
+   "draft": true,
+   "en": "Very good! Thanks.",
+   "focus_words": [
+    "chunk_danke"
+   ],
+   "gestures": [],
+   "line_id": "anna_q03_done",
+   "npc_id": "npc_anna"
+  },
+  "anna_q03_hint": {
+   "de": "Das Wasser ist hier.",
+   "draft": true,
+   "en": "The water is here.",
+   "focus_words": [
+    "wasser"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_trough",
+     "word": "wasser"
+    }
+   ],
+   "line_id": "anna_q03_hint",
+   "npc_id": "npc_anna"
   }
  },
  "npcs": {
@@ -106,6 +160,128 @@
    "shop": null,
    "voice_preset": "anna_warm_mid",
    "wants": "help_on_the_farm"
+  },
+  "npc_karl": {
+   "home": "bakery",
+   "name": "Karl",
+   "npc_id": "npc_karl",
+   "rep_gate": 0,
+   "role": "baker",
+   "schedule": [
+    {
+     "at": "bakery",
+     "from": "06:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "17:00"
+    },
+    {
+     "at": "bakery",
+     "from": "17:00",
+     "to": "24:00"
+    }
+   ],
+   "shop": {
+    "sells": [
+     "brot"
+    ]
+   },
+   "voice_preset": "karl_gruff_low",
+   "wants": "bread_delivered"
+  },
+  "npc_mila": {
+   "home": "village_square",
+   "name": "Mila",
+   "npc_id": "npc_mila",
+   "rep_gate": 0,
+   "role": "child",
+   "schedule": [
+    {
+     "at": "farm_yard",
+     "from": "06:00",
+     "to": "10:00"
+    },
+    {
+     "at": "stream",
+     "from": "10:00",
+     "to": "14:00"
+    },
+    {
+     "at": "village_square",
+     "from": "14:00",
+     "to": "19:00"
+    },
+    {
+     "at": "farm_yard",
+     "from": "19:00",
+     "to": "24:00"
+    }
+   ],
+   "shop": null,
+   "voice_preset": "mila_child_high",
+   "wants": "someone_to_play_with"
+  },
+  "npc_petra": {
+   "home": "shop",
+   "name": "Petra",
+   "npc_id": "npc_petra",
+   "rep_gate": 0,
+   "role": "shopkeeper",
+   "schedule": [
+    {
+     "at": "shop",
+     "from": "06:00",
+     "to": "09:00"
+    },
+    {
+     "at": "village_square",
+     "from": "09:00",
+     "to": "18:00"
+    },
+    {
+     "at": "shop",
+     "from": "18:00",
+     "to": "24:00"
+    }
+   ],
+   "shop": {
+    "sells": [
+     "heu",
+     "brot"
+    ]
+   },
+   "voice_preset": "petra_bright_mid",
+   "wants": "prices_learned"
+  },
+  "npc_weber": {
+   "home": "village_square",
+   "name": "Weber",
+   "npc_id": "npc_weber",
+   "rep_gate": 0,
+   "role": "mayor",
+   "schedule": [
+    {
+     "at": "village_square",
+     "from": "06:00",
+     "to": "11:00"
+    },
+    {
+     "at": "bakery",
+     "from": "11:00",
+     "to": "16:00"
+    },
+    {
+     "at": "village_square",
+     "from": "16:00",
+     "to": "24:00"
+    }
+   ],
+   "shop": null,
+   "voice_preset": "weber_formal_low",
+   "wants": "village_festival"
   }
  },
  "quests": {
@@ -169,6 +345,41 @@
     "heu",
     "fuettern"
    ]
+  },
+  "q03": {
+   "giver": "npc_anna",
+   "kind": "story",
+   "prereq": [
+    "q02"
+   ],
+   "quest_id": "q03",
+   "rep_gate": 0,
+   "rewards": {
+    "money": 6,
+    "rep": {
+     "npc_anna": 4
+    }
+   },
+   "steps": [
+    {
+     "hint_line": "anna_q03_hint",
+     "line": "anna_q03_ask",
+     "objective": {
+      "action": "water",
+      "count": 4,
+      "target": "obj_field"
+     },
+     "presentation": "scene"
+    },
+    {
+     "line": "anna_q03_done"
+    }
+   ],
+   "vocab_tags": [
+    "wasser",
+    "giessen",
+    "feld"
+   ]
   }
  },
  "schema": 1,
@@ -212,6 +423,23 @@
    "pos": "phrase",
    "word_id": "chunk_guten_morgen"
   },
+  "feld": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "field",
+   "distractors": [
+    "gras",
+    "heu"
+   ],
+   "draft": true,
+   "english": "field",
+   "family": "farm",
+   "intro_quest": "q03",
+   "lemma": "Feld",
+   "plural": "Felder",
+   "pos": "noun",
+   "word_id": "feld"
+  },
   "fuettern": {
    "cefr": "A1.1",
    "concept": "to_feed",
@@ -228,6 +456,23 @@
    "lemma": "füttern",
    "pos": "verb",
    "word_id": "fuettern"
+  },
+  "giessen": {
+   "cefr": "A1.1",
+   "concept": "to_water",
+   "draft": true,
+   "english": "to water",
+   "family": "farm",
+   "forms": {
+    "du": "gießt",
+    "er_sie": "gießt",
+    "ich": "gieße",
+    "imperativ": "gieße"
+   },
+   "intro_quest": "q03",
+   "lemma": "gießen",
+   "pos": "verb",
+   "word_id": "giessen"
   },
   "gras": {
    "article": "das",
@@ -332,6 +577,22 @@
    "plural": "Schweine",
    "pos": "noun",
    "word_id": "schwein"
+  },
+  "wasser": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "water",
+   "distractors": [
+    "heu",
+    "gras"
+   ],
+   "draft": true,
+   "english": "water",
+   "family": "farm",
+   "intro_quest": "q03",
+   "lemma": "Wasser",
+   "pos": "noun",
+   "word_id": "wasser"
   }
  }
 }

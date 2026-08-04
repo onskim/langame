@@ -14,6 +14,8 @@ signal interacted(who: WorldObject)
 @export var action: String = ""
 ## Item the player must be carrying for the action to count ("" = none).
 @export var requires_item: String = ""
+## False for repeatable actions like watering, where the item is not used up.
+@export var consumes_item: bool = true
 @export var is_pickup: bool = false
 ## Word this pickup grants when collected (content word_id).
 @export var grants_item: String = ""

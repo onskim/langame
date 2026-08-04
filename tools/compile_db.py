@@ -62,8 +62,12 @@ class CompileError(Exception):
     pass
 
 
-def load_yaml_dir(subdir, expect_list):
-    """Load every .yaml under content/<subdir>, recursively."""
+def load_yaml_dir(subdir, expect_list=None):
+    """Load every .yaml under content/<subdir>, recursively.
+
+    A file may hold either a single mapping or a list of them — one NPC per
+    file is tidy for Anna, unbearable for a 16-NPC cast.
+    """
     base = os.path.join(CONTENT, subdir)
     items = []
     if not os.path.isdir(base):
@@ -78,17 +82,17 @@ def load_yaml_dir(subdir, expect_list):
             if data is None:
                 continue
             rel = os.path.relpath(path, ROOT)
-            if expect_list:
-                if not isinstance(data, list):
-                    raise CompileError("%s: expected a list of entries" % rel)
+            if isinstance(data, list):
                 for entry in data:
+                    if not isinstance(entry, dict):
+                        raise CompileError("%s: list entries must be mappings" % rel)
                     entry["_source"] = rel
                 items.extend(data)
-            else:
-                if not isinstance(data, dict):
-                    raise CompileError("%s: expected a single mapping" % rel)
+            elif isinstance(data, dict):
                 data["_source"] = rel
                 items.append(data)
+            else:
+                raise CompileError("%s: expected a mapping or a list of mappings" % rel)
     return items
 
 
@@ -105,10 +109,10 @@ def require(entry, field, kind):
 
 
 def compile_all(quiet=False):
-    words = load_yaml_dir("words", expect_list=True)
-    npcs = load_yaml_dir("npcs", expect_list=False)
-    lines = load_yaml_dir("lines", expect_list=True)
-    quests = load_yaml_dir("quests", expect_list=False)
+    words = load_yaml_dir("words")
+    npcs = load_yaml_dir("npcs")
+    lines = load_yaml_dir("lines")
+    quests = load_yaml_dir("quests")
 
     _check_unique(words, "word_id", "word")
     _check_unique(npcs, "npc_id", "npc")

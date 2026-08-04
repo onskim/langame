@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/phone.gd" id="1_phone"]
+
+[node name="Phone" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_phone")
+
+[node name="Root" type="Control" parent="."]
+mouse_filter = 2
+
+[node name="Dim" type="ColorRect" parent="Root"]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.04, 0.05, 0.08, 0.55)
+
+[node name="Panel" type="Panel" parent="Root"]
+offset_left = 194.0
+offset_top = 28.0
+offset_right = 446.0
+offset_bottom = 332.0
+
+[node name="Title" type="Label" parent="Root/Panel"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 236.0
+offset_bottom = 36.0
+theme_override_font_sizes/font_size = 20
+
+[node name="List" type="VBoxContainer" parent="Root/Panel"]
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 236.0
+offset_bottom = 260.0
+theme_override_constants/separation = 8
+
+[node name="Empty" type="Label" parent="Root/Panel"]
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 236.0
+offset_bottom = 72.0
+text = "—"
+theme_override_colors/font_color = Color(0.7, 0.74, 0.82, 0.8)
+
+[node name="Hint" type="Label" parent="Root/Panel"]
+offset_left = 16.0
+offset_top = 268.0
+offset_right = 236.0
+offset_bottom = 288.0
+text = "TAB close"
+theme_override_colors/font_color = Color(0.7, 0.74, 0.82, 0.75)
+theme_override_font_sizes/font_size = 12

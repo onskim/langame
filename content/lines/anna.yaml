@@ -44,3 +44,34 @@
   focus_words: [kuh, chunk_danke]
   gestures: []
   draft: true
+
+- line_id: anna_q03_ask
+  npc_id: npc_anna
+  de: "Bitte gieß das Feld."
+  en: "Please water the field."
+  focus_words: [feld, giessen]
+  gestures:
+    - {word: feld, point_at: obj_field}
+  response:
+    tier_1: {action: water, target: obj_field}
+  recasts:
+    wrong_action: "Nein — das FELD, bitte."
+    repeat_slow: "Bitte … gieß … das Feld."
+  draft: true
+
+- line_id: anna_q03_hint
+  npc_id: npc_anna
+  de: "Das Wasser ist hier."
+  en: "The water is here."
+  focus_words: [wasser]
+  gestures:
+    - {word: wasser, point_at: obj_trough}
+  draft: true
+
+- line_id: anna_q03_done
+  npc_id: npc_anna
+  de: "Sehr gut! Danke."
+  en: "Very good! Thanks."
+  focus_words: [chunk_danke]
+  gestures: []
+  draft: true
