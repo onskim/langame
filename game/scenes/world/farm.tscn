@@ -21,7 +21,7 @@
 size = Vector2(32, 26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_farmhouse"]
-size = Vector2(118, 34)
+size = Vector2(172, 98)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_small"]
 size = Vector2(20, 20)
@@ -71,6 +71,12 @@ position = Vector2(640, 200)
 position = Vector2(640, 104)
 
 [node name="Arrivals" type="Node2D" parent="."]
+
+[node name="from_farmhouse" type="Marker2D" parent="Arrivals"]
+position = Vector2(169, 224)
+
+[node name="from_anna_kitchen" type="Marker2D" parent="Arrivals"]
+position = Vector2(560, 194)
 
 [node name="from_village" type="Marker2D" parent="Arrivals"]
 position = Vector2(856, 320)
@@ -172,7 +178,7 @@ position = Vector2(208, 152)
 texture = ExtResource("16_house")
 
 [node name="Body" type="StaticBody2D" parent="Buildings/Farmhouse"]
-position = Vector2(0, 20)
+position = Vector2(0, 0)
 
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Farmhouse/Body"]
 shape = SubResource("RectangleShape2D_farmhouse")
@@ -200,7 +206,7 @@ shape = SubResource("RectangleShape2D_big")
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="FarmhouseDoor" type="Area2D" parent="Doors" groups=["door"]]
-position = Vector2(180, 198)
+position = Vector2(169, 214)
 script = ExtResource("15_door")
 target_map = "interior_farmhouse"
 arrival_marker = "from_outside"

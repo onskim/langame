@@ -39,6 +39,61 @@ func _run() -> void:
 		var path: String = WorldRouter.scene_path(map_id)
 		_check("%s has a scene file" % map_id, ResourceLoader.exists(path), path)
 
+	# ---------- every exit lands where it says it lands ----------
+	# A door names the marker it wants to arrive on. If the destination has no
+	# marker by that name the spawn falls back to the map's DEFAULT — you leave
+	# your own front door and appear in the middle of the field. That is exactly
+	# what every interior exit did, and nothing failed, because the fallback is
+	# silent by design. So assert the link itself, both ends, for every map.
+	var arrivals_by_map: Dictionary = {}
+	var exits: Array[Dictionary] = []
+	for map_id in maps:
+		var scene_path: String = WorldRouter.scene_path(map_id)
+		if not ResourceLoader.exists(scene_path):
+			continue
+		var place: Node2D = (load(scene_path) as PackedScene).instantiate()
+		var marker_names: Array[String] = []
+		var arrivals := place.get_node_or_null("Arrivals")
+		if arrivals != null:
+			for marker in arrivals.get_children():
+				marker_names.append(str(marker.name))
+		arrivals_by_map[map_id] = marker_names
+		for group in ["Doors", "Gates"]:
+			var holder := place.get_node_or_null(group)
+			if holder == null:
+				continue
+			for exit_node in holder.get_children():
+				var target: String = str(exit_node.get("target_map"))
+				if target == "":
+					continue  # a door with nowhere to go is checked separately
+				exits.append({
+					"from": map_id, "name": str(exit_node.name), "to": target,
+					"marker": str(exit_node.get("arrival_marker")),
+				})
+		place.free()
+
+	_check("the world has exits to check", exits.size() >= 8, "%d" % exits.size())
+	for exit_info: Dictionary in exits:
+		var known: Variant = arrivals_by_map.get(exit_info["to"])
+		_check("%s/%s arrives on a real marker" % [exit_info["from"], exit_info["name"]],
+			known is Array and (known as Array).has(exit_info["marker"]),
+			"wants '%s' on %s, which has %s"
+				% [exit_info["marker"], exit_info["to"], known])
+
+	# Naming a real marker is not enough — the spawn code has to USE it. This is
+	# the check that would have caught the bug from the player's side.
+	WorldRouter.pending_arrival = "from_farmhouse"
+	var farm_place: Node2D = (load(WorldRouter.scene_path("farm")) as PackedScene).instantiate()
+	add_child(farm_place)
+	await get_tree().process_frame
+	var front_door: Vector2 = (farm_place.get_node("Doors/FarmhouseDoor") as Node2D).global_position
+	var landed: Vector2 = (farm_place.get_node("Player") as Node2D).global_position
+	_check("leaving the farmhouse puts you at its door, not the map centre",
+		landed.distance_to(front_door) < 32.0,
+		"landed %s, door %s" % [landed, front_door])
+	farm_place.queue_free()
+	await get_tree().process_frame
+
 	# ---------- persistent systems are autoloads, not per-scene copies ----------
 	for name in ["HUD", "Dialogue", "Phone", "Quests", "WorldRouter", "GameState"]:
 		_check("%s is a persistent autoload" % name,

@@ -99,6 +99,15 @@ position = Vector2(368, 432)
 [node name="from_farm" type="Marker2D" parent="Arrivals"]
 position = Vector2(48, 264)
 
+[node name="from_bakery" type="Marker2D" parent="Arrivals"]
+position = Vector2(320, 178)
+
+[node name="from_shop" type="Marker2D" parent="Arrivals"]
+position = Vector2(416, 178)
+
+[node name="from_mila" type="Marker2D" parent="Arrivals"]
+position = Vector2(240, 442)
+
 [node name="Gates" type="Node2D" parent="."]
 
 [node name="ToFarm" type="Area2D" parent="Gates"]

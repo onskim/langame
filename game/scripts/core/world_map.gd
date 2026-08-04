@@ -87,8 +87,16 @@ func _spawn_player() -> void:
 	var arrival := WorldRouter.consume_arrival()
 	if arrival != "" and has_node("Arrivals/" + arrival):
 		_player.global_position = get_node("Arrivals/" + arrival).global_position
-	else:
-		_player.global_position = GameState.consume_spawn_position(default_spawn)
+		return
+	# A door asking for a marker this map does not have used to fall through here
+	# in silence, dumping the player at the map's default spawn — you walked out
+	# of your own front door and landed in the middle of the field. Every
+	# interior exit had this bug. Falling back is still the right behaviour, but
+	# it must never again be quiet about it.
+	if arrival != "":
+		push_error("[map] %s has no arrival marker '%s' — spawning at default"
+			% [map_id, arrival])
+	_player.global_position = GameState.consume_spawn_position(default_spawn)
 
 
 func _register_world_objects() -> void:
