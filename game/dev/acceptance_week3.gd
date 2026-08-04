@@ -40,8 +40,13 @@ func _run() -> void:
 		_check("%s loaded from content" % npc.npc_id, not npc.data.is_empty(),
 			"name=%s" % npc.data.get("name", ""))
 
-	# All five are schedulable, whichever map they are on right now.
-	_check("all five NPCs exist in content", ContentDB.npcs.size() == 5,
+	# The ★ five must exist BY NAME. Asserting the cast size instead encoded a
+	# moment rather than an invariant, and went red the day the other eleven
+	# villagers arrived — which is not a regression, it is the plan.
+	for required in ["npc_anna", "npc_karl", "npc_petra", "npc_weber", "npc_mila"]:
+		_check("%s exists in content" % required,
+			not ContentDB.get_npc(required).is_empty())
+	_check("the cast has grown past the slice five", ContentDB.npcs.size() >= 5,
 		"count=%d" % ContentDB.npcs.size())
 
 	# Every NPC's scheduled location must actually change across the day, or the

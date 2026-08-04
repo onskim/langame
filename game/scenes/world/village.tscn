@@ -122,6 +122,33 @@ position = Vector2(560, 320)
 [node name="lane" type="Marker2D" parent="Locations"]
 position = Vector2(368, 432)
 
+[node name="praxis" type="Marker2D" parent="Locations"]
+position = Vector2(272, 320)
+
+[node name="schule" type="Marker2D" parent="Locations"]
+position = Vector2(240, 480)
+
+[node name="schuhmacherei" type="Marker2D" parent="Locations"]
+position = Vector2(448, 464)
+
+[node name="gasthaus" type="Marker2D" parent="Locations"]
+position = Vector2(608, 400)
+
+[node name="schmiede" type="Marker2D" parent="Locations"]
+position = Vector2(672, 176)
+
+[node name="hilde_cottage" type="Marker2D" parent="Locations"]
+position = Vector2(176, 496)
+
+[node name="hilde_garden" type="Marker2D" parent="Locations"]
+position = Vector2(128, 448)
+
+[node name="werkstatt" type="Marker2D" parent="Locations"]
+position = Vector2(128, 208)
+
+[node name="huegel" type="Marker2D" parent="Locations"]
+position = Vector2(640, 480)
+
 [node name="Arrivals" type="Node2D" parent="."]
 
 [node name="from_farm" type="Marker2D" parent="Arrivals"]

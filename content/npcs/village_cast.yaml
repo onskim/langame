@@ -1,0 +1,470 @@
+# The eleven remaining villagers — GDD Part 13 §§6–16, buildings per Part 14 §3.
+#
+# Profiles, schedules, vocabulary domains and memory callbacks, authored from
+# the compendium rather than invented. Each carries the fields the engine reads
+# (schedule, home, voice_preset) plus the two Part 13 fields that make them
+# authorable later: `domain` names the vocabulary family they own, and `chain`
+# lists their quest arc so nobody has to re-derive it from prose.
+#
+# WHAT IS DELIBERATELY NOT HERE, so it is not mistaken for finished:
+#   * their ~200 domain words and their 4–6 quests each. Part 8's vertical-slice
+#     gate says validate with the ★ five before ramping content, and authoring
+#     200 words against a schema Part 15 has only just changed is exactly the
+#     expensive mistake that gate exists to prevent.
+#   * their buildings. Part 14 §3 places each one, but the founder is
+#     redesigning the village, and a building placed now is a building moved
+#     twice.
+#
+# Every NPC below is reachable, scheduled, remembers you and can be spoken to.
+# All German is LLM-drafted, `draft: true` (Part 5 §4 gate).
+
+# --- 6. Oma Hilde — the second difficulty valve (Part 13 §6) -----------------
+# Slowest, kindest speech in the village: the recovery zone after a hard day.
+- npc_id: npc_hilde
+  name: Oma Hilde
+  role: grandmother
+  voice_preset: hilde_soft_slow
+  home: hilde_cottage
+  rep_gate: 0
+  wants: recipes_passed_on
+  domain: home_family
+  chain: [qh1_suppe, qh2_familienfoto, qh3_geheimkuchen, qh4_winteressen]
+  schedule:
+    - {from: "06:00", to: "11:00", at: hilde_garden}
+    - {from: "11:00", to: "17:00", at: hilde_cottage}
+    - {from: "17:00", to: "20:00", at: village_square}
+    - {from: "20:00", to: "24:00", at: hilde_cottage}
+  callbacks:
+    - cb_id: cb_hilde_usual
+      context: greeting
+      fact_kind: usual_order
+      draft: true
+      de: "Wieder Suppe?"
+      en: "Soup again?"
+      focus_words: []
+    - cb_id: cb_hilde_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Hör mal an. So schön sagst du das."
+      en: "Listen to you. You say it so nicely."
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_hilde_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Komm, setz dich. Hast du Hunger?"
+      en: "Come, sit down. Are you hungry?"
+      focus_words: []
+
+# --- 7. Jonas Angler — the timepass vertical (Part 13 §7) --------------------
+# Sparse speech, long silences, deliberately low-demand. His memory shows up as
+# a nod that references rather than a speech.
+- npc_id: npc_jonas
+  name: Jonas
+  role: fisherman
+  voice_preset: jonas_relaxed_tenor
+  home: fishing_hut
+  rep_gate: 0
+  wants: the_legendary_carp
+  domain: nature_water
+  chain: [qj1_die_angel, qj2_drei_fische, qj3_der_grosse_karpfen, qj4_fisch_fuer_das_fest]
+  schedule:
+    - {from: "06:00", to: "14:00", at: lakeshore}
+    - {from: "14:00", to: "18:00", at: fishing_hut}
+    - {from: "18:00", to: "22:00", at: gasthaus}
+    - {from: "22:00", to: "24:00", at: fishing_hut}
+  callbacks:
+    - cb_id: cb_jonas_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Wieder da."
+      en: "Back again."
+      focus_words: []
+    - cb_id: cb_jonas_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Guter Tag damals. Ruhig."
+      en: "Good day, that one. Quiet."
+      focus_words: []
+    - cb_id: cb_jonas_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Gut gesagt."
+      en: "Well said."
+      focus_words: ["{word}"]
+      reward: {affection: 1, once_per_ref: true}
+
+# --- 8. Dr. Ina Sommer — body and health (Part 13 §8) -----------------------
+- npc_id: npc_sommer
+  name: Dr. Sommer
+  role: doctor
+  voice_preset: sommer_calm_clear
+  home: praxis
+  rep_gate: 0
+  wants: a_healthy_village
+  domain: body_health
+  chain: [qd1_die_praxis, qd2_kraeutertee, qd3_du_bist_krank, qd4_wintergrippe]
+  schedule:
+    - {from: "06:00", to: "08:00", at: praxis}
+    - {from: "08:00", to: "13:00", at: praxis}
+    - {from: "13:00", to: "15:00", at: village_square}
+    - {from: "15:00", to: "19:00", at: praxis}
+    - {from: "19:00", to: "22:00", at: gasthaus}
+    - {from: "22:00", to: "24:00", at: praxis}
+  callbacks:
+    - cb_id: cb_sommer_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Geht es dir besser?"
+      en: "Are you feeling better?"
+      focus_words: []
+    - cb_id: cb_sommer_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Sehr deutlich. Sehr gut."
+      en: "Very clear. Very good."
+      focus_words: ["{word}"]
+      reward: {affection: 1, once_per_ref: true}
+    - cb_id: cb_sommer_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Guten Tag. Alles in Ordnung?"
+      en: "Good day. Everything all right?"
+      focus_words: []
+
+# --- 9. Frau Lehmann — school, reading, colours (Part 13 §9) -----------------
+- npc_id: npc_lehmann
+  name: Frau Lehmann
+  role: teacher
+  voice_preset: lehmann_precise_mid
+  home: schule
+  rep_gate: 0
+  wants: the_player_reading
+  domain: school_colors
+  chain: [ql1_die_schule, ql2_buchstaben, ql3_die_farben, ql4_das_erste_buch]
+  schedule:
+    - {from: "06:00", to: "07:00", at: schule}
+    - {from: "07:00", to: "13:00", at: schule}
+    - {from: "13:00", to: "16:00", at: village_square}
+    - {from: "16:00", to: "19:00", at: schule}
+    - {from: "19:00", to: "24:00", at: schule}
+  callbacks:
+    - cb_id: cb_lehmann_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Noch einmal, bitte. Langsam."
+      en: "Once more, please. Slowly."
+      focus_words: ["{word}"]
+    - cb_id: cb_lehmann_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Richtig! Genau richtig."
+      en: "Correct! Exactly right."
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_lehmann_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Guten Tag. Kannst du schon lesen?"
+      en: "Good day. Can you read yet?"
+      focus_words: []
+
+# --- 10. Bruno Hammer — tools, materials, TPR imperatives (Part 13 §10) ------
+# Booming imperatives. His forge is open-fronted, so his yard is always
+# reachable — no door, no lock, no gate (Part 14 §3).
+- npc_id: npc_bruno
+  name: Bruno
+  role: blacksmith
+  voice_preset: bruno_booming_bass
+  home: schmiede
+  rep_gate: 0
+  wants: better_tools_in_the_valley
+  domain: tools_materials
+  chain: [qb1_die_hacke, qb2_holz_und_stein, qb3_die_bestellung, qb4_der_amboss]
+  schedule:
+    - {from: "06:00", to: "12:00", at: schmiede}
+    - {from: "12:00", to: "14:00", at: village_square}
+    - {from: "14:00", to: "20:00", at: schmiede}
+    - {from: "20:00", to: "23:00", at: gasthaus}
+    - {from: "23:00", to: "24:00", at: schmiede}
+  callbacks:
+    - cb_id: cb_bruno_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Wie sagt man? Laut!"
+      en: "How do you say it? Loud!"
+      focus_words: ["{word}"]
+    - cb_id: cb_bruno_purchase
+      context: greeting
+      fact_kind: purchase_pattern
+      draft: true
+      de: "Du brauchst wieder Holz, ja?"
+      en: "You need wood again, yes?"
+      focus_words: []
+    - cb_id: cb_bruno_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "HA! Das war gut!"
+      en: "HA! That was good!"
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+
+# --- 11. Elke Tasse — the café, the social hub, the gossip source ------------
+# Part 14 §3 row 11: her café is enterable from day one. The building already
+# exists in the village; she is the person who was missing from it.
+- npc_id: npc_elke
+  name: Elke
+  role: cafe_owner
+  voice_preset: elke_chatty_bright
+  home: cafe
+  rep_gate: 0
+  wants: her_cafe_as_the_village_living_room
+  domain: cafe_ordering
+  chain: [qe1_der_erste_kaffee, qe2_stammgast, qe3_kuchen_krise, qe4_der_klatsch]
+  schedule:
+    - {from: "06:00", to: "08:00", at: cafe}
+    - {from: "08:00", to: "19:00", at: cafe}
+    - {from: "19:00", to: "22:00", at: village_square}
+    - {from: "22:00", to: "24:00", at: cafe}
+  callbacks:
+    # §3.6.3: "Das Übliche?" — routine becomes chunk automation becomes a
+    # tangible convenience. The canonical usual_order.
+    - cb_id: cb_elke_usual
+      context: greeting
+      fact_kind: usual_order
+      draft: true
+      de: "Das Übliche?"
+      en: "The usual?"
+      focus_words: []
+    - cb_id: cb_elke_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Das hast du schön gesagt! Setz dich."
+      en: "You said that beautifully! Sit down."
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_elke_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Hallo! Kaffee oder Tee?"
+      en: "Hello! Coffee or tea?"
+      focus_words: []
+
+# --- 12. Stefan Krug — the inn, evenings (Part 13 §12) -----------------------
+- npc_id: npc_stefan
+  name: Stefan
+  role: innkeeper
+  voice_preset: stefan_warm_baritone
+  home: gasthaus
+  rep_gate: 0
+  wants: a_full_house_on_friday
+  domain: inn_evening
+  chain: [qs1_das_zimmer, qs2_die_speisekarte, qs3_der_gast, qs4_musikabend]
+  schedule:
+    - {from: "06:00", to: "10:00", at: gasthaus}
+    - {from: "10:00", to: "14:00", at: gasthaus}
+    - {from: "14:00", to: "16:00", at: village_square}
+    - {from: "16:00", to: "24:00", at: gasthaus}
+  callbacks:
+    - cb_id: cb_stefan_usual
+      context: greeting
+      fact_kind: usual_order
+      draft: true
+      de: "Wie immer?"
+      en: "As always?"
+      focus_words: []
+    - cb_id: cb_stefan_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Erinnerst du dich an den Gast?"
+      en: "Do you remember the guest?"
+      focus_words: []
+    - cb_id: cb_stefan_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Willkommen! Setz dich, setz dich."
+      en: "Welcome! Sit down, sit down."
+      focus_words: []
+
+# --- 13. Herr Voss — clothing and sizes (Part 13 §13) ------------------------
+# §3.8: he remembers your size so YOU have to confirm it — memory turned into a
+# production prompt rather than a convenience.
+- npc_id: npc_voss
+  name: Herr Voss
+  role: cobbler
+  voice_preset: voss_dry_precise
+  home: schuhmacherei
+  rep_gate: 0
+  wants: everyone_properly_shod
+  domain: clothing
+  chain: [qv1_die_schuhe, qv2_die_groesse, qv3_winterstiefel, qv4_die_reparatur]
+  schedule:
+    - {from: "06:00", to: "08:00", at: schuhmacherei}
+    - {from: "08:00", to: "13:00", at: schuhmacherei}
+    - {from: "13:00", to: "15:00", at: village_square}
+    - {from: "15:00", to: "19:00", at: schuhmacherei}
+    - {from: "19:00", to: "22:00", at: gasthaus}
+    - {from: "22:00", to: "24:00", at: schuhmacherei}
+  callbacks:
+    - cb_id: cb_voss_purchase
+      context: greeting
+      fact_kind: purchase_pattern
+      draft: true
+      de: "Größe 42, richtig?"
+      en: "Size 42, right?"
+      focus_words: [num_4, num_2]
+    - cb_id: cb_voss_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Korrekt. Sehr korrekt."
+      en: "Correct. Very correct."
+      focus_words: ["{word}"]
+      reward: {affection: 1, once_per_ref: true}
+    - cb_id: cb_voss_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Guten Tag. Zeig mir deine Schuhe."
+      en: "Good day. Show me your shoes."
+      focus_words: []
+
+# --- 14. Tom Brett — wood and building (Part 13 §14) ------------------------
+- npc_id: npc_tom
+  name: Tom
+  role: carpenter
+  voice_preset: tom_easy_young
+  home: werkstatt
+  rep_gate: 0
+  wants: something_worth_building
+  domain: wood_building
+  chain: [qt1_das_holz, qt2_der_zaun, qt3_das_dach, qt4_der_anbau]
+  schedule:
+    - {from: "06:00", to: "07:00", at: werkstatt}
+    - {from: "07:00", to: "13:00", at: werkstatt}
+    - {from: "13:00", to: "16:00", at: village_square}
+    - {from: "16:00", to: "20:00", at: werkstatt}
+    - {from: "20:00", to: "24:00", at: gasthaus}
+  callbacks:
+    - cb_id: cb_tom_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Das Dach hält noch, oder?"
+      en: "The roof's still holding, isn't it?"
+      focus_words: []
+    - cb_id: cb_tom_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Sauber gesagt!"
+      en: "Cleanly said!"
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_tom_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Hey! Brauchst du Holz?"
+      en: "Hey! Do you need wood?"
+      focus_words: []
+
+# --- 15. Lena Wolle — weather and the hills (Part 13 §15) -------------------
+# §3.8: she remembers whether YOUR forecast was right, which is what turns
+# speaking the weather into a streak worth keeping.
+- npc_id: npc_lena
+  name: Lena
+  role: shepherd
+  voice_preset: lena_bright_open
+  home: huegel
+  rep_gate: 0
+  wants: the_flock_through_winter
+  domain: weather
+  chain: [qn1_die_schafe, qn2_der_hirtenweg, qn3_der_wetterbericht, qn4_die_wolle]
+  schedule:
+    - {from: "06:00", to: "11:00", at: huegel}
+    - {from: "11:00", to: "13:00", at: village_square}
+    - {from: "13:00", to: "17:00", at: huegel}
+    - {from: "17:00", to: "21:00", at: gasthaus}
+    - {from: "21:00", to: "24:00", at: huegel}
+  callbacks:
+    - cb_id: cb_lena_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Dein Wetterbericht war richtig!"
+      en: "Your weather report was right!"
+      focus_words: [sonne, regen]
+    - cb_id: cb_lena_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Ja! Genau so!"
+      en: "Yes! Exactly like that!"
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_lena_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Hallo! Schönes Wetter heute, oder?"
+      en: "Hello! Nice weather today, isn't it?"
+      focus_words: []
+
+# --- 16. Max Brief — the postman, met on his route (Part 13 §16) ------------
+# Part 14 §3: he has a room at the inn and is never "at home". He is met while
+# moving, which makes his callbacks the fastest in the game.
+- npc_id: npc_max
+  name: Max
+  role: postman
+  voice_preset: max_quick_light
+  home: gasthaus
+  rep_gate: 0
+  wants: every_letter_delivered
+  domain: post_names
+  chain: [qm1_der_brief, qm2_die_adresse, qm3_das_paket, qm4_die_postkarte]
+  schedule:
+    - {from: "06:00", to: "10:00", at: village_square}
+    - {from: "10:00", to: "13:00", at: lane}
+    - {from: "13:00", to: "17:00", at: village_square}
+    - {from: "17:00", to: "24:00", at: gasthaus}
+  callbacks:
+    - cb_id: cb_max_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Schnell — wie heißt das?"
+      en: "Quick — what's that called?"
+      focus_words: ["{word}"]
+    - cb_id: cb_max_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Sitzt! Muss weiter!"
+      en: "Nailed it! Must run!"
+      focus_words: ["{word}"]
+      reward: {affection: 1, once_per_ref: true}
+    - cb_id: cb_max_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Post! Bist du neu hier?"
+      en: "Post! Are you new here?"
+      focus_words: []

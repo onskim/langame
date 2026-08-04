@@ -490,12 +490,22 @@
     "farm_yard": "farm",
     "farmhouse": "farm",
     "field": "farm",
+    "fishing_hut": "lake",
+    "gasthaus": "village",
+    "hilde_cottage": "village",
+    "hilde_garden": "village",
+    "huegel": "village",
     "lakeshore": "lake",
     "lane": "village",
+    "praxis": "village",
     "rathaus": "village",
+    "schmiede": "village",
+    "schuhmacherei": "village",
+    "schule": "village",
     "shop": "village",
     "stream": "farm",
-    "village_square": "village"
+    "village_square": "village",
+    "werkstatt": "village"
    },
    "maps": {
     "farm": {
@@ -1919,6 +1929,305 @@
    "voice_preset": "anna_warm_mid",
    "wants": "help_on_the_farm"
   },
+  "npc_bruno": {
+   "callbacks": [
+    {
+     "cb_id": "cb_bruno_retest",
+     "context": "greeting",
+     "de": "Wie sagt man? Laut!",
+     "draft": true,
+     "en": "How do you say it? Loud!",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_bruno_purchase",
+     "context": "greeting",
+     "de": "Du brauchst wieder Holz, ja?",
+     "draft": true,
+     "en": "You need wood again, yes?",
+     "fact_kind": "purchase_pattern",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_bruno_triumph",
+     "context": "greeting",
+     "de": "HA! Das war gut!",
+     "draft": true,
+     "en": "HA! That was good!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    }
+   ],
+   "chain": [
+    "qb1_die_hacke",
+    "qb2_holz_und_stein",
+    "qb3_die_bestellung",
+    "qb4_der_amboss"
+   ],
+   "domain": "tools_materials",
+   "home": "schmiede",
+   "name": "Bruno",
+   "npc_id": "npc_bruno",
+   "rep_gate": 0,
+   "role": "blacksmith",
+   "schedule": [
+    {
+     "at": "schmiede",
+     "from": "06:00",
+     "to": "12:00"
+    },
+    {
+     "at": "village_square",
+     "from": "12:00",
+     "to": "14:00"
+    },
+    {
+     "at": "schmiede",
+     "from": "14:00",
+     "to": "20:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "20:00",
+     "to": "23:00"
+    },
+    {
+     "at": "schmiede",
+     "from": "23:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "bruno_booming_bass",
+   "wants": "better_tools_in_the_valley"
+  },
+  "npc_elke": {
+   "callbacks": [
+    {
+     "cb_id": "cb_elke_usual",
+     "context": "greeting",
+     "de": "Das Übliche?",
+     "draft": true,
+     "en": "The usual?",
+     "fact_kind": "usual_order",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_elke_triumph",
+     "context": "greeting",
+     "de": "Das hast du schön gesagt! Setz dich.",
+     "draft": true,
+     "en": "You said that beautifully! Sit down.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_elke_first_meeting",
+     "context": "greeting",
+     "de": "Hallo! Kaffee oder Tee?",
+     "draft": true,
+     "en": "Hello! Coffee or tea?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qe1_der_erste_kaffee",
+    "qe2_stammgast",
+    "qe3_kuchen_krise",
+    "qe4_der_klatsch"
+   ],
+   "domain": "cafe_ordering",
+   "home": "cafe",
+   "name": "Elke",
+   "npc_id": "npc_elke",
+   "rep_gate": 0,
+   "role": "cafe_owner",
+   "schedule": [
+    {
+     "at": "cafe",
+     "from": "06:00",
+     "to": "08:00"
+    },
+    {
+     "at": "cafe",
+     "from": "08:00",
+     "to": "19:00"
+    },
+    {
+     "at": "village_square",
+     "from": "19:00",
+     "to": "22:00"
+    },
+    {
+     "at": "cafe",
+     "from": "22:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "elke_chatty_bright",
+   "wants": "her_cafe_as_the_village_living_room"
+  },
+  "npc_hilde": {
+   "callbacks": [
+    {
+     "cb_id": "cb_hilde_usual",
+     "context": "greeting",
+     "de": "Wieder Suppe?",
+     "draft": true,
+     "en": "Soup again?",
+     "fact_kind": "usual_order",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_hilde_triumph",
+     "context": "greeting",
+     "de": "Hör mal an. So schön sagst du das.",
+     "draft": true,
+     "en": "Listen to you. You say it so nicely.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_hilde_first_meeting",
+     "context": "greeting",
+     "de": "Komm, setz dich. Hast du Hunger?",
+     "draft": true,
+     "en": "Come, sit down. Are you hungry?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qh1_suppe",
+    "qh2_familienfoto",
+    "qh3_geheimkuchen",
+    "qh4_winteressen"
+   ],
+   "domain": "home_family",
+   "home": "hilde_cottage",
+   "name": "Oma Hilde",
+   "npc_id": "npc_hilde",
+   "rep_gate": 0,
+   "role": "grandmother",
+   "schedule": [
+    {
+     "at": "hilde_garden",
+     "from": "06:00",
+     "to": "11:00"
+    },
+    {
+     "at": "hilde_cottage",
+     "from": "11:00",
+     "to": "17:00"
+    },
+    {
+     "at": "village_square",
+     "from": "17:00",
+     "to": "20:00"
+    },
+    {
+     "at": "hilde_cottage",
+     "from": "20:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "hilde_soft_slow",
+   "wants": "recipes_passed_on"
+  },
+  "npc_jonas": {
+   "callbacks": [
+    {
+     "cb_id": "cb_jonas_first_meeting",
+     "context": "greeting",
+     "de": "Wieder da.",
+     "draft": true,
+     "en": "Back again.",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_jonas_quest_memory",
+     "context": "greeting",
+     "de": "Guter Tag damals. Ruhig.",
+     "draft": true,
+     "en": "Good day, that one. Quiet.",
+     "fact_kind": "quest_memory",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_jonas_triumph",
+     "context": "greeting",
+     "de": "Gut gesagt.",
+     "draft": true,
+     "en": "Well said.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 1,
+      "once_per_ref": true
+     }
+    }
+   ],
+   "chain": [
+    "qj1_die_angel",
+    "qj2_drei_fische",
+    "qj3_der_grosse_karpfen",
+    "qj4_fisch_fuer_das_fest"
+   ],
+   "domain": "nature_water",
+   "home": "fishing_hut",
+   "name": "Jonas",
+   "npc_id": "npc_jonas",
+   "rep_gate": 0,
+   "role": "fisherman",
+   "schedule": [
+    {
+     "at": "lakeshore",
+     "from": "06:00",
+     "to": "14:00"
+    },
+    {
+     "at": "fishing_hut",
+     "from": "14:00",
+     "to": "18:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "18:00",
+     "to": "22:00"
+    },
+    {
+     "at": "fishing_hut",
+     "from": "22:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "jonas_relaxed_tenor",
+   "wants": "the_legendary_carp"
+  },
   "npc_karl": {
    "callbacks": [
     {
@@ -2011,6 +2320,242 @@
    },
    "voice_preset": "karl_gruff_low",
    "wants": "bread_delivered"
+  },
+  "npc_lehmann": {
+   "callbacks": [
+    {
+     "cb_id": "cb_lehmann_retest",
+     "context": "greeting",
+     "de": "Noch einmal, bitte. Langsam.",
+     "draft": true,
+     "en": "Once more, please. Slowly.",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_lehmann_triumph",
+     "context": "greeting",
+     "de": "Richtig! Genau richtig.",
+     "draft": true,
+     "en": "Correct! Exactly right.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_lehmann_first_meeting",
+     "context": "greeting",
+     "de": "Guten Tag. Kannst du schon lesen?",
+     "draft": true,
+     "en": "Good day. Can you read yet?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "ql1_die_schule",
+    "ql2_buchstaben",
+    "ql3_die_farben",
+    "ql4_das_erste_buch"
+   ],
+   "domain": "school_colors",
+   "home": "schule",
+   "name": "Frau Lehmann",
+   "npc_id": "npc_lehmann",
+   "rep_gate": 0,
+   "role": "teacher",
+   "schedule": [
+    {
+     "at": "schule",
+     "from": "06:00",
+     "to": "07:00"
+    },
+    {
+     "at": "schule",
+     "from": "07:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "16:00"
+    },
+    {
+     "at": "schule",
+     "from": "16:00",
+     "to": "19:00"
+    },
+    {
+     "at": "schule",
+     "from": "19:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "lehmann_precise_mid",
+   "wants": "the_player_reading"
+  },
+  "npc_lena": {
+   "callbacks": [
+    {
+     "cb_id": "cb_lena_quest_memory",
+     "context": "greeting",
+     "de": "Dein Wetterbericht war richtig!",
+     "draft": true,
+     "en": "Your weather report was right!",
+     "fact_kind": "quest_memory",
+     "focus_words": [
+      "sonne",
+      "regen"
+     ]
+    },
+    {
+     "cb_id": "cb_lena_triumph",
+     "context": "greeting",
+     "de": "Ja! Genau so!",
+     "draft": true,
+     "en": "Yes! Exactly like that!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_lena_first_meeting",
+     "context": "greeting",
+     "de": "Hallo! Schönes Wetter heute, oder?",
+     "draft": true,
+     "en": "Hello! Nice weather today, isn't it?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qn1_die_schafe",
+    "qn2_der_hirtenweg",
+    "qn3_der_wetterbericht",
+    "qn4_die_wolle"
+   ],
+   "domain": "weather",
+   "home": "huegel",
+   "name": "Lena",
+   "npc_id": "npc_lena",
+   "rep_gate": 0,
+   "role": "shepherd",
+   "schedule": [
+    {
+     "at": "huegel",
+     "from": "06:00",
+     "to": "11:00"
+    },
+    {
+     "at": "village_square",
+     "from": "11:00",
+     "to": "13:00"
+    },
+    {
+     "at": "huegel",
+     "from": "13:00",
+     "to": "17:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "17:00",
+     "to": "21:00"
+    },
+    {
+     "at": "huegel",
+     "from": "21:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "lena_bright_open",
+   "wants": "the_flock_through_winter"
+  },
+  "npc_max": {
+   "callbacks": [
+    {
+     "cb_id": "cb_max_retest",
+     "context": "greeting",
+     "de": "Schnell — wie heißt das?",
+     "draft": true,
+     "en": "Quick — what's that called?",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_max_triumph",
+     "context": "greeting",
+     "de": "Sitzt! Muss weiter!",
+     "draft": true,
+     "en": "Nailed it! Must run!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 1,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_max_first_meeting",
+     "context": "greeting",
+     "de": "Post! Bist du neu hier?",
+     "draft": true,
+     "en": "Post! Are you new here?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qm1_der_brief",
+    "qm2_die_adresse",
+    "qm3_das_paket",
+    "qm4_die_postkarte"
+   ],
+   "domain": "post_names",
+   "home": "gasthaus",
+   "name": "Max",
+   "npc_id": "npc_max",
+   "rep_gate": 0,
+   "role": "postman",
+   "schedule": [
+    {
+     "at": "village_square",
+     "from": "06:00",
+     "to": "10:00"
+    },
+    {
+     "at": "lane",
+     "from": "10:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "17:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "17:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "max_quick_light",
+   "wants": "every_letter_delivered"
   },
   "npc_mila": {
    "callbacks": [
@@ -2192,6 +2737,320 @@
    },
    "voice_preset": "petra_bright_mid",
    "wants": "prices_learned"
+  },
+  "npc_sommer": {
+   "callbacks": [
+    {
+     "cb_id": "cb_sommer_quest_memory",
+     "context": "greeting",
+     "de": "Geht es dir besser?",
+     "draft": true,
+     "en": "Are you feeling better?",
+     "fact_kind": "quest_memory",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_sommer_triumph",
+     "context": "greeting",
+     "de": "Sehr deutlich. Sehr gut.",
+     "draft": true,
+     "en": "Very clear. Very good.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 1,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_sommer_first_meeting",
+     "context": "greeting",
+     "de": "Guten Tag. Alles in Ordnung?",
+     "draft": true,
+     "en": "Good day. Everything all right?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qd1_die_praxis",
+    "qd2_kraeutertee",
+    "qd3_du_bist_krank",
+    "qd4_wintergrippe"
+   ],
+   "domain": "body_health",
+   "home": "praxis",
+   "name": "Dr. Sommer",
+   "npc_id": "npc_sommer",
+   "rep_gate": 0,
+   "role": "doctor",
+   "schedule": [
+    {
+     "at": "praxis",
+     "from": "06:00",
+     "to": "08:00"
+    },
+    {
+     "at": "praxis",
+     "from": "08:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "15:00"
+    },
+    {
+     "at": "praxis",
+     "from": "15:00",
+     "to": "19:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "19:00",
+     "to": "22:00"
+    },
+    {
+     "at": "praxis",
+     "from": "22:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "sommer_calm_clear",
+   "wants": "a_healthy_village"
+  },
+  "npc_stefan": {
+   "callbacks": [
+    {
+     "cb_id": "cb_stefan_usual",
+     "context": "greeting",
+     "de": "Wie immer?",
+     "draft": true,
+     "en": "As always?",
+     "fact_kind": "usual_order",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_stefan_quest_memory",
+     "context": "greeting",
+     "de": "Erinnerst du dich an den Gast?",
+     "draft": true,
+     "en": "Do you remember the guest?",
+     "fact_kind": "quest_memory",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_stefan_first_meeting",
+     "context": "greeting",
+     "de": "Willkommen! Setz dich, setz dich.",
+     "draft": true,
+     "en": "Welcome! Sit down, sit down.",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qs1_das_zimmer",
+    "qs2_die_speisekarte",
+    "qs3_der_gast",
+    "qs4_musikabend"
+   ],
+   "domain": "inn_evening",
+   "home": "gasthaus",
+   "name": "Stefan",
+   "npc_id": "npc_stefan",
+   "rep_gate": 0,
+   "role": "innkeeper",
+   "schedule": [
+    {
+     "at": "gasthaus",
+     "from": "06:00",
+     "to": "10:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "10:00",
+     "to": "14:00"
+    },
+    {
+     "at": "village_square",
+     "from": "14:00",
+     "to": "16:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "16:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "stefan_warm_baritone",
+   "wants": "a_full_house_on_friday"
+  },
+  "npc_tom": {
+   "callbacks": [
+    {
+     "cb_id": "cb_tom_quest_memory",
+     "context": "greeting",
+     "de": "Das Dach hält noch, oder?",
+     "draft": true,
+     "en": "The roof's still holding, isn't it?",
+     "fact_kind": "quest_memory",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_tom_triumph",
+     "context": "greeting",
+     "de": "Sauber gesagt!",
+     "draft": true,
+     "en": "Cleanly said!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_tom_first_meeting",
+     "context": "greeting",
+     "de": "Hey! Brauchst du Holz?",
+     "draft": true,
+     "en": "Hey! Do you need wood?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qt1_das_holz",
+    "qt2_der_zaun",
+    "qt3_das_dach",
+    "qt4_der_anbau"
+   ],
+   "domain": "wood_building",
+   "home": "werkstatt",
+   "name": "Tom",
+   "npc_id": "npc_tom",
+   "rep_gate": 0,
+   "role": "carpenter",
+   "schedule": [
+    {
+     "at": "werkstatt",
+     "from": "06:00",
+     "to": "07:00"
+    },
+    {
+     "at": "werkstatt",
+     "from": "07:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "16:00"
+    },
+    {
+     "at": "werkstatt",
+     "from": "16:00",
+     "to": "20:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "20:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "tom_easy_young",
+   "wants": "something_worth_building"
+  },
+  "npc_voss": {
+   "callbacks": [
+    {
+     "cb_id": "cb_voss_purchase",
+     "context": "greeting",
+     "de": "Größe 42, richtig?",
+     "draft": true,
+     "en": "Size 42, right?",
+     "fact_kind": "purchase_pattern",
+     "focus_words": [
+      "num_4",
+      "num_2"
+     ]
+    },
+    {
+     "cb_id": "cb_voss_triumph",
+     "context": "greeting",
+     "de": "Korrekt. Sehr korrekt.",
+     "draft": true,
+     "en": "Correct. Very correct.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 1,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_voss_first_meeting",
+     "context": "greeting",
+     "de": "Guten Tag. Zeig mir deine Schuhe.",
+     "draft": true,
+     "en": "Good day. Show me your shoes.",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
+   "chain": [
+    "qv1_die_schuhe",
+    "qv2_die_groesse",
+    "qv3_winterstiefel",
+    "qv4_die_reparatur"
+   ],
+   "domain": "clothing",
+   "home": "schuhmacherei",
+   "name": "Herr Voss",
+   "npc_id": "npc_voss",
+   "rep_gate": 0,
+   "role": "cobbler",
+   "schedule": [
+    {
+     "at": "schuhmacherei",
+     "from": "06:00",
+     "to": "08:00"
+    },
+    {
+     "at": "schuhmacherei",
+     "from": "08:00",
+     "to": "13:00"
+    },
+    {
+     "at": "village_square",
+     "from": "13:00",
+     "to": "15:00"
+    },
+    {
+     "at": "schuhmacherei",
+     "from": "15:00",
+     "to": "19:00"
+    },
+    {
+     "at": "gasthaus",
+     "from": "19:00",
+     "to": "22:00"
+    },
+    {
+     "at": "schuhmacherei",
+     "from": "22:00",
+     "to": "24:00"
+    }
+   ],
+   "voice_preset": "voss_dry_precise",
+   "wants": "everyone_properly_shod"
   },
   "npc_weber": {
    "callbacks": [

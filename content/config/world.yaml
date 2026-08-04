@@ -63,6 +63,21 @@ locations:
   rathaus: village
   lane: village
   lakeshore: lake
+  fishing_hut: lake
+  # The eleven remaining villagers' spots (Part 14 §3 building table). Buildings
+  # are not placed yet — the founder is redesigning the village — but the
+  # locations are, so the cast is scheduled, reachable and routable today.
+  praxis: village
+  schule: village
+  schuhmacherei: village
+  gasthaus: village
+  schmiede: village
+  hilde_cottage: village
+  hilde_garden: village
+  werkstatt: village
+  # Lena's hills are not their own map yet, so she stands at the village's
+  # upland edge. Moving her is one line here once the map exists.
+  huegel: village
 
 # Where the player arrives when entering a map from another one.
 arrivals:

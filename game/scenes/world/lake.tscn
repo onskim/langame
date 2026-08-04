@@ -21,6 +21,12 @@ default_spawn = Vector2(112, 256)
 [node name="Locations" type="Node2D" parent="."]
 
 [node name="lakeshore" type="Marker2D" parent="Locations"]
+position = Vector2(200, 256)
+
+[node name="fishing_hut" type="Marker2D" parent="Locations"]
+position = Vector2(120, 200)
+
+[node name="lakeshore" type="Marker2D" parent="Locations"]
 position = Vector2(128, 256)
 
 [node name="Arrivals" type="Node2D" parent="."]
