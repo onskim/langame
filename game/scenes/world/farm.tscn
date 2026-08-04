@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://blangamefarm01"]
+
+[ext_resource type="Script" path="res://scripts/core/game_state.gd" id="1_gamestate"]
+
+[node name="Farm" type="Node2D"]
+script = ExtResource("1_gamestate")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(320, 180)
+
+[node name="BootLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 624.0
+offset_bottom = 64.0
+text = "langame — boot OK
+640x360 integer-scaled"

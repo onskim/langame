@@ -1,0 +1,39 @@
+; Engine configuration file.
+; Constants below are pinned by GDD Part 11 §2 — do not change without updating that doc.
+
+config_version=5
+
+[application]
+
+config/name="Langame"
+config/description="Speech-first German-learning cozy RPG."
+run/main_scene="res://scenes/world/farm.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+
+; GDD Part 11 §2: 640x360 base viewport, integer-scaled. Crisp on 720p/1080p/4K.
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/scale_mode="integer"
+
+[rendering]
+
+; 2D pixel art: no filtering, no mipmaps.
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+
+[importer_defaults]
+
+texture={
+"compress/mode": 0,
+"detect_3d/compress_to": 0,
+"mipmaps/generate": false,
+"process/fix_alpha_border": true
+}

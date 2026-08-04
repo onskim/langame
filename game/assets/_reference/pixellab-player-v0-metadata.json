@@ -1,0 +1,36 @@
+{
+  "group_id": "4849aead-0e8e-46e0-9963-bec1d9ac9ccf",
+  "states": [
+    {
+      "character": {
+        "id": "29c93794-6361-43e7-a467-3d644860fb16",
+        "name": "Idle",
+        "prompt": "Create a pixel art character sprite sheet for a cozy farming RPG language-learning game.\n\nCharacter:\nA young adventurer/farmer who is also a language learner. Friendly, curious, intelligent, and approachable. The character should feel like the main protagonist of a cozy indie game.\n\nArt style:\n- High-quality 16-bit pixel art\n- Modern indie RPG style\n- Inspired by Stardew Valley, Harvest Moon, Zelda, and classic SNES RPGs\n- Clean pixel edges\n- Detailed but readable at small size\n- Professional game-ready sprite design\n\nCharacter design:\n- Young adult character\n- Expressive face with friendly eyes\n- Casual farming outfit\n- Comfortable boots\n- Backpack containing books and learning materials\n- Small notebook or language journal accessory\n- Simple tools attached to belt\n- Distinct silhouette that is recognizable from a distance\n\nClothing:\n- Cozy shirt or jacket\n- Overalls or adventure pants\n- Farming boots\n- Small backpack\n- Language learning badge or symbol\n- Warm natural colors\n- Handmade village aesthetic\n\nCreate a complete sprite sheet:\n- Front facing idle pose\n- Back facing idle pose\n- Left walking animation\n- Right walking animation\n- Front walking animation\n- Back walking animation\n- Talking pose\n- Happy reaction pose\n- Thinking/learning pose\n- Farming/action pose\n\nTechnical requirements:\n- Pixel art sprite sheet\n- Same character proportions in every frame\n- Consistent lighting\n- Transparent background\n- Game-ready RPG character asset\n- No text\n- No UI elements\n- No extra characters\n\nMake the character feel like the hero of a cozy world where farming, friendships, exploration, and learning languages are the core gameplay.",
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-08-03T10:30:15.528040+00:00"
+      },
+      "folder": "Idle",
+      "frames": {
+        "rotations": {
+          "south": "Idle/rotations/south.png",
+          "south-east": "Idle/rotations/south-east.png",
+          "east": "Idle/rotations/east.png",
+          "north-east": "Idle/rotations/north-east.png",
+          "north": "Idle/rotations/north.png",
+          "north-west": "Idle/rotations/north-west.png",
+          "west": "Idle/rotations/west.png",
+          "south-west": "Idle/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-08-03T11:20:14.357197"
+}
