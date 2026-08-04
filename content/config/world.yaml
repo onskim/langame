@@ -1,0 +1,39 @@
+# World layout — GDD Part 14 §2 (the split map).
+#
+#   [PLAYER FARM] ──path──> [VILLAGE] ──> [FOREST] ──> [LAKE]
+#                               └──> [HILLS]
+#
+# Farm  = private space: labour, quiet, no NPCs except Anna next door.
+# Village = social space: all shops, all people, all talk.
+#
+# The geography teaches the rhythm — work at home, speak in town — and makes
+# going to town a choice with a reason rather than ambient social noise.
+#
+# `locations` maps every name an NPC schedule can reference to the map it is
+# on. The engine reads this, so moving a shop between maps is a content edit.
+
+config_id: world
+
+maps:
+  farm:
+    scene: "res://scenes/world/farm.tscn"
+    display: Hof
+  village:
+    scene: "res://scenes/world/village.tscn"
+    display: Dorf
+
+locations:
+  farm_yard: farm
+  field: farm
+  farmhouse: farm
+  stream: farm
+  village_square: village
+  bakery: village
+  shop: village
+  rathaus: village
+  lane: village
+
+# Where the player arrives when entering a map from another one.
+arrivals:
+  farm: from_village
+  village: from_farm

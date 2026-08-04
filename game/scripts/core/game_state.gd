@@ -14,6 +14,8 @@ var carrying: String = ""
 var reputation: int = 0
 var money: int = 0
 var completed_quests: Array = []
+## Which map the player is standing on (Part 14 §2 split world).
+var current_map: String = "farm"
 
 var _loaded_position: Variant = null
 
@@ -32,6 +34,7 @@ func to_dict() -> Dictionary:
 		"money": money,
 		"completed_quests": completed_quests,
 		"word_stats": WordStats.to_dict(),
+		"current_map": current_map,
 	}
 
 
@@ -49,6 +52,7 @@ func load_state() -> void:
 	money = int(data.get("money", 0))
 	completed_quests = data.get("completed_quests", [])
 	WordStats.from_dict(data.get("word_stats", {}))
+	current_map = str(data.get("current_map", "farm"))
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
 		player_position = _loaded_position

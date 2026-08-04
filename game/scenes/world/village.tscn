@@ -1,0 +1,163 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/village_map.gd" id="1_village"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_runner.tscn" id="3_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/ui/phone/phone.tscn" id="4_phone"]
+[ext_resource type="Script" path="res://scripts/core/map_gate.gd" id="5_gate"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_bakery.png" id="6_bakery"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_shop.png" id="7_shop"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_rathaus.png" id="8_rathaus"]
+[ext_resource type="Texture2D" path="res://assets/sprites/well.png" id="9_well"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(20, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bld"]
+size = Vector2(60, 40)
+
+[node name="Village" type="Node2D"]
+script = ExtResource("1_village")
+map_id = "village"
+map_width_tiles = 46
+map_height_tiles = 34
+default_spawn = Vector2(368, 264)
+
+[node name="Ground" type="TileMapLayer" parent="."]
+
+[node name="Buildings" type="Node2D" parent="."]
+
+[node name="Bakery" type="Sprite2D" parent="Buildings"]
+position = Vector2(320, 128)
+texture = ExtResource("6_bakery")
+
+[node name="BakeryBody" type="StaticBody2D" parent="Buildings/Bakery"]
+position = Vector2(0, 6)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/Bakery/BakeryBody"]
+shape = SubResource("RectangleShape2D_bld")
+
+[node name="Shop" type="Sprite2D" parent="Buildings"]
+position = Vector2(416, 128)
+texture = ExtResource("7_shop")
+
+[node name="ShopBody" type="StaticBody2D" parent="Buildings/Shop"]
+position = Vector2(0, 6)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/Shop/ShopBody"]
+shape = SubResource("RectangleShape2D_bld")
+
+[node name="Rathaus" type="Sprite2D" parent="Buildings"]
+position = Vector2(560, 264)
+texture = ExtResource("8_rathaus")
+
+[node name="RathausBody" type="StaticBody2D" parent="Buildings/Rathaus"]
+position = Vector2(0, 8)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/Rathaus/RathausBody"]
+shape = SubResource("RectangleShape2D_bld")
+
+[node name="Well" type="Sprite2D" parent="Buildings"]
+position = Vector2(368, 280)
+texture = ExtResource("9_well")
+
+[node name="Locations" type="Node2D" parent="."]
+
+[node name="village_square" type="Marker2D" parent="Locations"]
+position = Vector2(368, 320)
+
+[node name="bakery" type="Marker2D" parent="Locations"]
+position = Vector2(320, 184)
+
+[node name="shop" type="Marker2D" parent="Locations"]
+position = Vector2(416, 184)
+
+[node name="rathaus" type="Marker2D" parent="Locations"]
+position = Vector2(560, 320)
+
+[node name="lane" type="Marker2D" parent="Locations"]
+position = Vector2(368, 432)
+
+[node name="Arrivals" type="Node2D" parent="."]
+
+[node name="from_farm" type="Marker2D" parent="Arrivals"]
+position = Vector2(48, 264)
+
+[node name="Gates" type="Node2D" parent="."]
+
+[node name="ToFarm" type="Area2D" parent="Gates"]
+position = Vector2(12, 264)
+script = ExtResource("5_gate")
+target_map = "farm"
+arrival_marker = "from_village"
+label_text = "Hof"
+
+[node name="Shape" type="CollisionShape2D" parent="Gates/ToFarm"]
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(368, 264)
+
+[node name="NightTint" type="CanvasModulate" parent="."]
+color = Color(1, 1, 1, 1)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Root" type="Control" parent="HUD"]
+mouse_filter = 2
+
+[node name="Day" type="Label" parent="HUD/Root"]
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 260.0
+offset_bottom = 26.0
+
+[node name="Place" type="Label" parent="HUD/Root"]
+offset_left = 240.0
+offset_top = 6.0
+offset_right = 420.0
+offset_bottom = 26.0
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.98, 0.93, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 5
+
+[node name="Clock" type="Label" parent="HUD/Root"]
+offset_left = 560.0
+offset_top = 6.0
+offset_right = 632.0
+offset_bottom = 26.0
+horizontal_alignment = 2
+
+[node name="Carry" type="Label" parent="HUD/Root"]
+offset_left = 10.0
+offset_top = 28.0
+offset_right = 300.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.29, 0.71, 0.48, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 5
+
+[node name="Task" type="Label" parent="HUD/Root"]
+offset_left = 10.0
+offset_top = 48.0
+offset_right = 400.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.95, 0.9, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+
+[node name="Hint" type="Label" parent="HUD/Root"]
+offset_left = 10.0
+offset_top = 336.0
+offset_right = 632.0
+offset_bottom = 354.0
+theme_override_colors/font_color = Color(0.85, 0.88, 0.95, 0.85)
+
+[node name="DialogueRunner" parent="." instance=ExtResource("3_dialogue")]
+
+[node name="Phone" parent="." instance=ExtResource("4_phone")]

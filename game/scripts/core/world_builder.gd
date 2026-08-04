@@ -54,18 +54,26 @@ static func paint_ground(layer: TileMapLayer) -> void:
 			layer.set_cell(Vector2i(x, y), Tile.SOIL, Vector2i.ZERO)
 
 
+enum GateSide { NONE, EAST, WEST }
+
+
 ## Perimeter fence: visual tiles on `fence_layer`, collision as StaticBody2D
-## children of `collision_parent`.
-static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D) -> void:
+## children of `collision_parent`. `gate` leaves a gap so the farm has a way
+## out — a fenced field with no gate is a prison, not a smallholding.
+static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D,
+		gate: GateSide = GateSide.NONE) -> void:
 	fence_layer.tile_set = build_tileset()
 
 	var cells: Array[Vector2i] = []
 	for x in range(FARM_W):
 		cells.append(Vector2i(x, 0))
 		cells.append(Vector2i(x, FARM_H - 1))
+	var gate_rows := [FARM_H / 2 - 1, FARM_H / 2, FARM_H / 2 + 1]
 	for y in range(1, FARM_H - 1):
-		cells.append(Vector2i(0, y))
-		cells.append(Vector2i(FARM_W - 1, y))
+		if not (gate == GateSide.WEST and gate_rows.has(y)):
+			cells.append(Vector2i(0, y))
+		if not (gate == GateSide.EAST and gate_rows.has(y)):
+			cells.append(Vector2i(FARM_W - 1, y))
 
 	for cell in cells:
 		fence_layer.set_cell(cell, Tile.FENCE, Vector2i.ZERO)
@@ -81,3 +89,34 @@ static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D) -> 
 		shape.shape = rect
 		shape.position = Vector2(cell.x * TILE + TILE / 2.0, cell.y * TILE + TILE / 2.0)
 		body.add_child(shape)
+
+
+# ------------------------------------------------------------------ village
+
+const VILLAGE_W := 46
+const VILLAGE_H := 34
+
+
+## The village square and its lanes. Buildings are placed in the scene; this
+## lays the ground they stand on.
+static func paint_village(layer: TileMapLayer) -> void:
+	layer.tile_set = build_tileset()
+
+	for y in range(VILLAGE_H):
+		for x in range(VILLAGE_W):
+			layer.set_cell(Vector2i(x, y), Tile.GRASS, Vector2i.ZERO)
+
+	# The square itself — paved, central, the place people gather.
+	for y in range(12, 22):
+		for x in range(15, 31):
+			layer.set_cell(Vector2i(x, y), Tile.PATH, Vector2i.ZERO)
+
+	# The lane in from the farm (west edge) and the lanes to each shopfront.
+	for x in range(0, 16):
+		layer.set_cell(Vector2i(x, 16), Tile.PATH, Vector2i.ZERO)
+		layer.set_cell(Vector2i(x, 17), Tile.PATH, Vector2i.ZERO)
+	for y in range(6, 13):
+		layer.set_cell(Vector2i(20, y), Tile.PATH, Vector2i.ZERO)
+		layer.set_cell(Vector2i(26, y), Tile.PATH, Vector2i.ZERO)
+	for y in range(21, 29):
+		layer.set_cell(Vector2i(23, y), Tile.PATH, Vector2i.ZERO)

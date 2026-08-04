@@ -9,7 +9,7 @@ size = Vector2(10, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_probe"]
 size = Vector2(18, 18)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_player")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -49,6 +49,17 @@ C = {
     "bed_frame": (128, 84, 52, 255),
     "bed_sheet": (226, 226, 236, 255),
     "bed_pillow": (245, 245, 250, 255),
+    "wall": (222, 206, 182, 255),
+    "wall_shade": (198, 180, 156, 255),
+    "roof_bake": (188, 96, 74, 255),
+    "roof_shop": (92, 124, 176, 255),
+    "roof_hall": (120, 104, 152, 255),
+    "roof_dark": (62, 52, 48, 255),
+    "door": (108, 74, 46, 255),
+    "window": (140, 190, 214, 255),
+    "sign": (240, 226, 190, 255),
+    "stone": (150, 148, 142, 255),
+    "stone_dark": (112, 110, 106, 255),
 }
 
 
@@ -242,6 +253,71 @@ def pig():
     return px
 
 
+def building(roof_col, width=64, height=64):
+    """A shopfront: roof, wall, door, two windows. Distinct roof colour per
+    building so the player can navigate by silhouette + hue before they can
+    read the sign."""
+    px = blank(width, height)
+
+    def rect(x0, y0, x1, y1, col):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if 0 <= x < width and 0 <= y < height:
+                    px[y][x] = C[col]
+
+    body_top = height // 3
+    rect(2, body_top, width - 3, height - 5, "wall")
+    for y in range(body_top, height - 4):          # wall shading on the right
+        rect(width - 10, y, width - 3, y, "wall_shade")
+
+    # gabled roof
+    for i in range(body_top + 3):
+        x0 = max(0, i - 2)
+        x1 = min(width - 1, width - 1 - i + 2)
+        if x0 <= x1:
+            rect(x0, i, x1, i, roof_col)
+    rect(0, body_top + 1, width - 1, body_top + 3, "roof_dark")
+
+    door_x = width // 2 - 5
+    rect(door_x, height - 20, door_x + 9, height - 5, "door")
+    rect(door_x + 7, height - 13, door_x + 7, height - 12, "sign")   # handle
+
+    rect(6, body_top + 8, 15, body_top + 17, "window")
+    rect(width - 16, body_top + 8, width - 7, body_top + 17, "window")
+    rect(6, body_top + 8, 15, body_top + 8, "roof_dark")
+    rect(width - 16, body_top + 8, width - 7, body_top + 8, "roof_dark")
+
+    rect(door_x - 4, body_top + 6, door_x + 13, body_top + 11, "sign")  # signboard
+    rect(door_x - 4, body_top + 6, door_x + 13, body_top + 6, "roof_dark")
+
+    rect(0, height - 5, width - 1, height - 1, "stone_dark")            # footing
+    return px
+
+
+def well():
+    """The village well — the square's landmark and Mila's hangout."""
+    px = blank(32, 32)
+
+    def rect(x0, y0, x1, y1, col):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if 0 <= x < 32 and 0 <= y < 32:
+                    px[y][x] = C[col]
+
+    rect(6, 14, 25, 27, "stone")
+    for y in range(14, 28):
+        if y % 3 == 0:
+            rect(6, y, 25, y, "stone_dark")
+    rect(6, 12, 25, 14, "stone_dark")
+    rect(13, 15, 18, 20, "water")
+    rect(7, 2, 9, 14, "wood")       # posts
+    rect(22, 2, 24, 14, "wood")
+    rect(5, 0, 26, 3, "roof_dark")  # little roof
+    rect(15, 4, 16, 9, "wood")      # rope
+    rect(13, 9, 18, 12, "wood_dark")
+    return px
+
+
 def hay_bale():
     px = blank(16, 16)
     for y in range(5, 15):
@@ -305,6 +381,10 @@ def main():
     write_png(os.path.join(s, "hay_bale.png"), 16, 16, hay_bale())
     write_png(os.path.join(s, "trough.png"), 16, 16, trough())
     write_png(os.path.join(s, "bed.png"), 32, 32, bed())
+    write_png(os.path.join(s, "bld_bakery.png"), 64, 64, building("roof_bake"))
+    write_png(os.path.join(s, "bld_shop.png"), 64, 64, building("roof_shop"))
+    write_png(os.path.join(s, "bld_rathaus.png"), 80, 72, building("roof_hall", 80, 72))
+    write_png(os.path.join(s, "well.png"), 32, 32, well())
     print("Done. ALL PLACEHOLDER — regenerate via PixelLab MCP per Part 11 §2.")
 
 

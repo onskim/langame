@@ -36,6 +36,34 @@
     "second_interval_days": 3.0
    },
    "starvation_days": 12
+  },
+  "world": {
+   "arrivals": {
+    "farm": "from_village",
+    "village": "from_farm"
+   },
+   "config_id": "world",
+   "locations": {
+    "bakery": "village",
+    "farm_yard": "farm",
+    "farmhouse": "farm",
+    "field": "farm",
+    "lane": "village",
+    "rathaus": "village",
+    "shop": "village",
+    "stream": "farm",
+    "village_square": "village"
+   },
+   "maps": {
+    "farm": {
+     "display": "Hof",
+     "scene": "res://scenes/world/farm.tscn"
+    },
+    "village": {
+     "display": "Dorf",
+     "scene": "res://scenes/world/village.tscn"
+    }
+   }
   }
  },
  "lines": {
@@ -240,12 +268,17 @@
     {
      "at": "field",
      "from": "12:00",
-     "to": "18:00"
+     "to": "17:00"
+    },
+    {
+     "at": "village_square",
+     "from": "17:00",
+     "to": "19:00"
     },
     {
      "at": "farmhouse",
-     "from": "18:00",
-     "to": "22:00"
+     "from": "19:00",
+     "to": "24:00"
     }
    ],
    "shop": null,
@@ -291,22 +324,22 @@
    "role": "child",
    "schedule": [
     {
-     "at": "farm_yard",
+     "at": "lane",
      "from": "06:00",
      "to": "10:00"
     },
     {
-     "at": "stream",
+     "at": "village_square",
      "from": "10:00",
      "to": "14:00"
     },
     {
-     "at": "village_square",
+     "at": "rathaus",
      "from": "14:00",
      "to": "19:00"
     },
     {
-     "at": "farm_yard",
+     "at": "lane",
      "from": "19:00",
      "to": "24:00"
     }
@@ -355,7 +388,7 @@
    "role": "mayor",
    "schedule": [
     {
-     "at": "village_square",
+     "at": "rathaus",
      "from": "06:00",
      "to": "11:00"
     },
@@ -365,7 +398,7 @@
      "to": "16:00"
     },
     {
-     "at": "village_square",
+     "at": "rathaus",
      "from": "16:00",
      "to": "24:00"
     }

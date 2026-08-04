@@ -22,16 +22,17 @@ func _check(label: String, condition: bool, detail: String = "") -> void:
 
 func _run() -> void:
 	print("--- Week 3 acceptance ---")
-	var farm: Node2D = load("res://scenes/world/farm.tscn").instantiate()
-	add_child(farm)
+
+	# The cast lives in the village (Part 14 §2), so schedules are exercised
+	# there; the farm hosts the quest chain.
+	DayCycle.running = false
+	DayCycle.hour = 9.0
+	var village: Node2D = load("res://scenes/world/village.tscn").instantiate()
+	add_child(village)
 	await get_tree().process_frame
 
-	var quests: Node = farm.quests
-	var phone: CanvasLayer = farm.get_node("Phone")
 	var npcs := get_tree().get_nodes_in_group("npc")
-
-	# ---------- 5 NPCs walking content-defined schedules ----------
-	_check("five NPCs in the world", npcs.size() == 5, "found %d" % npcs.size())
+	_check("village populated at 09:00", npcs.size() >= 4, "found %d" % npcs.size())
 
 	var named := {}
 	for npc: NPC in npcs:
@@ -39,41 +40,55 @@ func _run() -> void:
 		_check("%s loaded from content" % npc.npc_id, not npc.data.is_empty(),
 			"name=%s" % npc.data.get("name", ""))
 
-	# Each NPC's scheduled location must actually change across the day, or the
-	# "schedule" is decoration.
-	for npc: NPC in npcs:
+	# All five are schedulable, whichever map they are on right now.
+	_check("all five NPCs exist in content", ContentDB.npcs.size() == 5,
+		"count=%d" % ContentDB.npcs.size())
+
+	# Every NPC's scheduled location must actually change across the day, or the
+	# "schedule" is decoration. Checked from content so it covers the whole cast.
+	for npc_id in ContentDB.npcs.keys():
 		var seen := {}
 		for hour in [7.0, 12.0, 15.0, 20.0, 23.0]:
-			var loc: String = npc.location_at(hour)
+			var loc: String = WorldRouter.scheduled_location(npc_id, hour)
 			if loc != "":
 				seen[loc] = true
-		_check("%s visits multiple places" % npc.npc_id, seen.size() >= 2,
+		_check("%s visits multiple places" % npc_id, seen.size() >= 2,
 			"locations=%s" % str(seen.keys()))
 
 	# Drive the clock and confirm they actually move, not just retarget.
-	var mila: NPC = named["npc_mila"]
-	var before := mila.global_position
-	_check("Mila starts at her 06:00 post", mila.current_location == "farm_yard",
-		"at=%s" % mila.current_location)
+	var weber: NPC = named["npc_weber"]
+	var before := weber.global_position
+	_check("Weber starts at the Rathaus", weber.current_location == "rathaus",
+		"at=%s" % weber.current_location)
 
-	DayCycle.running = false
-	DayCycle.hour = 11.0
-	DayCycle.time_changed.emit(11.0)
+	DayCycle.hour = 13.0
+	DayCycle.time_changed.emit(13.0)
 	await get_tree().process_frame
-	_check("Mila retargets at 11:00", mila.current_location == "stream",
-		"at=%s" % mila.current_location)
-	_check("Mila is walking", mila.is_walking())
+	_check("Weber retargets to the bakery at 13:00", weber.current_location == "bakery",
+		"at=%s" % weber.current_location)
+	_check("Weber is walking", weber.is_walking())
 
-	for i in range(180):
+	for i in range(240):
 		await get_tree().physics_frame
-	var moved := mila.global_position.distance_to(before)
-	_check("Mila physically moved", moved > 40.0, "moved %.1f px" % moved)
+	var moved := weber.global_position.distance_to(before)
+	_check("Weber physically moved", moved > 40.0, "moved %.1f px" % moved)
 
 	var karl: NPC = named["npc_karl"]
-	_check("Karl is elsewhere at 11:00", karl.current_location != mila.current_location,
-		"karl=%s mila=%s" % [karl.current_location, mila.current_location])
+	_check("Karl is elsewhere than Weber started",
+		karl.current_location != "rathaus",
+		"karl=%s" % karl.current_location)
 
-	# ---------- gating ----------
+	village.queue_free()
+	await get_tree().process_frame
+	DayCycle.hour = 9.0
+
+	# ---------- the farm hosts the quest chain ----------
+	var farm: Node2D = load("res://scenes/world/farm.tscn").instantiate()
+	add_child(farm)
+	await get_tree().process_frame
+	var quests: Node = farm.quests
+	var phone: CanvasLayer = farm.get_node("Phone")
+
 	_check("Q01 available at start", quests.is_available("q01"))
 	_check("Q02 gated behind Q01", not quests.is_available("q02"))
 	_check("Q03 gated behind Q02", not quests.is_available("q03"))
