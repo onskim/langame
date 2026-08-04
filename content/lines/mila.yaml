@@ -1,0 +1,25 @@
+# Mila's lines. She is the difficulty valve (Part 3 §2): simplest German in the
+# village, so her drill framing has to be the gentlest in the game.
+#
+# DRAFT GERMAN — unreviewed, Part 5 §4 gate applies.
+
+- line_id: mila_q06_ask
+  npc_id: npc_mila
+  de: "Sag Guten Morgen!"
+  en: "Say good morning!"
+  focus_words: [chunk_guten_morgen]
+  gestures: []
+  response:
+    tier_4: {action: greet, expect: chunk_guten_morgen}
+  recasts:
+    wrong_action: "Noch mal — Guten Morgen!"
+    repeat_slow: "Guten … Morgen!"
+  draft: true
+
+- line_id: mila_q06_done
+  npc_id: npc_mila
+  de: "Super! Danke!"
+  en: "Great! Thanks!"
+  focus_words: [chunk_danke]
+  gestures: []
+  draft: true

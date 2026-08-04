@@ -18,6 +18,8 @@ var completed_quests: Array = []
 var current_map: String = "farm"
 ## Per-NPC affection tiers (Part 12). Week 7 fills these; doors read them now.
 var affection: Dictionary = {}
+## Silent path (Part 3 §1): the game must be completable mute.
+var quiet_mode: bool = false
 
 var _loaded_position: Variant = null
 
@@ -38,6 +40,8 @@ func to_dict() -> Dictionary:
 		"word_stats": WordStats.to_dict(),
 		"current_map": current_map,
 		"affection": affection,
+		"quiet_mode": quiet_mode,
+		"drills": DrillSpawner.to_dict(),
 	}
 
 
@@ -57,6 +61,8 @@ func load_state() -> void:
 	WordStats.from_dict(data.get("word_stats", {}))
 	current_map = str(data.get("current_map", "farm"))
 	affection = data.get("affection", {})
+	quiet_mode = bool(data.get("quiet_mode", false))
+	DrillSpawner.from_dict(data.get("drills", {}))
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
 		player_position = _loaded_position
