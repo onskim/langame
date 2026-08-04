@@ -128,6 +128,32 @@ def purity(tile, want_lower, is_lower=is_dirt):
     return good / float(total)
 
 
+def furrow_bias(tile):
+    """+1 when a tile's plough lines run ACROSS it, -1 when they run down it.
+
+    A ploughed field is ploughed one way. The founder's reference shows seven
+    different patterns side by side — rows, columns, waves, diagonals — and
+    picking variants blindly lays them next to each other, so the field reads as
+    a patchwork of other people's fields rather than one worked plot.
+
+    Horizontal furrows mean big changes from ROW to row and little change along
+    a row; vertical furrows are the transpose. The ratio between those two says
+    which way the tile is ploughed, and how strongly.
+    """
+    px = tile.load()
+    down = 0.0
+    across = 0.0
+    for y in range(TILE - 1):
+        for x in range(TILE - 1):
+            here = px[x, y]
+            down += abs(here[0] - px[x, y + 1][0])
+            across += abs(here[0] - px[x + 1, y][0])
+    total = down + across
+    if total < 1.0:
+        return 0.0
+    return (down - across) / total
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("source")
@@ -148,6 +174,11 @@ def main():
     # band keeps the classifier honest: within a band there really are only two
     # terrains, which is the assumption corner-Wang classification rests on.
     ap.add_argument("--crop", help="left,top,right,bottom in SOURCE pixels")
+    # A worked field is worked ONE way. Without this the variant picker lays
+    # rows, columns, waves and diagonals side by side and the plot reads as a
+    # patchwork rather than a field somebody ploughed.
+    ap.add_argument("--align", choices=["none", "horizontal", "vertical"],
+                    default="none", help="plough direction the variants must agree on")
     ap.add_argument("--name", default="ground_ref")
     args = ap.parse_args()
 
@@ -181,6 +212,15 @@ def main():
                 score = purity(tile, False, is_lower)
             else:
                 score = 0.5  # edge tiles: keep variety rather than rank
+            if args.align != "none":
+                # Agreeing with the pack's plough direction outranks purity: a
+                # spotless tile ploughed the wrong way is the thing that makes
+                # the field look wrong. Added rather than filtered, so a bucket
+                # with no well-aligned member still keeps its best candidates.
+                bias = furrow_bias(tile)
+                if args.align == "vertical":
+                    bias = -bias
+                score += bias * 2.0
             buckets[k].append((score, tile))
 
     missing = [k for k in ["%d%d%d%d" % (a, b, c, d)
@@ -229,6 +269,10 @@ def main():
             "source": "founder-reference",
             "source_file": os.path.basename(args.source),
             "lower": LOWER_LABELS[args.lower],
+            # Recorded so the engine can assert a worked field declares a plough
+            # direction: regenerating this pack without --align would put the
+            # patchwork back and nothing else would notice.
+            "align": args.align,
             "upper": "lush meadow grass with wildflowers, leafy clumps and stones",
             "tile_size": TILE,
             "grid": {"cols": cols, "rows": rows},
@@ -240,6 +284,22 @@ def main():
           % (os.path.relpath(png_path, ROOT), atlas.size[0], atlas.size[1], rows, cols))
     for k in sorted(chosen.keys()):
         print("  %s  %d variant(s)" % (k, len(chosen[k])))
+
+    # The variants of a solid tile sit edge to edge across a whole plot, so if
+    # they disagree about plough direction the field looks wrong no matter how
+    # good each tile is on its own. Say so here rather than leaving it to be
+    # found in a screenshot.
+    if args.align != "none":
+        solid = chosen.get("0000", [])
+        want = 1.0 if args.align == "horizontal" else -1.0
+        biases = [furrow_bias(t) * want for t in solid]
+        wrong = [b for b in biases if b < 0.0]
+        print("plough alignment (%s): %d/%d solid variants agree, mean %+.2f"
+              % (args.align, len(biases) - len(wrong), len(biases),
+                 sum(biases) / len(biases) if biases else 0.0))
+        if wrong:
+            print("WARNING: %d solid variant(s) are ploughed the wrong way — the "
+                  "field will read as a patchwork" % len(wrong), file=sys.stderr)
     return 0
 
 

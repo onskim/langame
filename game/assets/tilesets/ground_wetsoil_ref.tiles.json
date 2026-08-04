@@ -2,6 +2,7 @@
  "source": "founder-reference",
  "source_file": "farmland_reference.png",
  "lower": "tilled crop soil, furrowed and clodded, ready for planting",
+ "align": "horizontal",
  "upper": "lush meadow grass with wildflowers, leafy clumps and stones",
  "tile_size": 16,
  "grid": {

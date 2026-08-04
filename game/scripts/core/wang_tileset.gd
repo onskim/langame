@@ -15,6 +15,10 @@ const TILE := 16
 var texture: Texture2D
 var lower_name: String = ""
 var upper_name: String = ""
+## "horizontal", "vertical", or "none" — which way this pack's furrows run.
+## A worked field must be worked one way; if the variants disagree the plot
+## reads as a patchwork of other people's fields.
+var align: String = "none"
 ## corner key -> Array[Vector2i] of interchangeable atlas coords.
 ##
 ## VARIANTS are why the ground stops reading as wallpaper. One tile per
@@ -51,6 +55,7 @@ func _load(base_path: String) -> void:
 	var data: Dictionary = parsed
 	lower_name = str(data.get("lower", ""))
 	upper_name = str(data.get("upper", ""))
+	align = str(data.get("align", "none"))
 
 	for entry in data.get("tiles", []):
 		var corners: Dictionary = entry.get("corners", {})

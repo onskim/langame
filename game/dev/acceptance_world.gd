@@ -84,6 +84,15 @@ func _run() -> void:
 	_check("every farm door is reachable from outside",
 		_buried_doors(farm).is_empty(), str(_buried_doors(farm)))
 
+	# A worked field is worked one way. The reference sheet has seven plough
+	# patterns side by side, so a pack built without an alignment lays rows next
+	# to columns next to waves and the plot reads as a patchwork. The extractor
+	# records the direction it enforced; regenerating without it would put the
+	# patchwork back silently, so the pack has to declare one.
+	var soil_pack := WangTileset.load_pack(WorldBuilder.PACK_GRASS_SOIL)
+	_check("the crop soil declares a plough direction", soil_pack.align != "none",
+		"align=%s" % soil_pack.align)
+
 	farm.queue_free()
 	await get_tree().process_frame
 
