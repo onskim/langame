@@ -31,3 +31,13 @@ festivals:
   Sommer:   {day_in_season: 20, name: Sommermarkt}
   Herbst:   {day_in_season: 20, name: Erntefest}
   Winter:   {day_in_season: 20, name: Winterfest}
+
+# The campaign's four acts (Part 6 §2). They pace the monologue fade's ceiling
+# (Part 15 §2.1 rule 6) — a ceiling, never a gate: a fast learner still feels
+# fast progress inside their act, and a struggling one is never pushed past it.
+# Day at which each act BEGINS.
+acts:
+  1: 1
+  2: 25
+  3: 49
+  4: 73

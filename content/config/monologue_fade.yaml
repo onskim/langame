@@ -1,0 +1,89 @@
+# The fading inner monologue — GDD Part 15 §2.
+#
+# The player character thinks in English. Over the campaign those thoughts
+# code-switch into German, word by word, driven by the player's ACTUAL
+# word_stats — never by a global act switch. It is the most visible proof of the
+# game's promise: you watch yourself stop thinking in English.
+#
+# Every threshold lives here rather than in code, because these numbers are the
+# felt pacing of the entire game and will be tuned against the simulation.
+
+config_id: monologue_fade
+
+# --- the gates (Part 15 §2.1) ------------------------------------------------
+gates:
+  # M1 — German nouns and chunks intrude into English syntax.
+  m1_mastery: 0.50
+  # A word must have been MET before it can appear in a thought. The monologue
+  # never introduces vocabulary — same law as side quests (Part 4 §4).
+  m1_times_seen: 3
+  # M2 — whole German clauses take over. Authored fragments only: no runtime
+  # grammar generation, ever.
+  m2_mastery: 0.75
+  # M3 — the whole thought is German.
+  m3_mastery: 0.75
+  m3_family_average: 0.80
+
+# Hysteresis. A word swaps INTO German at 0.50 and only falls back to English
+# below 0.40 — without the gap a word hovering at the threshold would flicker
+# between languages line to line, which reads as a bug rather than as progress.
+# Watching a word genuinely return to English is the dog-ear made visceral.
+swap_off_mastery: 0.40
+
+# --- pacing, not gating (Part 15 §2.1 rule 6) --------------------------------
+# A prodigy still feels fast progress inside the cap; a struggling player is
+# never pushed past it. The slice ships M0-M1 only (§6, binding).
+act_ceilings:
+  1: 1    # M1
+  2: 2    # M2
+  3: 3
+  4: 3
+
+# Thoughts must stay effortlessly readable. Past this many swaps in one line the
+# overflow renders English this time round (§2.10).
+max_swaps_per_line: 3
+
+# --- structure words (Part 15 §2.1 rule 4) -----------------------------------
+# Pronouns, sein/haben, modals, prepositions cannot be quest objects, so the
+# monologue is their PRIMARY rep channel. They are exempt from the seen>=3 gate
+# INSIDE authored fragments only — they ride, they never lead.
+struktur_whitelist:
+  - ich
+  - du
+  - er
+  - sie
+  - es
+  - wir
+  - ist
+  - bin
+  - hat
+  - habe
+  - muss
+  - kann
+  - will
+  - der
+  - die
+  - das
+  - ein
+  - eine
+  - und
+  - aber
+  - vor
+  - nach
+  - bevor
+  - noch
+  - schon
+  - heute
+  - morgen
+
+# --- rhythm ------------------------------------------------------------------
+# A thought that fires every few seconds stops being a thought. Cooldowns keep
+# the inner voice occasional enough to be worth reading.
+cooldowns:
+  min_seconds_between: 25.0
+  same_line_min_days: 2
+
+# How many of the player's met words feed the fade index. Never shown as a
+# number — the player sees it only as their own thoughts changing (§2.2).
+fade_index:
+  min_words: 5

@@ -1,0 +1,63 @@
+# The village memory — GDD Part 15 §3.
+#
+# NPCs remember what happened WITH THEM and act on it. This is what makes the
+# SRS personal: not "the system scheduled a review" but "Karl remembers, and
+# Karl asks."
+#
+# Two laws govern everything here and both are enforced in code:
+#
+#   WITNESS RULE (§3.2) — an NPC records only what happened in interaction with
+#   them or in their scripted presence. Nobody knows things they could not know.
+#   Without this the village stops being characters and becomes surveillance.
+#
+#   NEVER-NEGATIVE LAW (§3.6) — no fact ever produces mockery, a penalty, a
+#   price increase or withheld content. `word_struggle` callbacks are warm
+#   invitations to try again. Memory only ever adds.
+
+config_id: memory
+
+# Facts the slice records (§6 cut list is binding — gossip is NOT in it).
+kinds:
+  - first_meeting
+  - quest_memory
+  - purchase_pattern
+  - usual_order
+  - word_struggle
+  - word_triumph
+  - drill_coached
+  - speech_style
+
+# Kinds that never decay. A triumph is a milestone: the day you finally said
+# "Brötchen" right is not something the village should be allowed to forget.
+permanent:
+  - first_meeting
+  - quest_memory
+  - word_triumph
+  - drill_coached
+
+decay:
+  nightly_multiplier: 0.98
+  prune_below: 0.15
+
+caps:
+  # One callback per NPC per day, three across the village. Past that the
+  # village stops feeling observant and starts feeling scripted.
+  per_npc_per_day: 1
+  per_village_per_day: 3
+  # The morning retest is exempt: it IS the curriculum (§3.4).
+  retest_exempt: true
+
+# Scoring weights for callback selection (§3.4). Retesting a word the player is
+# forgetting outranks celebrating one they nailed, which outranks small talk.
+relevance:
+  word_due_retest: 3.0
+  word_triumph: 2.0
+  usual_order: 1.5
+  purchase_pattern: 1.5
+  quest_memory: 1.0
+  first_meeting: 1.0
+  default: 1.0
+
+# Below this nothing fires and the ordinary greeting plays. A weak callback is
+# worse than no callback: it reads as a non-sequitur.
+score_threshold: 0.8

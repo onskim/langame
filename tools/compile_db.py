@@ -114,12 +114,32 @@ def compile_all(quiet=False):
     lines = load_yaml_dir("lines")
     quests = load_yaml_dir("quests")
     configs = load_yaml_dir("config")
+    monologue = load_yaml_dir("monologue")
 
+    _check_unique(monologue, "mono_id", "monologue")
     _check_unique(words, "word_id", "word")
     _check_unique(npcs, "npc_id", "npc")
     _check_unique(lines, "line_id", "line")
     _check_unique(quests, "quest_id", "quest")
     _check_unique(configs, "config_id", "config")
+
+    # Part 15 §2.6: a span that names a word which does not exist would render
+    # German the player has no gloss for, breaking the zero-frustration
+    # guarantee. Caught here rather than at runtime, where it is a silent hole.
+    known_words = {w.get("word_id") for w in words}
+    for m in monologue:
+        require(m, "mono_id", "monologue")
+        require(m, "class", "monologue")
+        for block_name in ("spans", "m2_spans"):
+            for key, span in (m.get(block_name) or {}).items():
+                for word_id in (span.get("words") or []):
+                    if word_id not in known_words:
+                        raise CompileError(
+                            "monologue %s span %s references unknown word '%s'"
+                            % (m["mono_id"], key, word_id))
+                if not span.get("de"):
+                    raise CompileError("monologue %s span %s has no German"
+                                       % (m["mono_id"], key))
 
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     if os.path.exists(DB_PATH):
@@ -175,7 +195,7 @@ def compile_all(quiet=False):
 
     con.commit()
 
-    bundle = _write_bundle(words, npcs, lines, quests, configs)
+    bundle = _write_bundle(words, npcs, lines, quests, configs, monologue)
     con.close()
 
     if not quiet:
@@ -207,7 +227,7 @@ def _strip(entry):
     return {k: v for k, v in entry.items() if k != "_source"}
 
 
-def _write_bundle(words, npcs, lines, quests, configs=()):
+def _write_bundle(words, npcs, lines, quests, configs=(), monologue=()):
     """Runtime bundle: dicts keyed by id so the engine does no scanning."""
     bundle = {
         "schema": 1,
@@ -216,6 +236,7 @@ def _write_bundle(words, npcs, lines, quests, configs=()):
         "lines": {l["line_id"]: _strip(l) for l in lines},
         "quests": {q["quest_id"]: _strip(q) for q in quests},
         "config": {c["config_id"]: _strip(c) for c in configs if "config_id" in c},
+        "monologue": {m["mono_id"]: _strip(m) for m in monologue},
     }
     os.makedirs(os.path.dirname(BUNDLE_PATH), exist_ok=True)
     with open(BUNDLE_PATH, "w", encoding="utf-8") as f:

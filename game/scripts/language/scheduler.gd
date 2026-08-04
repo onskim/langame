@@ -146,6 +146,21 @@ func apply_sm2(s: Dictionary, correct: bool, day: int, credit: float = 1.0) -> v
 
 ## Words introduced but not seen for longer than the starvation window.
 ## The acceptance test (Part 10 §6 Week 4) requires this to stay empty.
+## The single word most worth asking about today — the most urgent thing that is
+## actually due. Part 15 §3.4 hands this to the morning retest so the review is
+## delivered by somebody who remembers you struggling with it, rather than by a
+## system. Returns "" when nothing is due, and the retest simply does not fire.
+func weakest_due_word() -> String:
+	var best := ""
+	var best_urgency := 0.0
+	for word_id in due_words(GameState.day):
+		var score := urgency(word_id, GameState.day)
+		if score > best_urgency:
+			best_urgency = score
+			best = word_id
+	return best
+
+
 func starved_words(day: int) -> Array[String]:
 	var limit := Config.starvation_days()
 	var out: Array[String] = []

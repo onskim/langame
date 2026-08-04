@@ -192,6 +192,11 @@ func _complete() -> void:
 	active_quest = ""
 	step_index = -1
 	print("[quest] complete %s rewards=%s" % [finished, rewards])
+	# The giver was definitionally party to their own quest, so this is forced
+	# past the witness check rather than depending on where they stand now.
+	var giver := str(_quest.get("giver", ""))
+	if giver != "" and giver != "auto":
+		Memory.record(giver, "quest_memory", finished, null, true)
 	GameState.complete_quest(finished, rewards)
 	quest_completed.emit(finished, rewards)
 	start_next_available()

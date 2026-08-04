@@ -65,6 +65,11 @@ func _ready() -> void:
 
 	Quests.start_next_available()
 
+	# Arriving somewhere is a thought. Fired last so the place is fully built —
+	# a thought about the village that renders before the village does reads as
+	# a loading artefact.
+	Monologue.trigger("location_enter", map_id)
+
 
 func _exit_tree() -> void:
 	if DayCycle.time_changed.is_connected(_on_time_changed):
@@ -212,6 +217,9 @@ func _door_in_reach() -> Door:
 
 
 func _on_world_object(who: WorldObject) -> void:
+	# Looking at a thing is when a thought about it is welcome. Fires before the
+	# action resolves, so the thought reads as the impulse, not the report.
+	Monologue.trigger("object_examine", who.object_id)
 	if who.is_pickup:
 		# Pickups go into the inventory, which puts the item in hand if the
 		# hands are free. Setting `carrying` directly used to mean picking up a
@@ -406,6 +414,11 @@ func _on_time_changed(_hour: float) -> void:
 	# A quest whose giver was elsewhere can begin the moment they arrive.
 	if Quests.active_quest == "":
 		Quests.start_next_available()
+
+	# Arriving somewhere is a thought. Fired last so the place is fully built —
+	# a thought about the village that renders before the village does reads as
+	# a loading artefact.
+	Monologue.trigger("location_enter", map_id)
 
 
 func _apply_light() -> void:

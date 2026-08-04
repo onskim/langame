@@ -26,6 +26,11 @@ var _facing: int = 0
 
 
 func _ready() -> void:
+	# The first time somebody meets you is a fact about THEM meeting YOU, so
+	# it is theirs to hold. Forced past the witness check: they are, by
+	# definition, present at their own first meeting.
+	if npc_id != "":
+		Memory.record(npc_id, "first_meeting", npc_id, null, true)
 	add_to_group("npc")
 	data = ContentDB.get_npc(npc_id)
 	if data.is_empty():

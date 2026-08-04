@@ -12,6 +12,7 @@ var npcs: Dictionary = {}
 var lines: Dictionary = {}
 var quests: Dictionary = {}
 var config: Dictionary = {}
+var sections: Dictionary = {}
 
 var loaded: bool = false
 
@@ -37,10 +38,18 @@ func load_bundle() -> bool:
 	lines = bundle.get("lines", {})
 	quests = bundle.get("quests", {})
 	config = bundle.get("config", {})
+	sections = bundle
 	loaded = true
 	print("[content] %d words, %d npcs, %d lines, %d quests"
 		% [words.size(), npcs.size(), lines.size(), quests.size()])
 	return true
+
+
+## Any top-level table in the bundle, by name. New content types (monologue,
+## callbacks) are read through this rather than growing a getter each.
+func section(name: String) -> Dictionary:
+	var found: Variant = sections.get(name)
+	return found if found is Dictionary else {}
 
 
 func get_line(line_id: String) -> Dictionary:

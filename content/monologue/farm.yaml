@@ -1,0 +1,201 @@
+# The player character's inner monologue — GDD Part 15 §2.
+#
+# The ONLY English voice in the game, and the one that must disappear. Each line
+# is authored once in English with {span} markers; the spans swap to German
+# independently, driven by the player's own mastery. The player never chooses
+# this and is never told it is happening — they simply notice, one day, that
+# they thought "die Kuh".
+#
+# AUTHORING LAWS (Part 15 §2.1), all lint-enforced:
+#   * `en_template` contains NO German. `de` spans contain no English.
+#   * Nouns bring their articles — "die Kuh", never "Kuh".
+#   * Chunks swap WHOLE ("Guten Morgen"), never word by word.
+#   * Every span word must be a real word_id the player can meet in a quest.
+#     The monologue NEVER introduces vocabulary.
+#   * `de_full` is the M3 thought: the same idea, entirely in German.
+#
+# All German here is LLM-drafted and carries `draft: true` (Part 5 §4 gate).
+
+- mono_id: mono_wake_01
+  class: wake
+  draft: true
+  en_template: "Another morning. {c1} will be hungry."
+  spans:
+    c1: {de: "Die Kuh", en: "The cow", words: [kuh]}
+  de_full: "Wieder Morgen. Die Kuh hat Hunger."
+  focus_words: [kuh]
+  family: farm
+
+- mono_id: mono_wake_02
+  class: wake
+  draft: true
+  en_template: "{c1}. Time to work."
+  spans:
+    c1: {de: "Guten Morgen", en: "Good morning", words: [chunk_guten_morgen]}
+  de_full: "Guten Morgen. Jetzt arbeite ich."
+  focus_words: [chunk_guten_morgen]
+  family: social
+
+- mono_id: mono_wake_03
+  class: wake
+  draft: true
+  en_template: "I should check {c1} before it gets hot."
+  spans:
+    c1: {de: "das Feld", en: "the field", words: [feld]}
+  de_full: "Ich sehe das Feld an. Dann wird es heiß."
+  focus_words: [feld]
+  family: farm
+
+- mono_id: mono_sleep_01
+  class: sleep
+  draft: true
+  en_template: "{c1} is fed. {c2} is watered. Enough for today."
+  spans:
+    c1: {de: "Die Kuh", en: "The cow", words: [kuh]}
+    c2: {de: "Das Feld", en: "The field", words: [feld]}
+  de_full: "Die Kuh hat Heu. Das Feld hat Wasser. Genug für heute."
+  focus_words: [kuh, feld]
+  family: farm
+
+- mono_id: mono_sleep_02
+  class: sleep
+  draft: true
+  en_template: "Tomorrow: {c1}, then the village."
+  spans:
+    c1: {de: "gießen", en: "watering", words: [giessen]}
+  de_full: "Morgen gieße ich. Dann gehe ich ins Dorf."
+  focus_words: [giessen]
+  family: farm
+
+- mono_id: mono_loc_village_01
+  class: location_enter
+  subkey: village
+  draft: true
+  en_template: "{c1}. Someone always needs something."
+  spans:
+    c1: {de: "Das Dorf", en: "The village", words: [dorf]}
+  de_full: "Das Dorf. Hier braucht immer jemand etwas."
+  focus_words: [dorf]
+  family: places
+
+- mono_id: mono_loc_farm_01
+  class: location_enter
+  subkey: farm
+  draft: true
+  en_template: "Quiet out here. Just me and {c1}."
+  spans:
+    c1: {de: "die Tiere", en: "the animals", words: [kuh]}
+  de_full: "Hier ist es ruhig. Nur ich und die Tiere."
+  focus_words: [kuh]
+  family: farm
+
+- mono_id: mono_loc_lake_01
+  class: location_enter
+  subkey: lake
+  draft: true
+  en_template: "{c1}. I could stand here a while."
+  spans:
+    c1: {de: "Das Wasser", en: "The water", words: [wasser]}
+  de_full: "Das Wasser. Hier bleibe ich gern."
+  focus_words: [wasser]
+  family: nature
+
+- mono_id: mono_obj_kuh_01
+  class: object_examine
+  subkey: obj_cow
+  draft: true
+  en_template: "There she is. I should feed {c1} before {c2}."
+  spans:
+    c1: {de: "die Kuh", en: "the cow", words: [kuh]}
+    c2: {de: "der Markt", en: "the market", words: [markt]}
+  de_full: "Ich muss die Kuh füttern, bevor der Markt beginnt."
+  focus_words: [kuh, markt]
+  family: farm
+
+- mono_id: mono_obj_field_01
+  class: object_examine
+  subkey: obj_field
+  draft: true
+  en_template: "{c1} needs {c2}."
+  spans:
+    c1: {de: "Das Feld", en: "The field", words: [feld]}
+    c2: {de: "Wasser", en: "water", words: [wasser]}
+  de_full: "Das Feld braucht Wasser."
+  focus_words: [feld, wasser]
+  family: farm
+
+- mono_id: mono_obj_hen_01
+  class: object_examine
+  subkey: obj_hen
+  draft: true
+  en_template: "{c1} again. Maybe there's {c2} today."
+  spans:
+    c1: {de: "Das Huhn", en: "The hen", words: [huhn]}
+    c2: {de: "ein Ei", en: "an egg", words: [ei]}
+  de_full: "Das Huhn. Vielleicht gibt es heute ein Ei."
+  focus_words: [huhn, ei]
+  family: farm
+
+- mono_id: mono_quest_start_01
+  class: quest_react
+  draft: true
+  en_template: "She's asking for something. {c1}?"
+  spans:
+    c1: {de: "Das Heu", en: "The hay", words: [heu]}
+  de_full: "Sie will etwas. Das Heu?"
+  focus_words: [heu]
+  family: farm
+
+- mono_id: mono_quest_done_01
+  class: quest_react
+  draft: true
+  en_template: "That's done. {c1}."
+  spans:
+    c1: {de: "Danke", en: "Thanks", words: [chunk_danke]}
+  de_full: "Fertig. Danke."
+  focus_words: [chunk_danke]
+  family: social
+
+- mono_id: mono_craving_brot_01
+  class: craving
+  subkey: brot
+  draft: true
+  en_template: "I could eat. {c1}, maybe."
+  spans:
+    c1: {de: "Brot", en: "Bread", words: [brot]}
+  de_full: "Ich habe Hunger. Vielleicht Brot."
+  focus_words: [brot]
+  family: food
+
+- mono_id: mono_craving_milch_01
+  class: craving
+  subkey: milch
+  draft: true
+  en_template: "Something cold would be good. {c1}."
+  spans:
+    c1: {de: "Milch", en: "Milk", words: [milch]}
+  de_full: "Etwas Kaltes wäre gut. Milch."
+  focus_words: [milch]
+  family: farm
+
+- mono_id: mono_weather_regen_01
+  class: weather
+  subkey: regen
+  draft: true
+  en_template: "{c1}. The field waters itself today."
+  spans:
+    c1: {de: "Regen", en: "Rain", words: [regen]}
+  de_full: "Regen. Heute gießt der Himmel das Feld."
+  focus_words: [regen]
+  family: weather
+
+- mono_id: mono_weather_sonne_01
+  class: weather
+  subkey: sonne
+  draft: true
+  en_template: "{c1} today. Good day for the field."
+  spans:
+    c1: {de: "Sonne", en: "Sun", words: [sonne]}
+  de_full: "Heute Sonne. Ein guter Tag für das Feld."
+  focus_words: [sonne]
+  family: weather

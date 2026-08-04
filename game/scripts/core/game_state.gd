@@ -48,6 +48,8 @@ func to_dict() -> Dictionary:
 		"quiet_mode": quiet_mode,
 		"weather_seed": weather_seed,
 		"drills": DrillSpawner.to_dict(),
+		"monologue": Monologue.to_dict(),
+		"memory": Memory.to_dict(),
 		"inventory": Inventory.to_dict(),
 		"plots": Farm.to_dict(),
 		"animals": Livestock.to_dict(),
@@ -73,6 +75,8 @@ func load_state() -> void:
 	quiet_mode = bool(data.get("quiet_mode", false))
 	weather_seed = int(data.get("weather_seed", 20260804))
 	DrillSpawner.from_dict(data.get("drills", {}))
+	Monologue.from_dict(data.get("monologue", {}))
+	Memory.from_dict(data.get("memory", {}))
 	Inventory.from_dict(data.get("inventory", {}))
 	Farm.from_dict(data.get("plots", {}))
 	Livestock.from_dict(data.get("animals", {}))
@@ -116,10 +120,32 @@ func sleep(spawn_position: Vector2) -> void:
 	# The field grows overnight, so it must roll forward AFTER the day number
 	# advances and BEFORE the save — otherwise a reload replays or skips a night.
 	Farm.advance_day(day)
+	# The village sleeps too: weak memories fade, milestones do not.
+	Memory.advance_day()
+	# The scheduler names tomorrow's weakest word; whoever remembers you
+	# struggling with it gets to ask (Part 15 §3.4).
+	Callbacks.set_retest_word(Scheduler.weakest_due_word())
 	save_state()
 	day_advanced.emit(day)
+	# You wake thinking. The wake thought is the first thing the fade shows the
+	# player each day, which is why it is the class with the most templates.
+	Monologue.trigger("wake")
 	print("[state] slept -> day %d" % day)
 	HUD.refresh()
+
+
+## Which act of the campaign we are in (Part 6 §2). Boundaries are content, and
+## the act is a PACING ceiling for the monologue fade (Part 15 §2.1 rule 6) —
+## never a gate on what the player has actually earned.
+func act() -> int:
+	var block: Variant = Config._section("calendar").get("acts")
+	if not (block is Dictionary):
+		return 1
+	var current := 1
+	for key in (block as Dictionary):
+		if day >= int((block as Dictionary)[key]):
+			current = maxi(current, int(str(key)))
+	return current
 
 
 ## Affection tier with an NPC, 0 if never met (Part 12 §affection).

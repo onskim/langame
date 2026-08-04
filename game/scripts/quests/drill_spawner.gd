@@ -53,6 +53,7 @@ func on_pronunciation_pass(word_id: String) -> void:
 	var entry: Dictionary = flagged[word_id]
 	entry["consecutive_passes"] = int(entry.get("consecutive_passes", 0)) + 1
 	if int(entry["consecutive_passes"]) >= passes_to_clear():
+		_record_triumph(word_id)
 		_clear(word_id, "passed")
 
 
@@ -73,9 +74,21 @@ func _flag(word_id: String) -> void:
 		"consecutive_passes": 0,
 		"flagged_on_day": GameState.day,
 	}
+	# Everyone present sees you struggle. The drill's giver additionally becomes
+	# your COACH — which is the fact the celebration later hangs off, so the
+	# right person gets to be proud of you (Part 15 §3.6.2).
+	for npc_id in WorldRouter.npcs_on_map(WorldRouter.current_map, DayCycle.hour):
+		Memory.record(str(npc_id), "word_struggle", word_id)
 	word_flagged.emit(word_id)
 	print("[drill] flagged %s (cycle %d/%d)" % [word_id, cycles + 1, max_cycles()])
 	_spawn_drill(word_id)
+
+
+## A triumph is permanent. The day you finally said it right is the one thing
+## the village is never allowed to forget (Part 15 §3.2).
+func _record_triumph(word_id: String) -> void:
+	for npc_id in Memory.npcs_remembering_word(word_id):
+		Memory.record(str(npc_id), "word_triumph", word_id, null, true)
 
 
 func _clear(word_id: String, reason: String) -> void:

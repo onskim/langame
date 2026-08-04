@@ -1,6 +1,12 @@
 {
  "config": {
   "calendar": {
+   "acts": {
+    "1": 1,
+    "2": 25,
+    "3": 49,
+    "4": 73
+   },
    "config_id": "calendar",
    "days_per_season": 24,
    "festivals": {
@@ -208,6 +214,98 @@
    "recognition": 0.35,
    "speech_enabled": false,
    "spoken_multiplier": 2.0
+  },
+  "memory": {
+   "caps": {
+    "per_npc_per_day": 1,
+    "per_village_per_day": 3,
+    "retest_exempt": true
+   },
+   "config_id": "memory",
+   "decay": {
+    "nightly_multiplier": 0.98,
+    "prune_below": 0.15
+   },
+   "kinds": [
+    "first_meeting",
+    "quest_memory",
+    "purchase_pattern",
+    "usual_order",
+    "word_struggle",
+    "word_triumph",
+    "drill_coached",
+    "speech_style"
+   ],
+   "permanent": [
+    "first_meeting",
+    "quest_memory",
+    "word_triumph",
+    "drill_coached"
+   ],
+   "relevance": {
+    "default": 1.0,
+    "first_meeting": 1.0,
+    "purchase_pattern": 1.5,
+    "quest_memory": 1.0,
+    "usual_order": 1.5,
+    "word_due_retest": 3.0,
+    "word_triumph": 2.0
+   },
+   "score_threshold": 0.8
+  },
+  "monologue_fade": {
+   "act_ceilings": {
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 3
+   },
+   "config_id": "monologue_fade",
+   "cooldowns": {
+    "min_seconds_between": 25.0,
+    "same_line_min_days": 2
+   },
+   "fade_index": {
+    "min_words": 5
+   },
+   "gates": {
+    "m1_mastery": 0.5,
+    "m1_times_seen": 3,
+    "m2_mastery": 0.75,
+    "m3_family_average": 0.8,
+    "m3_mastery": 0.75
+   },
+   "max_swaps_per_line": 3,
+   "struktur_whitelist": [
+    "ich",
+    "du",
+    "er",
+    "sie",
+    "es",
+    "wir",
+    "ist",
+    "bin",
+    "hat",
+    "habe",
+    "muss",
+    "kann",
+    "will",
+    "der",
+    "die",
+    "das",
+    "ein",
+    "eine",
+    "und",
+    "aber",
+    "vor",
+    "nach",
+    "bevor",
+    "noch",
+    "schon",
+    "heute",
+    "morgen"
+   ],
+   "swap_off_mastery": 0.4
   },
   "thresholds": {
    "config_id": "thresholds",
@@ -1046,6 +1144,390 @@
      "target": "{TARGET}"
     }
    }
+  }
+ },
+ "monologue": {
+  "mono_craving_brot_01": {
+   "class": "craving",
+   "de_full": "Ich habe Hunger. Vielleicht Brot.",
+   "draft": true,
+   "en_template": "I could eat. {c1}, maybe.",
+   "family": "food",
+   "focus_words": [
+    "brot"
+   ],
+   "mono_id": "mono_craving_brot_01",
+   "spans": {
+    "c1": {
+     "de": "Brot",
+     "en": "Bread",
+     "words": [
+      "brot"
+     ]
+    }
+   },
+   "subkey": "brot"
+  },
+  "mono_craving_milch_01": {
+   "class": "craving",
+   "de_full": "Etwas Kaltes wäre gut. Milch.",
+   "draft": true,
+   "en_template": "Something cold would be good. {c1}.",
+   "family": "farm",
+   "focus_words": [
+    "milch"
+   ],
+   "mono_id": "mono_craving_milch_01",
+   "spans": {
+    "c1": {
+     "de": "Milch",
+     "en": "Milk",
+     "words": [
+      "milch"
+     ]
+    }
+   },
+   "subkey": "milch"
+  },
+  "mono_loc_farm_01": {
+   "class": "location_enter",
+   "de_full": "Hier ist es ruhig. Nur ich und die Tiere.",
+   "draft": true,
+   "en_template": "Quiet out here. Just me and {c1}.",
+   "family": "farm",
+   "focus_words": [
+    "kuh"
+   ],
+   "mono_id": "mono_loc_farm_01",
+   "spans": {
+    "c1": {
+     "de": "die Tiere",
+     "en": "the animals",
+     "words": [
+      "kuh"
+     ]
+    }
+   },
+   "subkey": "farm"
+  },
+  "mono_loc_lake_01": {
+   "class": "location_enter",
+   "de_full": "Das Wasser. Hier bleibe ich gern.",
+   "draft": true,
+   "en_template": "{c1}. I could stand here a while.",
+   "family": "nature",
+   "focus_words": [
+    "wasser"
+   ],
+   "mono_id": "mono_loc_lake_01",
+   "spans": {
+    "c1": {
+     "de": "Das Wasser",
+     "en": "The water",
+     "words": [
+      "wasser"
+     ]
+    }
+   },
+   "subkey": "lake"
+  },
+  "mono_loc_village_01": {
+   "class": "location_enter",
+   "de_full": "Das Dorf. Hier braucht immer jemand etwas.",
+   "draft": true,
+   "en_template": "{c1}. Someone always needs something.",
+   "family": "places",
+   "focus_words": [
+    "dorf"
+   ],
+   "mono_id": "mono_loc_village_01",
+   "spans": {
+    "c1": {
+     "de": "Das Dorf",
+     "en": "The village",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "subkey": "village"
+  },
+  "mono_obj_field_01": {
+   "class": "object_examine",
+   "de_full": "Das Feld braucht Wasser.",
+   "draft": true,
+   "en_template": "{c1} needs {c2}.",
+   "family": "farm",
+   "focus_words": [
+    "feld",
+    "wasser"
+   ],
+   "mono_id": "mono_obj_field_01",
+   "spans": {
+    "c1": {
+     "de": "Das Feld",
+     "en": "The field",
+     "words": [
+      "feld"
+     ]
+    },
+    "c2": {
+     "de": "Wasser",
+     "en": "water",
+     "words": [
+      "wasser"
+     ]
+    }
+   },
+   "subkey": "obj_field"
+  },
+  "mono_obj_hen_01": {
+   "class": "object_examine",
+   "de_full": "Das Huhn. Vielleicht gibt es heute ein Ei.",
+   "draft": true,
+   "en_template": "{c1} again. Maybe there's {c2} today.",
+   "family": "farm",
+   "focus_words": [
+    "huhn",
+    "ei"
+   ],
+   "mono_id": "mono_obj_hen_01",
+   "spans": {
+    "c1": {
+     "de": "Das Huhn",
+     "en": "The hen",
+     "words": [
+      "huhn"
+     ]
+    },
+    "c2": {
+     "de": "ein Ei",
+     "en": "an egg",
+     "words": [
+      "ei"
+     ]
+    }
+   },
+   "subkey": "obj_hen"
+  },
+  "mono_obj_kuh_01": {
+   "class": "object_examine",
+   "de_full": "Ich muss die Kuh füttern, bevor der Markt beginnt.",
+   "draft": true,
+   "en_template": "There she is. I should feed {c1} before {c2}.",
+   "family": "farm",
+   "focus_words": [
+    "kuh",
+    "markt"
+   ],
+   "mono_id": "mono_obj_kuh_01",
+   "spans": {
+    "c1": {
+     "de": "die Kuh",
+     "en": "the cow",
+     "words": [
+      "kuh"
+     ]
+    },
+    "c2": {
+     "de": "der Markt",
+     "en": "the market",
+     "words": [
+      "markt"
+     ]
+    }
+   },
+   "subkey": "obj_cow"
+  },
+  "mono_quest_done_01": {
+   "class": "quest_react",
+   "de_full": "Fertig. Danke.",
+   "draft": true,
+   "en_template": "That's done. {c1}.",
+   "family": "social",
+   "focus_words": [
+    "chunk_danke"
+   ],
+   "mono_id": "mono_quest_done_01",
+   "spans": {
+    "c1": {
+     "de": "Danke",
+     "en": "Thanks",
+     "words": [
+      "chunk_danke"
+     ]
+    }
+   }
+  },
+  "mono_quest_start_01": {
+   "class": "quest_react",
+   "de_full": "Sie will etwas. Das Heu?",
+   "draft": true,
+   "en_template": "She's asking for something. {c1}?",
+   "family": "farm",
+   "focus_words": [
+    "heu"
+   ],
+   "mono_id": "mono_quest_start_01",
+   "spans": {
+    "c1": {
+     "de": "Das Heu",
+     "en": "The hay",
+     "words": [
+      "heu"
+     ]
+    }
+   }
+  },
+  "mono_sleep_01": {
+   "class": "sleep",
+   "de_full": "Die Kuh hat Heu. Das Feld hat Wasser. Genug für heute.",
+   "draft": true,
+   "en_template": "{c1} is fed. {c2} is watered. Enough for today.",
+   "family": "farm",
+   "focus_words": [
+    "kuh",
+    "feld"
+   ],
+   "mono_id": "mono_sleep_01",
+   "spans": {
+    "c1": {
+     "de": "Die Kuh",
+     "en": "The cow",
+     "words": [
+      "kuh"
+     ]
+    },
+    "c2": {
+     "de": "Das Feld",
+     "en": "The field",
+     "words": [
+      "feld"
+     ]
+    }
+   }
+  },
+  "mono_sleep_02": {
+   "class": "sleep",
+   "de_full": "Morgen gieße ich. Dann gehe ich ins Dorf.",
+   "draft": true,
+   "en_template": "Tomorrow: {c1}, then the village.",
+   "family": "farm",
+   "focus_words": [
+    "giessen"
+   ],
+   "mono_id": "mono_sleep_02",
+   "spans": {
+    "c1": {
+     "de": "gießen",
+     "en": "watering",
+     "words": [
+      "giessen"
+     ]
+    }
+   }
+  },
+  "mono_wake_01": {
+   "class": "wake",
+   "de_full": "Wieder Morgen. Die Kuh hat Hunger.",
+   "draft": true,
+   "en_template": "Another morning. {c1} will be hungry.",
+   "family": "farm",
+   "focus_words": [
+    "kuh"
+   ],
+   "mono_id": "mono_wake_01",
+   "spans": {
+    "c1": {
+     "de": "Die Kuh",
+     "en": "The cow",
+     "words": [
+      "kuh"
+     ]
+    }
+   }
+  },
+  "mono_wake_02": {
+   "class": "wake",
+   "de_full": "Guten Morgen. Jetzt arbeite ich.",
+   "draft": true,
+   "en_template": "{c1}. Time to work.",
+   "family": "social",
+   "focus_words": [
+    "chunk_guten_morgen"
+   ],
+   "mono_id": "mono_wake_02",
+   "spans": {
+    "c1": {
+     "de": "Guten Morgen",
+     "en": "Good morning",
+     "words": [
+      "chunk_guten_morgen"
+     ]
+    }
+   }
+  },
+  "mono_wake_03": {
+   "class": "wake",
+   "de_full": "Ich sehe das Feld an. Dann wird es heiß.",
+   "draft": true,
+   "en_template": "I should check {c1} before it gets hot.",
+   "family": "farm",
+   "focus_words": [
+    "feld"
+   ],
+   "mono_id": "mono_wake_03",
+   "spans": {
+    "c1": {
+     "de": "das Feld",
+     "en": "the field",
+     "words": [
+      "feld"
+     ]
+    }
+   }
+  },
+  "mono_weather_regen_01": {
+   "class": "weather",
+   "de_full": "Regen. Heute gießt der Himmel das Feld.",
+   "draft": true,
+   "en_template": "{c1}. The field waters itself today.",
+   "family": "weather",
+   "focus_words": [
+    "regen"
+   ],
+   "mono_id": "mono_weather_regen_01",
+   "spans": {
+    "c1": {
+     "de": "Regen",
+     "en": "Rain",
+     "words": [
+      "regen"
+     ]
+    }
+   },
+   "subkey": "regen"
+  },
+  "mono_weather_sonne_01": {
+   "class": "weather",
+   "de_full": "Heute Sonne. Ein guter Tag für das Feld.",
+   "draft": true,
+   "en_template": "{c1} today. Good day for the field.",
+   "family": "weather",
+   "focus_words": [
+    "sonne"
+   ],
+   "mono_id": "mono_weather_sonne_01",
+   "spans": {
+    "c1": {
+     "de": "Sonne",
+     "en": "Sun",
+     "words": [
+      "sonne"
+     ]
+    }
+   },
+   "subkey": "sonne"
   }
  },
  "npcs": {

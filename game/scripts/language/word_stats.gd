@@ -73,6 +73,17 @@ func record(word_id: String, correct: bool, day: int, spoken: bool = false,
 	Scheduler.apply_sm2(s, correct, day, credit)
 
 
+## Recency only — no correctness, no SM-2 advance. A German word rendered in a
+## thought keeps that word warm, but a thought must never satisfy a due review:
+## reading your own mind is not retrieval (Part 15 §2.6, Part 9 m3/m5).
+func touch(word_id: String, day: int) -> void:
+	if not has_word(word_id):
+		return
+	var s := get_stat(word_id)
+	s["last_seen_day"] = day
+	Mastery.update(s, day)
+
+
 func record_repair(word_id: String, day: int) -> void:
 	# Repair use is never penalised, but it is a weak-signal miss (Part 3 §2).
 	var s := get_stat(word_id)
