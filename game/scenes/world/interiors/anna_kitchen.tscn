@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/interior_map.gd" id="1_interior"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/core/door.gd" id="3_door"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bed.png" id="4_bed"]
+[ext_resource type="Script" path="res://scripts/core/interactable.gd" id="5_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bed"]
+size = Vector2(32, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(28, 24)
+
+[node name="AnnaKitchen" type="Node2D"]
+script = ExtResource("1_interior")
+map_id = "interior_anna_kitchen"
+map_width_tiles = 20
+map_height_tiles = 14
+default_spawn = Vector2(160, 176)
+is_interior = true
+room_width = 20
+room_height = 14
+
+[node name="Ground" type="TileMapLayer" parent="."]
+
+[node name="Locations" type="Node2D" parent="."]
+
+[node name="Arrivals" type="Node2D" parent="."]
+
+[node name="from_outside" type="Marker2D" parent="Arrivals"]
+position = Vector2(160, 176)
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="Exit" type="Area2D" parent="Doors" groups=["door"]]
+position = Vector2(160, 200)
+script = ExtResource("3_door")
+target_map = "farm"
+arrival_marker = "from_anna_kitchen"
+sign_text = "raus"
+
+[node name="Shape" type="CollisionShape2D" parent="Doors/Exit"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="Furniture" type="Node2D" parent="."]
+
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(160, 176)
+
+[node name="Light" type="CanvasModulate" parent="."]
+color = Color(1, 1, 1, 1)

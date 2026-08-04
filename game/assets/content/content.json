@@ -44,11 +44,15 @@
    },
    "config_id": "world",
    "enterable": {
+    "interior_anna_kitchen": "open",
     "interior_bakery": "open",
     "interior_farmhouse": "open",
     "interior_shop": "open"
    },
    "locations": {
+    "anna_farmhouse": "farm",
+    "anna_field": "farm",
+    "anna_yard": "farm",
     "bakery": "village",
     "farm_yard": "farm",
     "farmhouse": "farm",
@@ -63,6 +67,10 @@
     "farm": {
      "display": "Hof",
      "scene": "res://scenes/world/farm.tscn"
+    },
+    "interior_anna_kitchen": {
+     "display": "Annas Küche",
+     "scene": "res://scenes/world/interiors/anna_kitchen.tscn"
     },
     "interior_bakery": {
      "display": "Bäckerei",
@@ -303,19 +311,24 @@
  },
  "npcs": {
   "npc_anna": {
-   "home": "farmhouse",
+   "home": "anna_farmhouse",
    "name": "Anna",
    "npc_id": "npc_anna",
    "rep_gate": 0,
    "role": "farmer",
    "schedule": [
     {
-     "at": "farm_yard",
+     "at": "anna_field",
      "from": "06:00",
+     "to": "09:00"
+    },
+    {
+     "at": "farm_yard",
+     "from": "09:00",
      "to": "12:00"
     },
     {
-     "at": "field",
+     "at": "anna_yard",
      "from": "12:00",
      "to": "17:00"
     },
@@ -325,7 +338,7 @@
      "to": "19:00"
     },
     {
-     "at": "farmhouse",
+     "at": "anna_farmhouse",
      "from": "19:00",
      "to": "24:00"
     }

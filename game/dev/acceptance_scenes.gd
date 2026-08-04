@@ -30,8 +30,11 @@ func _run() -> void:
 	DayCycle.hour = 9.0
 
 	# ---------- one scene per place, declared in content ----------
+	# Every place is declared in content, so adding one is a scene + a row.
 	var maps := WorldRouter.maps()
-	_check("five places declared", maps.size() == 5, str(maps.keys()))
+	_check("every place is declared in content", maps.size() >= 6, str(maps.keys()))
+	for required in ["farm", "village", "interior_farmhouse", "interior_anna_kitchen"]:
+		_check("%s is declared" % required, maps.has(required))
 	for map_id in maps:
 		var path: String = WorldRouter.scene_path(map_id)
 		_check("%s has a scene file" % map_id, ResourceLoader.exists(path), path)

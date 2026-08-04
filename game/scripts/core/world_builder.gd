@@ -53,6 +53,14 @@ static func paint_ground(layer: TileMapLayer) -> void:
 		for x in range(5, 19):
 			layer.set_cell(Vector2i(x, y), Tile.SOIL, Vector2i.ZERO)
 
+	# Anna's plot, north of the divider (Part 14 §3: adjacent farm plot).
+	# Her field is tilled too, so the two holdings read as the same kind of work.
+	for y in range(4, 9):
+		for x in range(34, 46):
+			layer.set_cell(Vector2i(x, y), Tile.SOIL, Vector2i.ZERO)
+	for x in range(30, FARM_W - 2):
+		layer.set_cell(Vector2i(x, 12), Tile.PATH, Vector2i.ZERO)
+
 
 enum GateSide { NONE, EAST, WEST }
 
@@ -74,6 +82,14 @@ static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D,
 			cells.append(Vector2i(0, y))
 		if not (gate == GateSide.EAST and gate_rows.has(y)):
 			cells.append(Vector2i(FARM_W - 1, y))
+
+	# The divider between the player's plot and Anna's, with a gap to walk
+	# through. Neighbours, not strangers — the boundary should be legible but
+	# never an obstacle.
+	if gate != GateSide.NONE:
+		for x in range(28, FARM_W - 1):
+			if x < 36 or x > 39:
+				cells.append(Vector2i(x, 14))
 
 	for cell in cells:
 		fence_layer.set_cell(cell, Tile.FENCE, Vector2i.ZERO)

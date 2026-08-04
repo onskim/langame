@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm_map.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" path="res://scripts/core/map_gate.gd" id="14_gate"]
 [ext_resource type="Script" path="res://scripts/core/door.gd" id="15_door"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_shop.png" id="16_house"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_barn.png" id="17_barn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="18_annahouse"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
@@ -49,6 +51,15 @@ position = Vector2(208, 168)
 
 [node name="stream" type="Marker2D" parent="Locations"]
 position = Vector2(304, 560)
+
+[node name="anna_farmhouse" type="Marker2D" parent="Locations"]
+position = Vector2(560, 190)
+
+[node name="anna_yard" type="Marker2D" parent="Locations"]
+position = Vector2(640, 200)
+
+[node name="anna_field" type="Marker2D" parent="Locations"]
+position = Vector2(640, 104)
 
 [node name="Arrivals" type="Node2D" parent="."]
 
@@ -158,6 +169,26 @@ position = Vector2(0, 4)
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Farmhouse/Body"]
 shape = SubResource("RectangleShape2D_big")
 
+[node name="AnnaHouse" type="Sprite2D" parent="Buildings"]
+position = Vector2(560, 144)
+texture = ExtResource("18_annahouse")
+
+[node name="Body" type="StaticBody2D" parent="Buildings/AnnaHouse"]
+position = Vector2(0, 4)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/AnnaHouse/Body"]
+shape = SubResource("RectangleShape2D_big")
+
+[node name="Barn" type="Sprite2D" parent="Buildings"]
+position = Vector2(704, 144)
+texture = ExtResource("17_barn")
+
+[node name="Body" type="StaticBody2D" parent="Buildings/Barn"]
+position = Vector2(0, 8)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/Barn/Body"]
+shape = SubResource("RectangleShape2D_big")
+
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="FarmhouseDoor" type="Area2D" parent="Doors" groups=["door"]]
@@ -168,6 +199,16 @@ arrival_marker = "from_outside"
 sign_text = "Zuhause"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/FarmhouseDoor"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="AnnaKitchenDoor" type="Area2D" parent="Doors" groups=["door"]]
+position = Vector2(560, 178)
+script = ExtResource("15_door")
+target_map = "interior_anna_kitchen"
+arrival_marker = "from_outside"
+sign_text = "Annas Küche"
+
+[node name="Shape" type="CollisionShape2D" parent="Doors/AnnaKitchenDoor"]
 shape = SubResource("RectangleShape2D_door")
 
 [node name="NPCs" type="Node2D" parent="."]

@@ -24,7 +24,7 @@ func _run() -> void:
 	print("--- split world acceptance ---")
 
 	# ---------- the world layout is content, not code ----------
-	_check("outdoor + interior places all declared", WorldRouter.maps().size() == 5,
+	_check("outdoor + interior places all declared", WorldRouter.maps().size() == 6,
 		str(WorldRouter.maps().keys()))
 	_check("farm locations map to the farm",
 		WorldRouter.map_of_location("field") == "farm",
@@ -127,5 +127,46 @@ func _run() -> void:
 	var reloaded := SaveService.load_game()
 	_check("current map is saved", reloaded.get("current_map", "") == "village",
 		str(reloaded.get("current_map", "")))
+
+	# ---------- Part 14 §3: Anna has her OWN adjacent plot ----------
+	# She is a neighbour, not a lodger. Sleeping in the player's farmhouse and
+	# working the player's field was the bug this section exists to prevent.
+	var farm2: Node2D = load("res://scenes/world/farm.tscn").instantiate()
+	add_child(farm2)
+	await get_tree().process_frame
+
+	_check("Anna has her own farmhouse",
+		farm2.get_node_or_null("Buildings/AnnaHouse") != null)
+	_check("Anna has a big barn", farm2.get_node_or_null("Buildings/Barn") != null)
+	_check("Anna's kitchen is enterable (mentor exception)",
+		(farm2.get_node("Doors/AnnaKitchenDoor") as Door).effective_access() == Door.Access.OPEN)
+
+	var player_house: Marker2D = farm2.get_node("Locations/farmhouse")
+	var anna_house: Marker2D = farm2.get_node("Locations/anna_farmhouse")
+	_check("the two farmhouses are different places",
+		player_house.global_position.distance_to(anna_house.global_position) > 200.0,
+		"%.0f px apart" % player_house.global_position.distance_to(anna_house.global_position))
+
+	# The real assertion: Anna never sleeps in the player's house or works the
+	# player's field.
+	var trespass: Array[String] = []
+	for hour in [6.0, 8.0, 10.0, 13.0, 16.0, 20.0, 23.0]:
+		var where := WorldRouter.scheduled_location("npc_anna", hour)
+		if where == "farmhouse" or where == "field":
+			trespass.append("%02d:00 %s" % [int(hour), where])
+	_check("Anna never sleeps in the player's house or works their field",
+		trespass.is_empty(), str(trespass))
+
+	var own_land: Array[String] = []
+	for hour in [6.0, 13.0, 20.0]:
+		own_land.append(WorldRouter.scheduled_location("npc_anna", hour))
+	_check("Anna works her own land", own_land.has("anna_field") and own_land.has("anna_yard"),
+		str(own_land))
+	_check("Anna still visits the player's yard to teach",
+		WorldRouter.scheduled_location("npc_anna", 10.0) == "farm_yard",
+		WorldRouter.scheduled_location("npc_anna", 10.0))
+
+	farm2.queue_free()
+	await get_tree().process_frame
 
 	print("--- split world acceptance complete, %d failure(s). ---" % _failures)

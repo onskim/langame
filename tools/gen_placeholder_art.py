@@ -294,6 +294,38 @@ def building(roof_col, width=64, height=64):
     return px
 
 
+def barn():
+    """Anna's big barn — 80x64. Deliberately larger and squarer than a
+    shopfront so the plot next door reads as a working farm at a glance."""
+    w, h = 80, 64
+    px = blank(w, h)
+
+    def rect(x0, y0, x1, y1, col):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if 0 <= x < w and 0 <= y < h:
+                    px[y][x] = C[col]
+
+    rect(3, 20, w - 4, h - 5, "roof_bake")        # red board walls
+    for y in range(20, h - 4):
+        if y % 5 == 0:
+            rect(3, y, w - 4, y, "roof_dark")
+    # gambrel roof: two slopes, the barn silhouette
+    for i in range(10):
+        rect(max(0, 14 - i), 10 + i, min(w - 1, w - 15 + i), 10 + i, "wood_dark")
+    for i in range(10):
+        rect(max(0, 24 - i * 2), i, min(w - 1, w - 25 + i * 2), i, "wood_dark")
+    rect(0, 19, w - 1, 21, "roof_dark")
+
+    rect(w // 2 - 13, h - 30, w // 2 + 12, h - 5, "wood")   # big double doors
+    rect(w // 2 - 1, h - 30, w // 2, h - 5, "roof_dark")
+    rect(w // 2 - 13, h - 30, w // 2 + 12, h - 28, "roof_dark")
+    rect(10, 26, 19, 34, "window")
+    rect(w - 20, 26, w - 11, 34, "window")
+    rect(0, h - 5, w - 1, h - 1, "stone_dark")
+    return px
+
+
 def well():
     """The village well — the square's landmark and Mila's hangout."""
     px = blank(32, 32)
@@ -385,6 +417,8 @@ def main():
     write_png(os.path.join(s, "bld_shop.png"), 64, 64, building("roof_shop"))
     write_png(os.path.join(s, "bld_rathaus.png"), 80, 72, building("roof_hall", 80, 72))
     write_png(os.path.join(s, "well.png"), 32, 32, well())
+    write_png(os.path.join(s, "bld_barn.png"), 80, 64, barn())
+    write_png(os.path.join(s, "bld_anna_house.png"), 64, 64, building("roof_hall"))
     print("Done. ALL PLACEHOLDER — regenerate via PixelLab MCP per Part 11 §2.")
 
 

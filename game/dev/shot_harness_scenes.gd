@@ -10,7 +10,9 @@ func _ready() -> void:
 	await _shoot_place("res://scenes/world/interiors/farmhouse.tscn", "31-interior-farmhouse", Vector2(160, 150))
 	await _shoot_place("res://scenes/world/interiors/bakery.tscn", "32-interior-bakery", Vector2(160, 150))
 	await _shoot_place("res://scenes/world/village.tscn", "33-village-with-doors", Vector2(368, 200))
-	await _shoot_place("res://scenes/world/farm.tscn", "34-farm-with-house", Vector2(240, 200))
+	await _shoot_place("res://scenes/world/farm.tscn", "34-farm-player-plot", Vector2(240, 220))
+	DayCycle.hour = 13.0
+	await _shoot_place("res://scenes/world/farm.tscn", "35-anna-plot", Vector2(640, 180))
 	print("[harness] done -> %s" % ProjectSettings.globalize_path(OUT_DIR))
 	get_tree().quit()
 

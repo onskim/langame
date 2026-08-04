@@ -30,12 +30,18 @@ maps:
   interior_shop:
     scene: "res://scenes/world/interiors/shop.tscn"
     display: Laden
+  interior_anna_kitchen:
+    scene: "res://scenes/world/interiors/anna_kitchen.tscn"
+    display: Annas Küche
 
 locations:
   farm_yard: farm
   field: farm
   farmhouse: farm
   stream: farm
+  anna_farmhouse: farm
+  anna_yard: farm
+  anna_field: farm
   village_square: village
   bakery: village
   shop: village
@@ -54,3 +60,6 @@ enterable:
   interior_farmhouse: open
   interior_bakery: open
   interior_shop: open
+  # Mentor exception (Part 14 §3): Anna's kitchen is the one private home
+  # open from the start, because she is the player's way in to the village.
+  interior_anna_kitchen: open
