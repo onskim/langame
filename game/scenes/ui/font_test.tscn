@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/font_test.gd" id="1_fonttest"]
+
+[node name="FontTest" type="Node2D"]
+script = ExtResource("1_fonttest")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.09, 0.1, 0.13, 1)
+
+[node name="Rows" type="VBoxContainer" parent="CanvasLayer"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 628.0
+offset_bottom = 348.0
+theme_override_constants/separation = 10
