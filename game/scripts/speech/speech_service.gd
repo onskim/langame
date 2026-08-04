@@ -62,14 +62,19 @@ func pass_threshold() -> float:
 	return float(Config.threshold_group("pronunciation").get("a1_pass_accuracy", 60))
 
 
+## Addendum §1: silence is a REDUCED-CREDIT fallback, not a free pass.
+## It resolves the prompt and earns comprehension credit, but it must not
+## advance the schedule as far as a demonstrated spoken answer — otherwise a
+## whole quiet-mode run manufactures evidence of mastery the player never gave.
+const SILENT_CREDIT := 0.5
+
 func _silent_result(word_ids: Array) -> Dictionary:
-	# The silent path is a legitimate answer, logged as comprehension rather
-	# than production. It earns credit; it just does not earn the speech bonus.
 	return {
 		"spoken": false,
 		"accuracy": 0.0,
 		"passed": true,
 		"silent": true,
+		"credit": SILENT_CREDIT,
 		"words": word_ids,
 		"reason": "silent_mode",
 	}
@@ -171,7 +176,8 @@ func _apply_to_learner_model(result: Dictionary) -> void:
 				s["pron_fails_row"] = 0
 			else:
 				s["pron_fails_row"] += 1
-		WordStats.record(word_id, passed, GameState.day, spoken)
+		WordStats.record(word_id, passed, GameState.day, spoken,
+			float(result.get("credit", 1.0)))
 		if spoken:
 			if passed:
 				DrillSpawner.on_pronunciation_pass(word_id)

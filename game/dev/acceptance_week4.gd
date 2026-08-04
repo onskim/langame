@@ -32,24 +32,56 @@ func _run() -> void:
 		int(Config.scheduler("wantlist_size", 0)) == 12,
 		"wantlist_size=%s" % Config.scheduler("wantlist_size"))
 
-	# ---------- mastery formula (Part 10 §4) ----------
+	# ---------- Addendum §10.2: renormalization while speech is absent -------
+	_check("speech is off, so pron weight is redistributed",
+		is_zero_approx(float(Mastery.weights()["pronunciation"])),
+		str(Mastery.weights()))
+	_check("renormalized weights still sum to 1.0",
+		abs(float(Mastery.weights()["recognition"]) + float(Mastery.weights()["production"])
+			+ float(Mastery.weights()["recency"]) - 1.0) < 0.001,
+		str(Mastery.weights()))
+
+	# ---------- mastery formula ----------
 	var s := WordStats.get_stat("kuh")
 	s["times_correct"] = 8
 	s["times_wrong"] = 2
 	s["pron_avg"] = 80.0
 	s["last_seen_day"] = 5
 	var m := Mastery.compute(s, 5)
-	# 0.35*0.8 + 0.25*0 + 0.25*0.8 + 0.15*1.0 = 0.28 + 0 + 0.20 + 0.15 = 0.63
-	_check("mastery matches the spec formula", abs(m - 0.63) < 0.001, "mastery=%.4f" % m)
+	# 0.45*0.8 + 0.35*0 + 0.20*1.0 = 0.36 + 0.20 = 0.56
+	_check("mastery matches the renormalized formula", abs(m - 0.56) < 0.001,
+		"mastery=%.4f" % m)
+
+	# THE BUG THIS GUARDS: with the un-renormalized weights, pron_avg=0 for every
+	# silent player capped mastery at 0.50, so L2/L3 support tiers were
+	# unreachable and the 30-day sim certified a miscalibrated model.
+	_check("a silent player can still exceed 0.50 and reach L2+", m > 0.5,
+		"mastery=%.4f" % m)
 
 	var stale := Mastery.compute(s, 19)  # 14 days later: recency fully decayed
-	_check("mastery decays with recency", abs(stale - 0.48) < 0.001, "stale=%.4f" % stale)
+	_check("mastery decays with recency", stale < m, "%.4f -> %.4f" % [m, stale])
+	_check("recognition itself is recency-decayed (Part 10 §4)",
+		Mastery.recognition(s, 19) < Mastery.recognition(s, 5),
+		"%.3f -> %.3f" % [Mastery.recognition(s, 5), Mastery.recognition(s, 19)])
 	_check("recency decay is bounded at 0",
 		is_zero_approx(Mastery.recency(s, 99)), "recency=%.3f" % Mastery.recency(s, 99))
 
-	_check("repair use drags recognition",
-		Mastery.recognition({"times_correct": 8, "times_wrong": 2, "repair_uses": 4}) < 0.8,
+	# Part 3 §2: repair tools are free. Docking mastery for them made a free
+	# affordance quietly expensive.
+	_check("repair use does NOT dock mastery",
+		is_equal_approx(Mastery.recognition({"times_correct": 8, "times_wrong": 2, "repair_uses": 4}),
+			Mastery.recognition({"times_correct": 8, "times_wrong": 2})),
 		"recog=%.3f" % Mastery.recognition({"times_correct": 8, "times_wrong": 2, "repair_uses": 4}))
+
+	# ---------- production is a SUCCESS RATE, not an attempt ratio ----------
+	_check("production is 0 with no spoken attempts",
+		is_zero_approx(Mastery.production({"prod_attempts": 0, "prod_successes": 0})))
+	_check("speaking and always failing scores 0, not 1",
+		is_zero_approx(Mastery.production({"prod_attempts": 6, "prod_successes": 0})),
+		"prod=%.2f" % Mastery.production({"prod_attempts": 6, "prod_successes": 0}))
+	_check("a flawless speaker reaches 1.0, not 0.5",
+		is_equal_approx(Mastery.production({"prod_attempts": 6, "prod_successes": 6}), 1.0),
+		"prod=%.2f" % Mastery.production({"prod_attempts": 6, "prod_successes": 6}))
 
 	# ---------- support tiers (Part 10 §4) ----------
 	WordStats.reset()

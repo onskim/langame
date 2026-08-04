@@ -54,7 +54,9 @@ func is_available(quest_id: String) -> bool:
 	var q := ContentDB.get_quest(quest_id)
 	if q.is_empty() or q.get("kind", "story") != "story":
 		return false
-	if GameState.reputation < int(q.get("rep_gate", 0)):
+	# Part 10 §5.3 gates are per-giver: Karl's bread quest must not open because
+	# the player did Anna's chores.
+	if GameState.reputation_of(q.get("giver", "")) < int(q.get("rep_gate", 0)):
 		return false
 	var prereq: Variant = q.get("prereq")
 	if prereq is Array:

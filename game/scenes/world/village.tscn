@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/village_map.gd" id="1_village"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_shop.png" id="7_shop"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_rathaus.png" id="8_rathaus"]
 [ext_resource type="Texture2D" path="res://assets/sprites/well.png" id="9_well"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="11_cottage"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(20, 48)
@@ -57,6 +58,17 @@ texture = ExtResource("8_rathaus")
 position = Vector2(0, 8)
 
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Rathaus/RathausBody"]
+shape = SubResource("RectangleShape2D_bld")
+
+[node name="MilaCottage" type="Sprite2D" parent="Buildings"]
+position = Vector2(240, 392)
+texture = ExtResource("11_cottage")
+modulate = Color(0.92, 0.86, 1, 1)
+
+[node name="Body" type="StaticBody2D" parent="Buildings/MilaCottage"]
+position = Vector2(0, 4)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/MilaCottage/Body"]
 shape = SubResource("RectangleShape2D_bld")
 
 [node name="Well" type="Sprite2D" parent="Buildings"]
@@ -119,12 +131,25 @@ sign_text = "Laden"
 [node name="Shape" type="CollisionShape2D" parent="Doors/ShopDoor"]
 shape = SubResource("RectangleShape2D_door")
 
+[node name="MilaCottageDoor" type="Area2D" parent="Doors" groups=["door"]]
+position = Vector2(240, 426)
+script = ExtResource("10_door")
+target_map = "interior_mila"
+arrival_marker = "from_outside"
+access = 1
+owner_npc_id = "npc_mila"
+sign_text = "Milas Haus"
+
+[node name="Shape" type="CollisionShape2D" parent="Doors/MilaCottageDoor"]
+shape = SubResource("RectangleShape2D_door")
+
 [node name="RathausDoor" type="Area2D" parent="Doors" groups=["door"]]
 position = Vector2(560, 302)
 script = ExtResource("10_door")
-target_map = "interior_weber"
+target_map = ""
 arrival_marker = "from_outside"
-access = 1
+access = 2
+owner_npc_id = "npc_weber"
 sign_text = "Rathaus"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/RathausDoor"]

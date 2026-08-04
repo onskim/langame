@@ -70,7 +70,7 @@ func _run() -> void:
 
 	print("[harness] shots -> %s" % ProjectSettings.globalize_path(OUT_DIR))
 	print("[harness] rep=%d money=%d done=%s"
-		% [GameState.reputation, GameState.money, GameState.completed_quests])
+		% [GameState.total_reputation(), GameState.money, GameState.completed_quests])
 	get_tree().quit()
 
 

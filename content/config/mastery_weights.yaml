@@ -7,10 +7,23 @@
 
 config_id: mastery_weights
 
+# Addendum §10.2: until Azure PA is live, the pronunciation weight is
+# redistributed. Flipping `speech_enabled` restores the Part 10 §4 weights.
+# Without this the sim silently miscalibrates — mastery cannot exceed 0.50, so
+# no word ever reaches support tier L2/L3 and urgency stays inflated forever.
+speech_enabled: false
+
+# Part 10 §4 weights — used when speech_enabled is true.
 recognition: 0.35   # correct/(correct+wrong), recency-decayed
 production: 0.25    # Tier II/III success rate
 pronunciation: 0.25 # pron_avg / 100
 recency: 0.15       # decays toward 0 as a word goes unseen
+
+# Addendum §10.2 renormalized weights — used when speech_enabled is false.
+no_speech:
+  recognition: 0.45
+  production: 0.35
+  recency: 0.20
 
 # Addendum §1: a spoken success counts double into recognition and production.
 spoken_multiplier: 2.0

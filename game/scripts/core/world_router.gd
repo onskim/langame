@@ -101,7 +101,7 @@ func travel_to(map_id: String, arrival_marker: String) -> void:
 ## invisible wall, they get the dark room and an inner-monologue line.
 func enter_blackout(map_id: String, sign_text: String) -> void:
 	print("[world] blackout interior: %s" % map_id)
-	Dialogue.play_inner_monologue("Es ist dunkel…")
+	Dialogue.play_diegetic(Config.diegetic("interior_dark"))
 
 
 ## Consume the arrival marker set by the last transition.

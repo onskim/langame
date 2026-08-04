@@ -51,7 +51,7 @@ func prompt_text() -> String:
 		Access.BLACKOUT:
 			return "E   %s" % sign_text
 		_:
-			return "%s — zu" % sign_text   # closed
+			return sign_text
 
 
 ## BLACKOUT homes open once the relationship does (pre-wired, not yet reachable
@@ -62,11 +62,13 @@ func effective_access() -> int:
 	return access
 
 
-## Which NPC's home this is, derived from the target map id (interior_karl -> npc_karl).
+## Which NPC's home this is. Declared explicitly rather than derived from the
+## map id: `interior_anna_kitchen` would have produced `npc_anna_kitchen`, and
+## most of Part 14 §3's interiors are named for the room, not the person.
+@export var owner_npc_id: String = ""
+
 func owner_npc() -> String:
-	if not target_map.begins_with("interior_"):
-		return ""
-	return "npc_" + target_map.trim_prefix("interior_")
+	return owner_npc_id
 
 
 func use() -> void:
@@ -79,4 +81,4 @@ func use() -> void:
 			WorldRouter.enter_blackout(target_map, sign_text)
 		_:
 			# Locked doors still answer, so the world never feels like scenery.
-			Dialogue.play_inner_monologue("Es ist zu.")
+			Dialogue.play_diegetic(Config.diegetic("door_locked"))

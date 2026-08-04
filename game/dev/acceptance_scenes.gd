@@ -114,17 +114,32 @@ func _run() -> void:
 	_check("the bakery door leads to its interior",
 		bakery.target_map == "interior_bakery", bakery.target_map)
 
-	var rathaus: Door = village.get_node("Doors/RathausDoor")
+	# Part 14 §3 lists Mila's cottage as a blackout home.
+	var cottage: Door = village.get_node("Doors/MilaCottageDoor")
 	_check("a private home is blackout, not an invisible wall",
-		rathaus.effective_access() == Door.Access.BLACKOUT,
-		"access=%d" % rathaus.effective_access())
+		cottage.effective_access() == Door.Access.BLACKOUT,
+		"access=%d" % cottage.effective_access())
+	_check("blackout doors know whose home it is",
+		cottage.owner_npc() == "npc_mila", cottage.owner_npc())
 
 	# Pre-wired unlock: at 3 hearts the door opens (Part 14 §3).
-	GameState.affection["npc_weber"] = 3
+	GameState.affection["npc_mila"] = 3
 	_check("blackout opens at 3 hearts (pre-wired)",
-		rathaus.effective_access() == Door.Access.OPEN,
+		cottage.effective_access() == Door.Access.OPEN,
+		"access=%d" % cottage.effective_access())
+	GameState.affection.erase("npc_mila")
+
+	# Part 14 §3 makes the Rathaus "office via quests", not a heart-gated home.
+	# It also used to point at interior_weber, which does not exist — the door
+	# would have opened at 3 hearts and travelled nowhere, silently.
+	var rathaus: Door = village.get_node("Doors/RathausDoor")
+	_check("the Rathaus is locked, not heart-gated",
+		rathaus.effective_access() == Door.Access.LOCKED,
 		"access=%d" % rathaus.effective_access())
-	GameState.affection.erase("npc_weber")
+	for door: Door in get_tree().get_nodes_in_group("door"):
+		if door.effective_access() != Door.Access.LOCKED and door.target_map != "":
+			_check("door '%s' leads to a declared place" % door.name,
+				WorldRouter.scene_path(door.target_map) != "", door.target_map)
 
 	# ---------- giver presence ----------
 	# Q02's giver is Anna, who is on the farm — her line must not play here.

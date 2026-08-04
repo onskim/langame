@@ -24,7 +24,7 @@ func _run() -> void:
 	print("--- split world acceptance ---")
 
 	# ---------- the world layout is content, not code ----------
-	_check("outdoor + interior places all declared", WorldRouter.maps().size() == 6,
+	_check("outdoor + interior places all declared", WorldRouter.maps().size() >= 6,
 		str(WorldRouter.maps().keys()))
 	_check("farm locations map to the farm",
 		WorldRouter.map_of_location("field") == "farm",

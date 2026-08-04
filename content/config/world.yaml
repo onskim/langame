@@ -33,6 +33,11 @@ maps:
   interior_anna_kitchen:
     scene: "res://scenes/world/interiors/anna_kitchen.tscn"
     display: Annas Küche
+  # Blackout until 3 hearts (Part 14 §3). The scene exists so the unlock has
+  # somewhere to go — a door that opens onto nothing is worse than a locked one.
+  interior_mila:
+    scene: "res://scenes/world/interiors/mila_cottage.tscn"
+    display: Milas Haus
 
 locations:
   farm_yard: farm

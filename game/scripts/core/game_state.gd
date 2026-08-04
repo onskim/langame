@@ -11,7 +11,10 @@ var day: int = 1
 var player_position: Vector2 = Vector2(384, 336)
 ## word_id of the carried item, or "" — matches content ids, not engine names.
 var carrying: String = ""
-var reputation: int = 0
+## Per-NPC reputation (Part 10 §3 `npc_state`). A single global number meant
+## doing Anna's farm chores unlocked the mayor's festival — Part 10 §5.3 gates
+## are per-giver (Q07 = Karl 10, Q10 = Petra 15, Q14 = Weber 25).
+var reputation_by_npc: Dictionary = {}
 var money: int = 0
 var completed_quests: Array = []
 ## Which map the player is standing on (Part 14 §2 split world).
@@ -34,7 +37,7 @@ func to_dict() -> Dictionary:
 		"player_x": player_position.x,
 		"player_y": player_position.y,
 		"carrying": carrying,
-		"reputation": reputation,
+		"reputation_by_npc": reputation_by_npc,
 		"money": money,
 		"completed_quests": completed_quests,
 		"word_stats": WordStats.to_dict(),
@@ -55,7 +58,7 @@ func load_state() -> void:
 		return
 	day = int(data.get("day", 1))
 	carrying = str(data.get("carrying", ""))
-	reputation = int(data.get("reputation", 0))
+	reputation_by_npc = data.get("reputation_by_npc", {})
 	money = int(data.get("money", 0))
 	completed_quests = data.get("completed_quests", [])
 	WordStats.from_dict(data.get("word_stats", {}))
@@ -84,10 +87,10 @@ func complete_quest(quest_id: String, rewards: Dictionary) -> void:
 	var rep: Variant = rewards.get("rep")
 	if rep is Dictionary:
 		for npc_id in rep:
-			reputation += int(rep[npc_id])
+			add_reputation(npc_id, int(rep[npc_id]))
 	money += int(rewards.get("money", 0))
 	save_state()
-	print("[state] quest %s complete — rep %d, money %d" % [quest_id, reputation, money])
+	print("[state] quest %s complete — rep %s, money %d" % [quest_id, reputation_by_npc, money])
 	HUD.refresh()
 
 
@@ -107,3 +110,24 @@ func affection_of(npc_id: String) -> int:
 	if npc_id == "":
 		return 0
 	return int(affection.get(npc_id, 0))
+
+
+## Reputation with one NPC (Part 12 §1: clamped 0-100).
+func reputation_of(npc_id: String) -> int:
+	if npc_id == "" or npc_id == "auto":
+		return 0
+	return int(reputation_by_npc.get(npc_id, 0))
+
+
+func add_reputation(npc_id: String, amount: int) -> void:
+	if npc_id == "" or npc_id == "auto":
+		return
+	reputation_by_npc[npc_id] = clampi(reputation_of(npc_id) + amount, 0, 100)
+
+
+## Total standing in the village — display only, never a gate.
+func total_reputation() -> int:
+	var total := 0
+	for npc_id in reputation_by_npc:
+		total += int(reputation_by_npc[npc_id])
+	return total

@@ -102,8 +102,9 @@ func _run() -> void:
 	await get_tree().process_frame
 	_check("Q02 recorded complete", GameState.completed_quests.has("q02"),
 		str(GameState.completed_quests))
-	# Q01 pays 1 rep, Q02 pays 3 more and 5 money.
-	_check("rewards applied from YAML", GameState.reputation == 4 and GameState.money == 5,
-		"rep=%d money=%d" % [GameState.reputation, GameState.money])
+	# Q01 pays Anna 1, Q02 pays Anna 3 more and 5 money. Reputation is per-NPC.
+	_check("rewards applied from YAML",
+		GameState.reputation_of("npc_anna") == 4 and GameState.money == 5,
+		"anna=%d money=%d" % [GameState.reputation_of("npc_anna"), GameState.money])
 
 	print("--- Week 2 acceptance complete, %d failure(s). ---" % _failures)

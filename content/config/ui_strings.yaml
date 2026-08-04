@@ -1,0 +1,41 @@
+# UI strings table — GDD Part 5 §7: "Localization hygiene from day 1: even
+# though MVP is German-only, keep all UI strings in a strings table."
+#
+# TWO KINDS OF TEXT LIVE HERE, and the distinction matters:
+#
+#   `chrome`     — the player's interface, in THEIR language (English at MVP).
+#                  Translated wholesale when the game ships elsewhere.
+#   `diegetic`   — text the world itself shows: shop signs, the inner monologue.
+#                  German because the village is German. This is curriculum-
+#                  adjacent, so it carries `draft: true` and goes through the
+#                  same native-review gate as any line (Part 5 §4).
+#
+# Engine code may reference these by key. It may NEVER contain a German literal
+# (Part 4 §2) — that boundary is the entire multi-language strategy.
+
+config_id: ui_strings
+
+chrome:
+  hint_controls: "WASD move   E interact   TAB phone   Space talk   F5 shot"
+  dialogue_continue: "E continue"
+  draft_watermark: "DRAFT — unreviewed"
+  phone_close: "TAB close"
+  day_label: "Day"
+  door_prompt: "E"
+
+# App names are diegetic: the player learns to read their own phone.
+apps:
+  tasks: Aufgaben
+  words: Wörter
+  weather: Wetter
+  map: Karte
+
+diegetic:
+  door_locked:
+    de: "Es ist zu."
+    en: "It's closed."
+    draft: true
+  interior_dark:
+    de: "Es ist dunkel…"
+    en: "It's dark in here…"
+    draft: true

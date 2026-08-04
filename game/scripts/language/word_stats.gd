@@ -11,6 +11,7 @@ extends Node
 const FIELDS := {
 	"times_seen": 0, "times_heard": 0, "times_correct": 0, "times_wrong": 0,
 	"times_spoken": 0, "pron_avg": 0.0, "pron_fails_row": 0, "repair_uses": 0,
+	"prod_attempts": 0, "prod_successes": 0,
 	"mastery": 0.0, "ease": 2.5, "interval_days": 0.0,
 	"due_day": 0, "last_seen_day": 0, "intro_day": 0, "drill_cycles": 0,
 }
@@ -45,21 +46,31 @@ func introduced_words() -> Array:
 	return stats.keys()
 
 
-## Log one encounter. `spoken` successes count double (Addendum §1).
-func record(word_id: String, correct: bool, day: int, spoken: bool = false) -> void:
+## Log one encounter. `spoken` successes count double into recognition
+## (Addendum §1); production is tracked on its own counters so the double-count
+## cannot distort the success rate.
+##
+## `credit` scales how much this encounter advances the schedule. A silent
+## answer is a legitimate answer at REDUCED credit (Addendum §1) — it must not
+## push the word's next appearance out as far as a spoken one.
+func record(word_id: String, correct: bool, day: int, spoken: bool = false,
+		credit: float = 1.0) -> void:
 	var s := get_stat(word_id)
 	s["times_seen"] += 1
 	s["last_seen_day"] = day
 	var weight := int(Config.mastery("spoken_multiplier", 2.0)) if spoken else 1
 	if spoken:
 		s["times_spoken"] += 1
+		s["prod_attempts"] += 1
+		if correct:
+			s["prod_successes"] += 1
 	if correct:
 		s["times_correct"] += weight
 		s["pron_fails_row"] = 0
 	else:
 		s["times_wrong"] += 1
 	Mastery.update(s, day)
-	Scheduler.apply_sm2(s, correct, day)
+	Scheduler.apply_sm2(s, correct, day, credit)
 
 
 func record_repair(word_id: String, day: int) -> void:

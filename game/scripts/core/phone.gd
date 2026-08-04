@@ -59,7 +59,7 @@ func close() -> void:
 
 
 func refresh() -> void:
-	_title.text = "Aufgaben"
+	_title.text = Config.app_name("tasks", "Aufgaben")
 	for child in _list.get_children():
 		child.queue_free()
 

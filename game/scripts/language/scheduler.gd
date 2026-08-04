@@ -103,7 +103,7 @@ func _rank_quests(available: Array, want: Array) -> Array:
 
 ## SM-2 update after an encounter (Part 10 §4).
 ## pass: interval *= ease, ease += bonus. hard fail: interval resets.
-func apply_sm2(s: Dictionary, correct: bool, day: int) -> void:
+func apply_sm2(s: Dictionary, correct: bool, day: int, credit: float = 1.0) -> void:
 	var ease := float(s.get("ease", Config.sm2("initial_ease", 2.5)))
 	var interval := float(s.get("interval_days", 0.0))
 	var first := float(Config.sm2("first_interval_days", 1.0))
@@ -116,7 +116,9 @@ func apply_sm2(s: Dictionary, correct: bool, day: int) -> void:
 		elif is_equal_approx(interval, first):
 			interval = second
 		else:
-			interval = interval * ease
+			# `credit` < 1 means a reduced-confidence pass (silent answer, network
+			# fallback): it still advances the word, just not as far.
+			interval = interval * lerpf(1.0, ease, clampf(credit, 0.0, 1.0))
 	else:
 		ease -= float(Config.sm2("ease_penalty", 0.20))
 		interval = first

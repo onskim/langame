@@ -42,14 +42,28 @@ func clear_targets() -> void:
 
 
 ## The player character's inner voice — per Part 3 §3 the ONLY English in the
-## game, and it fades as the player's German grows. Not an NPC, so no speaker
-## name and no draft watermark: this is authored UI text, not curriculum.
+## game, and it fades as the player's German grows.
 func play_inner_monologue(text: String) -> void:
 	current_line_id = ""
 	_speaker.text = ""
 	_line_label.text = "[i]%s[/i]" % text
 	_draft_mark.visible = false
-	_repair.text = "E continue"
+	_repair.text = Config.ui("dialogue_continue")
+	_panel.visible = true
+	is_open = true
+
+
+## World-facing German that is not an NPC line (a locked door, a dark room).
+## It is still unreviewed German, so it still carries the draft watermark — the
+## gate applies to every German byte, not only to the ones inside content/lines.
+func play_diegetic(entry: Dictionary) -> void:
+	if entry.is_empty():
+		return
+	current_line_id = ""
+	_speaker.text = ""
+	_line_label.text = str(entry.get("de", ""))
+	_draft_mark.visible = bool(entry.get("draft", true))
+	_repair.text = Config.ui("dialogue_continue")
 	_panel.visible = true
 	is_open = true
 
@@ -65,7 +79,7 @@ func play_line(line_id: String) -> void:
 	_speaker.text = ContentDB.npc_name(line.get("npc_id", ""))
 	_line_label.text = _render_german(line)
 	_draft_mark.visible = ContentDB.is_draft(line_id)
-	_repair.text = "E continue"
+	_repair.text = Config.ui("dialogue_continue")
 	_panel.visible = true
 	is_open = true
 

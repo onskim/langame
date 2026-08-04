@@ -2,11 +2,17 @@
  "config": {
   "mastery_weights": {
    "config_id": "mastery_weights",
+   "no_speech": {
+    "production": 0.35,
+    "recency": 0.2,
+    "recognition": 0.45
+   },
    "production": 0.25,
    "pronunciation": 0.25,
    "recency": 0.15,
    "recency_horizon_days": 14,
    "recognition": 0.35,
+   "speech_enabled": false,
    "spoken_multiplier": 2.0
   },
   "thresholds": {
@@ -36,6 +42,35 @@
     "second_interval_days": 3.0
    },
    "starvation_days": 12
+  },
+  "ui_strings": {
+   "apps": {
+    "map": "Karte",
+    "tasks": "Aufgaben",
+    "weather": "Wetter",
+    "words": "Wörter"
+   },
+   "chrome": {
+    "day_label": "Day",
+    "dialogue_continue": "E continue",
+    "door_prompt": "E",
+    "draft_watermark": "DRAFT — unreviewed",
+    "hint_controls": "WASD move   E interact   TAB phone   Space talk   F5 shot",
+    "phone_close": "TAB close"
+   },
+   "config_id": "ui_strings",
+   "diegetic": {
+    "door_locked": {
+     "de": "Es ist zu.",
+     "draft": true,
+     "en": "It's closed."
+    },
+    "interior_dark": {
+     "de": "Es ist dunkel…",
+     "draft": true,
+     "en": "It's dark in here…"
+    }
+   }
   },
   "world": {
    "arrivals": {
@@ -79,6 +114,10 @@
     "interior_farmhouse": {
      "display": "Zuhause",
      "scene": "res://scenes/world/interiors/farmhouse.tscn"
+    },
+    "interior_mila": {
+     "display": "Milas Haus",
+     "scene": "res://scenes/world/interiors/mila_cottage.tscn"
     },
     "interior_shop": {
      "display": "Laden",

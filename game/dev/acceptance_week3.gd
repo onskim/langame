@@ -136,8 +136,13 @@ func _run() -> void:
 	_check("Q03 complete after the 4th", GameState.completed_quests.has("q03"),
 		str(GameState.completed_quests))
 
-	_check("chain paid out cumulatively", GameState.reputation == 8,
-		"rep=%d (1+3+4)" % GameState.reputation)
+	_check("chain paid out cumulatively to the giver",
+		GameState.reputation_of("npc_anna") == 8,
+		"anna=%d (1+3+4)" % GameState.reputation_of("npc_anna"))
+	# Part 10 §5.3 gates are per-giver: Anna's chores must not raise Karl.
+	_check("reputation does not leak to other NPCs",
+		GameState.reputation_of("npc_karl") == 0,
+		"karl=%d" % GameState.reputation_of("npc_karl"))
 
 	phone.open()
 	await get_tree().process_frame

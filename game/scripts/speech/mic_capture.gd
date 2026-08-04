@@ -88,13 +88,30 @@ func take_wav() -> PackedByteArray:
 	return _wrap_wav(pcm)
 
 
+## Downmix to mono AND resample to SAMPLE_RATE.
+##
+## AudioEffectCapture delivers frames at the AudioServer mix rate (44.1kHz by
+## default), but the WAV header declares 16kHz. Shipping the raw buffer told
+## Azure the audio was ~2.75x slower than it was, which would have scored every
+## utterance against a badly stretched signal.
 func _to_mono_pcm16(frames: PackedVector2Array) -> PackedByteArray:
+	var mix_rate: float = AudioServer.get_mix_rate()
+	var ratio := mix_rate / float(SAMPLE_RATE)
+	if ratio <= 0.0:
+		ratio = 1.0
+	var out_count := int(floor(frames.size() / ratio))
 	var out := PackedByteArray()
-	out.resize(frames.size() * 2)
-	for i in frames.size():
-		var mono := clampf((frames[i].x + frames[i].y) * 0.5, -1.0, 1.0)
-		var value := int(mono * 32767.0)
-		out.encode_s16(i * 2, value)
+	out.resize(out_count * 2)
+	for i in out_count:
+		# Linear interpolation between neighbouring source frames.
+		var src := i * ratio
+		var i0 := int(floor(src))
+		var i1: int = min(i0 + 1, frames.size() - 1)
+		var t := src - float(i0)
+		var f0 := (frames[i0].x + frames[i0].y) * 0.5
+		var f1 := (frames[i1].x + frames[i1].y) * 0.5
+		var mono := clampf(lerpf(f0, f1, t), -1.0, 1.0)
+		out.encode_s16(i * 2, int(mono * 32767.0))
 	return out
 
 

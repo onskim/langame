@@ -33,3 +33,30 @@ func drill(key: String, fallback: Variant = null) -> Variant:
 
 func starvation_days() -> int:
 	return int(_section("thresholds").get("starvation_days", 12))
+
+
+## UI chrome string (the player's own language). Part 5 §7 strings table.
+func ui(key: String, fallback: String = "") -> String:
+	var chrome: Variant = _section("ui_strings").get("chrome")
+	if chrome is Dictionary:
+		return str((chrome as Dictionary).get(key, fallback))
+	return fallback
+
+
+## Diegetic app name — German, because the phone belongs to the village.
+func app_name(key: String, fallback: String = "") -> String:
+	var apps: Variant = _section("ui_strings").get("apps")
+	if apps is Dictionary:
+		return str((apps as Dictionary).get(key, fallback))
+	return fallback
+
+
+## World-facing German (signs, the locked-door line). Returns the whole record
+## so callers can honour its draft flag.
+func diegetic(key: String) -> Dictionary:
+	var block: Variant = _section("ui_strings").get("diegetic")
+	if block is Dictionary:
+		var entry: Variant = (block as Dictionary).get(key)
+		if entry is Dictionary:
+			return entry
+	return {}

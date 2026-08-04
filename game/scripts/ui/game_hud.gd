@@ -22,7 +22,7 @@ func _root() -> Control:
 
 
 func refresh() -> void:
-	_day.text = "Day %d   rep %d" % [GameState.day, GameState.reputation]
+	_day.text = "Day %d   ★%d   %d€" % [GameState.day, GameState.total_reputation(), GameState.money]
 	_clock.text = DayCycle.clock_string()
 	_place.text = WorldRouter.display_name(WorldRouter.current_map)
 	_task.text = Quests.active_task_label()
@@ -46,4 +46,4 @@ func set_hint(text: String) -> void:
 
 
 func default_hint() -> String:
-	return "WASD move   E interact   TAB phone   Space talk   F5 shot"
+	return Config.ui("hint_controls")
