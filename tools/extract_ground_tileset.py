@@ -34,15 +34,30 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(ROOT, "game", "assets", "tilesets")
 TILE = 16
 
-# A pixel is "dirt" when it is warm and desaturated-brown rather than green.
+# A pixel is "dirt" when it is warm and brown rather than green.
 def is_dirt(rgb):
     r, g, b = rgb[:3]
     return r > g and r > 110 and b < r - 30
 
 
+# Water is blue-dominant. The reference's ponds run from pale shallows to deep
+# blue, so the test is "clearly bluer than it is red", not a fixed hue.
+def is_water(rgb):
+    r, g, b = rgb[:3]
+    return b > r + 25 and b > 90
+
+
 def is_grass(rgb):
     r, g, b = rgb[:3]
-    return g > r and g > 70
+    return g > r and g > 70 and not is_water(rgb)
+
+
+# The non-grass terrain a pack blends against.
+LOWER_TESTS = {"dirt": is_dirt, "water": is_water}
+LOWER_LABELS = {
+    "dirt": "warm tan hard-packed dirt path with pebbles",
+    "water": "clear blue pond water with lily pads and a rocky shore",
+}
 
 
 def downsample(im, scale):
@@ -57,7 +72,7 @@ def quantise(im, colors):
     return q.convert("RGB")
 
 
-def corner_flags(tile):
+def corner_flags(tile, is_lower=is_dirt):
     """Which of the four quadrants are predominantly GRASS.
 
     Grass is the "upper" terrain, matching the convention of the existing
@@ -69,16 +84,16 @@ def corner_flags(tile):
     out = {}
     for name, (ox, oy) in (("NW", (0, 0)), ("NE", (half, 0)),
                            ("SW", (0, half)), ("SE", (half, half))):
-        dirt = 0
+        lower = 0
         total = 0
         for y in range(oy, oy + half):
             for x in range(ox, ox + half):
                 c = px[x, y]
                 total += 1
-                if is_dirt(c):
-                    dirt += 1
-        # Grass unless the quadrant is clearly worn through.
-        out[name] = dirt <= total * 0.55
+                if is_lower(c):
+                    lower += 1
+        # Grass unless the quadrant is clearly the other terrain.
+        out[name] = lower <= total * 0.55
     return out
 
 
@@ -87,7 +102,7 @@ def key_of(flags):
                          int(flags["SE"]), int(flags["SW"]))
 
 
-def purity(tile, want_dirt):
+def purity(tile, want_lower, is_lower=is_dirt):
     """How cleanly a tile represents its classification — used to rank variants."""
     px = tile.load()
     good = 0
@@ -96,9 +111,9 @@ def purity(tile, want_dirt):
         for x in range(TILE):
             c = px[x, y]
             total += 1
-            if want_dirt and is_dirt(c):
+            if want_lower and is_lower(c):
                 good += 1
-            elif not want_dirt and is_grass(c):
+            elif not want_lower and is_grass(c):
                 good += 1
     return good / float(total)
 
@@ -117,12 +132,16 @@ def main():
                     help="palette size after quantisation")
     ap.add_argument("--variants", type=int, default=6,
                     help="max tiles kept per corner combination")
+    ap.add_argument("--lower", choices=sorted(LOWER_TESTS), default="dirt",
+                    help="the terrain grass blends against in this reference")
     ap.add_argument("--name", default="ground_ref")
     args = ap.parse_args()
 
     if not os.path.exists(args.source):
         print("no such file: %s" % args.source, file=sys.stderr)
         return 2
+
+    is_lower = LOWER_TESTS[args.lower]
 
     im = Image.open(args.source).convert("RGB")
     im = downsample(im, args.scale)
@@ -135,15 +154,15 @@ def main():
     for ty in range(h // TILE):
         for tx in range(w // TILE):
             tile = im.crop((tx * TILE, ty * TILE, (tx + 1) * TILE, (ty + 1) * TILE))
-            flags = corner_flags(tile)
+            flags = corner_flags(tile, is_lower)
             k = key_of(flags)
             all_grass = all(flags.values())
-            all_dirt = not any(flags.values())
+            all_lower = not any(flags.values())
             score = 0.0
-            if all_dirt:
-                score = purity(tile, True)
+            if all_lower:
+                score = purity(tile, True, is_lower)
             elif all_grass:
-                score = purity(tile, False)
+                score = purity(tile, False, is_lower)
             else:
                 score = 0.5  # edge tiles: keep variety rather than rank
             buckets[k].append((score, tile))
@@ -193,7 +212,7 @@ def main():
         json.dump({
             "source": "founder-reference",
             "source_file": os.path.basename(args.source),
-            "lower": "warm tan hard-packed dirt path with pebbles",
+            "lower": LOWER_LABELS[args.lower],
             "upper": "lush meadow grass with wildflowers, leafy clumps and stones",
             "tile_size": TILE,
             "grid": {"cols": cols, "rows": rows},

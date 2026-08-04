@@ -11,6 +11,9 @@ func _ready() -> void:
 	await _shoot_place("res://scenes/world/interiors/bakery.tscn", "32-interior-bakery", Vector2(160, 150))
 	await _shoot_place("res://scenes/world/village.tscn", "33-village-with-doors", Vector2(368, 200))
 	await _shoot_place("res://scenes/world/farm.tscn", "34-farm-player-plot", Vector2(240, 220))
+	await _shoot_place("res://scenes/world/farm.tscn", "36-farm-pond", Vector2(704, 480))
+	await _shoot_place("res://scenes/world/lake.tscn", "37-lake-shore", Vector2(160, 250))
+	await _shoot_place("res://scenes/world/lake.tscn", "38-lake-wide", Vector2(260, 250))
 	DayCycle.hour = 13.0
 	await _shoot_place("res://scenes/world/farm.tscn", "35-anna-plot", Vector2(640, 180))
 	print("[harness] done -> %s" % ProjectSettings.globalize_path(OUT_DIR))

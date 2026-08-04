@@ -28,7 +28,7 @@ const PACK_PATH_GRASS := "res://assets/tilesets/ground_ref"
 const PACK_GRASS_SOIL := "res://assets/tilesets/ground_grass_soil"
 const PACK_SOIL_WATERED := "res://assets/tilesets/ground_soil_watered"
 const PACK_GRASS_WILD := "res://assets/tilesets/ground_grass_wild"
-const PACK_GRASS_WATER := "res://assets/tilesets/ground_grass_water"
+const PACK_GRASS_WATER := "res://assets/tilesets/ground_water_ref"
 
 enum GateSide { NONE, EAST, WEST }
 
@@ -106,11 +106,61 @@ static func stamp(layer: TileMapLayer, pack: WangTileset, width: int, height: in
 				layer.set_cell(Vector2i(x, y), 0, pack.atlas_for(ne, nw, se, sw))
 
 
+## An irregular pond. Round ponds read as decals; the reference's water has
+## lobed, wandering shores, so the radius is modulated by angle.
+static func in_pond(x: int, y: int, cx: float, cy: float, radius: float,
+		seed_value: int) -> bool:
+	var dx := float(x) - cx
+	var dy := (float(y) - cy) * 1.35     # wider than tall, like the reference
+	var angle := atan2(dy, dx)
+	var lobed: float = radius \
+		+ sin(angle * 3.0 + seed_value) * radius * 0.22 \
+		+ sin(angle * 5.0 + seed_value * 2.0) * radius * 0.11
+	return sqrt(dx * dx + dy * dy) <= lobed
+
+
+## Water is scenery you cannot walk into. Every water cell gets a body, so the
+## shoreline stops the player exactly where it looks like it should.
+static func build_water_collision(parent: Node2D, width: int, height: int,
+		is_water: Callable) -> void:
+	var body := StaticBody2D.new()
+	body.name = "WaterCollision"
+	parent.add_child(body)
+	for y in range(height):
+		for x in range(width):
+			# Only fully-submerged cells block: a cell with any shore in it is
+			# walkable bank, which keeps the edge generous rather than sticky.
+			if is_water.call(x, y) and is_water.call(x + 1, y) \
+					and is_water.call(x, y + 1) and is_water.call(x + 1, y + 1):
+				var shape := CollisionShape2D.new()
+				var rect := RectangleShape2D.new()
+				rect.size = Vector2(TILE, TILE)
+				shape.shape = rect
+				shape.position = Vector2(x * TILE + TILE / 2.0, y * TILE + TILE / 2.0)
+				body.add_child(shape)
+
+
 # --------------------------------------------------------------------- farm
 
 ## Ground is two layers so material edges blend: lanes carved out of grass on
 ## the base, tilled soil stamped on top wherever a field is.
-static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null) -> void:
+## Where the farm's pond sits — shared by the painter and the collision pass so
+## the water you see and the water that stops you can never disagree.
+static func farm_is_water(x: int, y: int) -> bool:
+	return in_pond(x, y, 44.0, 30.0, 6.5, 3)
+
+
+## The pond plus one ring of bank — what the water layer needs to draw.
+static func _near_farm_water(x: int, y: int) -> bool:
+	for dy in range(-1, 2):
+		for dx in range(-1, 2):
+			if farm_is_water(x + dx, y + dy):
+				return true
+	return false
+
+
+static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null,
+		water: TileMapLayer = null, collision_parent: Node2D = null) -> void:
 	# ground_path_grass: lower = dirt path, upper = grass. "Upper" therefore
 	# means grass, and a lane is simply where grass is absent.
 	var pack := pack_layer(layer, PACK_PATH_GRASS)
@@ -120,6 +170,10 @@ static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null) -> voi
 	var is_grass := func(x: int, y: int) -> bool:
 		# Tracks give movement a readable destination rather than open field, and
 		# run past the edge of one screen so scrolling is obvious.
+		# The pond is not a track — grass stops at its shore, and the water
+		# layer draws over the top.
+		if farm_is_water(x, y):
+			return true
 		var track_main: bool = on_h_path(x, y, 20, 2, FARM_W - 2, 11)
 		var track_north: bool = on_v_path(x, y, 24, 3, FARM_H - 3, 29)
 		var track_anna: bool = on_h_path(x, y, 12, 29, FARM_W - 2, 47)
@@ -138,6 +192,29 @@ static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null) -> voi
 		var anna_field: bool = x >= 34 and x <= 46 and y >= 4 and y <= 9
 		return player_field or anna_field
 	stamp(crops, soil, FARM_W, FARM_H, is_soil)
+
+	if water == null:
+		return
+	# ground_water_ref: lower = water, upper = grass. The stamp draws the shore
+	# where grass meets it, so the bank blends instead of stepping.
+	var pond := pack_layer(water, PACK_GRASS_WATER)
+	if not pond.is_valid():
+		return
+	# In this pack grass is "upper", so the region test is "is this corner NOT
+	# water". Only cells near the pond are stamped, leaving the rest transparent.
+	var is_bank := func(x: int, y: int) -> bool: return not farm_is_water(x, y)
+	for y in range(FARM_H):
+		for x in range(FARM_W):
+			if not _near_farm_water(x, y):
+				continue
+			var nw: bool = is_bank.call(x, y)
+			var ne: bool = is_bank.call(x + 1, y)
+			var sw: bool = is_bank.call(x, y + 1)
+			var se: bool = is_bank.call(x + 1, y + 1)
+			var cell := Vector2i(x, y)
+			water.set_cell(cell, 0, pond.atlas_for(ne, nw, se, sw, cell))
+	if collision_parent != null:
+		build_water_collision(collision_parent, FARM_W, FARM_H, farm_is_water)
 
 
 ## Perimeter fence: visual tiles on `fence_layer`, collision as StaticBody2D
@@ -252,3 +329,59 @@ static func paint_interior(layer: TileMapLayer, collision_parent: Node2D,
 		shape.shape = rect
 		shape.position = Vector2(cell.x * TILE + TILE / 2.0, cell.y * TILE + TILE / 2.0)
 		body.add_child(shape)
+
+
+# --------------------------------------------------------------------- lake
+
+const LAKE_W := 44
+const LAKE_H := 32
+
+
+## The lake shore (Part 14 §2: farm/village -> forest -> LAKE, where Jonas is).
+##
+## Grass on the west, open water filling the east, divided by a shoreline that
+## runs roughly north-south and wanders. Deliberately NOT a pond in a field:
+## the player should arrive at a bank and see water reach the far edge, so the
+## lake reads as somewhere the world continues rather than a decorated pool.
+static func lake_is_water(x: int, y: int) -> bool:
+	var shore: float = 17.0 \
+		+ sin(float(y) * 0.19) * 3.6 \
+		+ sin(float(y) * 0.43 + 1.7) * 1.8
+	if float(x) > shore:
+		return true
+	# A couple of inlets biting into the bank, so the shore is not a single curve.
+	return in_pond(x, y, 12.0, 8.0, 3.4, 7) or in_pond(x, y, 10.0, 24.0, 2.8, 13)
+
+
+static func paint_lake(layer: TileMapLayer, water: TileMapLayer = null,
+		collision_parent: Node2D = null) -> void:
+	# Base: grass and the worn track along the bank.
+	var pack := pack_layer(layer, PACK_PATH_GRASS)
+	if not pack.is_valid():
+		return
+	var is_grass := func(x: int, y: int) -> bool:
+		if lake_is_water(x, y):
+			return true          # water draws on its own layer above
+		var bank_track: bool = on_v_path(x, y, 8, 2, LAKE_H - 2, 23)
+		return not (bank_track or on_scuff(x, y))
+	pack.paint(layer, 0, LAKE_W, LAKE_H, is_grass)
+
+	if water == null:
+		return
+	var pond := pack_layer(water, PACK_GRASS_WATER)
+	if not pond.is_valid():
+		return
+	var is_bank := func(x: int, y: int) -> bool: return not lake_is_water(x, y)
+	for y in range(LAKE_H):
+		for x in range(LAKE_W):
+			var nw: bool = is_bank.call(x, y)
+			var ne: bool = is_bank.call(x + 1, y)
+			var sw: bool = is_bank.call(x, y + 1)
+			var se: bool = is_bank.call(x + 1, y + 1)
+			if nw and ne and sw and se:
+				continue        # pure grass: leave the layer transparent
+			var cell := Vector2i(x, y)
+			water.set_cell(cell, 0, pond.atlas_for(ne, nw, se, sw, cell))
+
+	if collision_parent != null:
+		build_water_collision(collision_parent, LAKE_W, LAKE_H, lake_is_water)

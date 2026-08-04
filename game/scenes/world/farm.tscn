@@ -40,6 +40,8 @@ default_spawn = Vector2(384, 336)
 
 [node name="Crops" type="TileMapLayer" parent="."]
 
+[node name="Water" type="TileMapLayer" parent="."]
+
 [node name="Fence" type="TileMapLayer" parent="."]
 
 [node name="Locations" type="Node2D" parent="."]

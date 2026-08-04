@@ -21,6 +21,9 @@ maps:
   village:
     scene: "res://scenes/world/village.tscn"
     display: Dorf
+  lake:
+    scene: "res://scenes/world/lake.tscn"
+    display: See
   interior_farmhouse:
     scene: "res://scenes/world/interiors/farmhouse.tscn"
     display: Zuhause
@@ -52,6 +55,7 @@ locations:
   shop: village
   rathaus: village
   lane: village
+  lakeshore: lake
 
 # Where the player arrives when entering a map from another one.
 arrivals:
@@ -62,6 +66,9 @@ arrivals:
 # commercial ground floors. Every other home is a blackout interior until
 # 3 hearts (pre-wired, reachable once affection lands in Week 7).
 enterable:
+  lake:
+    scene: "res://scenes/world/lake.tscn"
+    display: See
   interior_farmhouse: open
   interior_bakery: open
   interior_shop: open

@@ -1,0 +1,549 @@
+{
+ "source": "founder-reference",
+ "source_file": "water tiles.png",
+ "lower": "clear blue pond water with lily pads and a rocky shore",
+ "upper": "lush meadow grass with wildflowers, leafy clumps and stones",
+ "tile_size": 16,
+ "grid": {
+  "cols": 6,
+  "rows": 16
+ },
+ "tiles": [
+  {
+   "atlas_coords": [
+    0,
+    0
+   ],
+   "variants": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ],
+    [
+     3,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     5,
+     0
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    1
+   ],
+   "variants": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     3,
+     1
+    ],
+    [
+     4,
+     1
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    2
+   ],
+   "variants": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     2
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    3
+   ],
+   "variants": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     3
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    4
+   ],
+   "variants": [
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     4
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    5
+   ],
+   "variants": [
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     5
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    6
+   ],
+   "variants": [
+    [
+     0,
+     6
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    7
+   ],
+   "variants": [
+    [
+     0,
+     7
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     5,
+     7
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    8
+   ],
+   "variants": [
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     8
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    9
+   ],
+   "variants": [
+    [
+     0,
+     9
+    ],
+    [
+     1,
+     9
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    10
+   ],
+   "variants": [
+    [
+     0,
+     10
+    ],
+    [
+     1,
+     10
+    ],
+    [
+     2,
+     10
+    ],
+    [
+     3,
+     10
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    11
+   ],
+   "variants": [
+    [
+     0,
+     11
+    ],
+    [
+     1,
+     11
+    ],
+    [
+     2,
+     11
+    ],
+    [
+     3,
+     11
+    ],
+    [
+     4,
+     11
+    ],
+    [
+     5,
+     11
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    12
+   ],
+   "variants": [
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     12
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     3,
+     12
+    ],
+    [
+     4,
+     12
+    ],
+    [
+     5,
+     12
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    13
+   ],
+   "variants": [
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     13
+    ],
+    [
+     2,
+     13
+    ],
+    [
+     3,
+     13
+    ],
+    [
+     4,
+     13
+    ],
+    [
+     5,
+     13
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    14
+   ],
+   "variants": [
+    [
+     0,
+     14
+    ],
+    [
+     1,
+     14
+    ],
+    [
+     2,
+     14
+    ],
+    [
+     3,
+     14
+    ],
+    [
+     4,
+     14
+    ],
+    [
+     5,
+     14
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    15
+   ],
+   "variants": [
+    [
+     0,
+     15
+    ],
+    [
+     1,
+     15
+    ],
+    [
+     2,
+     15
+    ],
+    [
+     3,
+     15
+    ],
+    [
+     4,
+     15
+    ],
+    [
+     5,
+     15
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  }
+ ]
+}

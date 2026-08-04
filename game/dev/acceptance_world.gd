@@ -169,4 +169,57 @@ func _run() -> void:
 	farm2.queue_free()
 	await get_tree().process_frame
 
+	# ---------- water (Part 14 §2: the lake) ----------
+	_check("the lake is a declared place", WorldRouter.maps().has("lake"),
+		str(WorldRouter.maps().keys()))
+
+	var lake: Node2D = load("res://scenes/world/lake.tscn").instantiate()
+	add_child(lake)
+	await get_tree().process_frame
+
+	# Grass on one side, open water on the other — the whole point of the place.
+	var west_water := 0
+	var east_water := 0
+	for y in range(4, WorldBuilder.LAKE_H - 4):
+		if WorldBuilder.lake_is_water(4, y):
+			west_water += 1
+		if WorldBuilder.lake_is_water(WorldBuilder.LAKE_W - 3, y):
+			east_water += 1
+	_check("the west bank is dry land", west_water == 0, "%d wet cells" % west_water)
+	_check("the east side is open water",
+		east_water >= WorldBuilder.LAKE_H - 10, "%d wet cells" % east_water)
+
+	# The shore must WANDER, or it is a wall with a texture.
+	var shore_xs: Array[int] = []
+	for y in [6, 12, 18, 24]:
+		for x in range(WorldBuilder.LAKE_W):
+			if WorldBuilder.lake_is_water(x, y):
+				shore_xs.append(x)
+				break
+	var spread: int = shore_xs.max() - shore_xs.min()
+	_check("the shoreline wanders rather than ruling straight", spread >= 3,
+		"shore x range %s" % str(shore_xs))
+
+	# Water you can walk into is a painted floor, not a lake.
+	var water_body: Node = lake.get_node_or_null("WaterCollision")
+	_check("the lake has collision", water_body != null and water_body.get_child_count() > 50,
+		"%d shapes" % (water_body.get_child_count() if water_body else 0))
+
+	lake.queue_free()
+	await get_tree().process_frame
+
+	# The farm pond, same rules.
+	var farm3: Node2D = load("res://scenes/world/farm.tscn").instantiate()
+	add_child(farm3)
+	await get_tree().process_frame
+	var pond_body: Node = farm3.get_node_or_null("WaterCollision")
+	_check("the farm pond has collision",
+		pond_body != null and pond_body.get_child_count() > 10,
+		"%d shapes" % (pond_body.get_child_count() if pond_body else 0))
+	_check("the pond is inside the fence",
+		WorldBuilder.farm_is_water(44, 30)
+		and not WorldBuilder.farm_is_water(0, 0))
+	farm3.queue_free()
+	await get_tree().process_frame
+
 	print("--- split world acceptance complete, %d failure(s). ---" % _failures)

@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/lake_map.gd" id="1_lake"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/core/map_gate.gd" id="3_gate"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(20, 48)
+
+[node name="Lake" type="Node2D"]
+script = ExtResource("1_lake")
+map_id = "lake"
+map_width_tiles = 44
+map_height_tiles = 32
+default_spawn = Vector2(112, 256)
+
+[node name="Ground" type="TileMapLayer" parent="."]
+
+[node name="Water" type="TileMapLayer" parent="."]
+
+[node name="Locations" type="Node2D" parent="."]
+
+[node name="lakeshore" type="Marker2D" parent="Locations"]
+position = Vector2(128, 256)
+
+[node name="Arrivals" type="Node2D" parent="."]
+
+[node name="from_village" type="Marker2D" parent="Arrivals"]
+position = Vector2(48, 256)
+
+[node name="Gates" type="Node2D" parent="."]
+
+[node name="ToVillage" type="Area2D" parent="Gates"]
+position = Vector2(12, 256)
+script = ExtResource("3_gate")
+target_map = "village"
+arrival_marker = "from_lake"
+label_text = "Dorf"
+
+[node name="Shape" type="CollisionShape2D" parent="Gates/ToVillage"]
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(112, 256)
+
+[node name="Light" type="CanvasModulate" parent="."]
+color = Color(1, 1, 1, 1)

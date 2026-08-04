@@ -151,7 +151,11 @@
     "interior_anna_kitchen": "open",
     "interior_bakery": "open",
     "interior_farmhouse": "open",
-    "interior_shop": "open"
+    "interior_shop": "open",
+    "lake": {
+     "display": "See",
+     "scene": "res://scenes/world/lake.tscn"
+    }
    },
    "locations": {
     "anna_farmhouse": "farm",
@@ -161,6 +165,7 @@
     "farm_yard": "farm",
     "farmhouse": "farm",
     "field": "farm",
+    "lakeshore": "lake",
     "lane": "village",
     "rathaus": "village",
     "shop": "village",
@@ -191,6 +196,10 @@
     "interior_shop": {
      "display": "Laden",
      "scene": "res://scenes/world/interiors/shop.tscn"
+    },
+    "lake": {
+     "display": "See",
+     "scene": "res://scenes/world/lake.tscn"
     },
     "village": {
      "display": "Dorf",
