@@ -22,7 +22,12 @@ func _root() -> Control:
 
 
 func refresh() -> void:
-	_day.text = "Day %d   ★%d   %d€" % [GameState.day, GameState.total_reputation(), GameState.money]
+	# Talfeld does not use euros. Money is Münzen — gold coins — per Part 12's
+	# meter table, and the symbol comes from the strings table so it can become
+	# a sprite later without touching this file.
+	_day.text = "%s %d   ★%d   %d%s" % [
+		Config.ui("day_label"), GameState.day, GameState.total_reputation(),
+		GameState.money, Config.ui("coin")]
 	_clock.text = DayCycle.clock_string()
 	_place.text = WorldRouter.display_name(WorldRouter.current_map)
 	_task.text = Quests.active_task_label()

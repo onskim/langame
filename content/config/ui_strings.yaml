@@ -31,6 +31,8 @@ chrome:
   phone_close: "TAB close"
   day_label: "Day"
   door_prompt: "E"
+  # Talfeld's currency is Münzen (Part 12 meter table) — gold coins, not euros.
+  coin: "₥"
 
 # App names are diegetic: the player learns to read their own phone.
 apps:

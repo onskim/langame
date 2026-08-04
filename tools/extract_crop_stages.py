@@ -35,8 +35,16 @@ def is_leaf(rgb):
     return g > r + 18 and g > 85 and b < g
 
 
-def blobs(mask, w, h, min_size):
-    """Connected components, so one plant is one sprite and not four leaves."""
+def blobs(mask, w, h, min_size, max_size=10 ** 9):
+    """Connected components, so one plant is one sprite and not four leaves.
+
+    `max_size` is what makes this work on the founder's sheet without knowing
+    where the plots are. The grass borders between plots are green too, and they
+    touch every plant they surround, so a plain flood fill returns a handful of
+    enormous blobs. A plant is a few pixels; a border is hundreds. Discarding
+    anything too big to be a plant separates them with no geometry at all —
+    which is what two rounds of guessing plot rectangles failed to do.
+    """
     seen = [[False] * w for _ in range(h)]
     found = []
     for sy in range(h):
@@ -53,31 +61,113 @@ def blobs(mask, w, h, min_size):
                     if 0 <= nx < w and 0 <= ny < h and not seen[ny][nx] and mask[ny][nx]:
                         seen[ny][nx] = True
                         queue.append((nx, ny))
-            if len(cells) >= min_size:
+            if min_size <= len(cells) <= max_size:
                 found.append(cells)
     return found
+
+
+def find_plots(im, scale, min_leaf=4, gap=8):
+    """Locate the planted plots by leaf DENSITY rather than by eye.
+
+    The first attempt at this guessed plot rectangles off a screenshot and got
+    them wrong: two of three windows contained no plants at all. The reference's
+    plots are separated by grass borders, and grass is green too — so the
+    borders connect every plant in the sheet into one blob and blur the plots
+    together.
+
+    The fix is to look for leaf-on-SOIL: green pixels whose neighbourhood is
+    mostly brown. That signature exists inside a plot and nowhere along a grass
+    border, so the column and row profiles it produces have clean gaps exactly
+    where the borders are.
+    """
+    w, h = im.size
+    px = im.load()
+
+    def leaf_on_soil(x, y):
+        if not is_leaf(px[x, y]):
+            return False
+        soil = 0
+        seen = 0
+        for dy in range(-3, 4):
+            for dx in range(-3, 4):
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < w and 0 <= ny < h:
+                    seen += 1
+                    r, g, b = px[nx, ny][:3]
+                    if r > g + 12 and r > 60 and b < r - 25:
+                        soil += 1
+        return seen > 0 and soil * 2 > seen
+
+    mask = [[leaf_on_soil(x, y) for x in range(w)] for y in range(h)]
+    cols = [sum(1 for y in range(h) if mask[y][x]) for x in range(w)]
+    rows = [sum(1 for x in range(w) if mask[y][x]) for y in range(h)]
+
+    def spans(profile, floor_value):
+        found = []
+        start = None
+        quiet = 0
+        for i, value in enumerate(profile):
+            if value >= floor_value:
+                if start is None:
+                    start = i
+                quiet = 0
+            elif start is not None:
+                quiet += 1
+                if quiet >= gap:
+                    found.append((start, i - quiet))
+                    start = None
+        if start is not None:
+            found.append((start, len(profile)))
+        return [(a, b) for a, b in found if b - a >= 16]
+
+    boxes = []
+    for x0, x1 in spans(cols, min_leaf):
+        for y0, y1 in spans(rows, min_leaf):
+            inside = sum(1 for y in range(y0, y1) for x in range(x0, x1) if mask[y][x])
+            if inside >= min_leaf * 8:
+                boxes.append((x0, y0, x1, y1))
+    return boxes
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("source")
-    ap.add_argument("--crop", required=True, help="left,top,right,bottom in SOURCE pixels")
+    ap.add_argument("--crop", help="left,top,right,bottom in SOURCE pixels")
+    ap.add_argument("--auto-plots", action="store_true",
+                    help="find the planted plots by leaf-on-soil density")
     ap.add_argument("--scale", type=int, default=4, help="upscale factor of the source")
     ap.add_argument("--min-size", type=int, default=6, help="smallest blob kept, in native px")
+    ap.add_argument("--max-size", type=int, default=60,
+                    help="largest blob still small enough to be a plant, not a grass border")
     ap.add_argument("--stages", type=int, default=6, help="how many growth stages to keep")
     ap.add_argument("--colors", type=int, default=16)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
     im = Image.open(args.source).convert("RGB")
-    im = im.crop(tuple(int(v) for v in args.crop.split(",")))
+    if args.crop:
+        im = im.crop(tuple(int(v) for v in args.crop.split(",")))
     w, h = im.size
     im = im.resize((w // args.scale, h // args.scale), Image.BOX)
     w, h = im.size
     px = im.load()
 
-    mask = [[is_leaf(px[x, y]) for x in range(w)] for y in range(h)]
-    plants = blobs(mask, w, h, args.min_size)
+    if args.auto_plots:
+        boxes = find_plots(im, args.scale)
+        print("found %d planted plot(s): %s" % (len(boxes), boxes))
+        if not boxes:
+            raise SystemExit("no planted plots found — check --crop")
+        # Search only INSIDE the plots. Outside them the grass border joins
+        # every plant into one blob, which is what wrecked the first attempt.
+        mask = [[False] * w for _ in range(h)]
+        for x0, y0, x1, y1 in boxes:
+            for y in range(y0, y1):
+                for x in range(x0, x1):
+                    mask[y][x] = is_leaf(px[x, y])
+    else:
+        mask = [[is_leaf(px[x, y]) for x in range(w)] for y in range(h)]
+
+    plants = blobs(mask, w, h, args.min_size, args.max_size)
     if not plants:
         raise SystemExit("no plants found in that crop")
     print("found %d plants in a %dx%d native grid" % (len(plants), w, h))

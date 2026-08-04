@@ -245,6 +245,7 @@
     "words": "Wörter"
    },
    "chrome": {
+    "coin": "₥",
     "day_label": "Day",
     "dialogue_continue": "E continue",
     "door_prompt": "E",
