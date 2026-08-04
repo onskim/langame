@@ -1,0 +1,36 @@
+{
+  "group_id": "73a3fa21-a868-44eb-aa86-1f9f6277159b",
+  "states": [
+    {
+      "character": {
+        "id": "aff801f2-c922-43fd-aa5d-f2670eb5e009",
+        "name": "walking",
+        "prompt": "create the character in the image for a cpozy rpg game.",
+        "size": {
+          "width": 256,
+          "height": 256
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "high top-down",
+        "created_at": "2026-08-04T11:22:21.857701+00:00"
+      },
+      "folder": "walking",
+      "frames": {
+        "rotations": {
+          "south": "walking/rotations/south.png",
+          "south-east": "walking/rotations/south-east.png",
+          "east": "walking/rotations/east.png",
+          "north-east": "walking/rotations/north-east.png",
+          "north": "walking/rotations/north.png",
+          "north-west": "walking/rotations/north-west.png",
+          "west": "walking/rotations/west.png",
+          "south-west": "walking/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-08-04T11:24:52.503444"
+}

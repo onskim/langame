@@ -57,6 +57,39 @@ func _pass1() -> void:
 	_check("player walks", moved > 20.0, "moved %.1f px" % moved)
 	_check("faces right after walking right", player.facing == 3, "facing=%d" % player.facing)
 
+	# --- the sprite sheet actually shows four facings ---------------------
+	# The generated character export could not be trusted: its "south" rotation
+	# was not a walk cycle at all but the four VIEWS of the character — front,
+	# profile, back, profile — so walking down would have shown the player's back
+	# every third frame. Nothing in the engine can tell; it just indexes cells.
+	# So measure it. How much of the head is FACE tells the facing apart: the
+	# back of a head is hair, and shows almost none.
+	var sheet: Image = (player.get_node("Sprite2D") as Sprite2D).texture.get_image()
+	var face_by_row: Array[Array] = []
+	for row in range(4):
+		var per_frame: Array[float] = []
+		for frame in range(4):
+			per_frame.append(_face_fraction(sheet, frame * 16, row * 32))
+		face_by_row.append(per_frame)
+
+	for row in range(4):
+		var values: Array = face_by_row[row]
+		var spread: float = values.max() - values.min()
+		# Within one direction every frame must show the SAME face. A big spread
+		# means a stray back-of-head sitting in the middle of a walk cycle.
+		_check("row %d holds one facing across its walk cycle" % row, spread < 0.12,
+			"spread %.2f over %s" % [spread, str(values)])
+
+	# Facing up must show markedly less face than facing down, or the rows are
+	# swapped and the player moons the camera on the way north.
+	var down_face: float = face_by_row[0][0]
+	var up_face: float = face_by_row[1][0]
+	_check("walking up shows the back of the head", up_face < down_face - 0.12,
+		"down %.2f vs up %.2f" % [down_face, up_face])
+	# A walk that never moves is a slide. Frames within a row must differ.
+	_check("the walk cycle actually animates",
+		_cells_differ(sheet, 0, 0, 2 * 16, 0), "frame 0 vs frame 2 of the down row")
+
 	# --- fence collision: walk hard into the west fence -------------------
 	player.global_position = Vector2(24, 320)
 	Input.action_press("move_left")
@@ -120,3 +153,33 @@ func _pass2() -> void:
 	_check("you wake where you slept", GameState.current_map == "interior_farmhouse",
 		GameState.current_map)
 	print("--- pass 2 complete, %d failure(s). ---" % _failures)
+
+
+## How much of a 16x32 cell's head band is skin rather than hair. Cheap, but it
+## separates front (a face), profile (half a face) and back (none) reliably at
+## this sprite size — measured on the shipped sheet as 0.33 / 0.26 / 0.08.
+func _face_fraction(sheet: Image, ox: int, oy: int) -> float:
+	var skin := 0
+	var total := 0
+	for y in range(oy + 4, oy + 14):
+		for x in range(ox, ox + 16):
+			var c := sheet.get_pixel(x, y)
+			if c.a < 0.5:
+				continue
+			total += 1
+			var r := c.r * 255.0
+			var g := c.g * 255.0
+			var b := c.b * 255.0
+			if r > 140.0 and g < r and b < g and (r - b) > 40.0:
+				skin += 1
+	return float(skin) / float(total) if total > 0 else 0.0
+
+
+## Do two cells of the sheet differ enough to read as movement?
+func _cells_differ(sheet: Image, ax: int, ay: int, bx: int, by: int) -> bool:
+	var changed := 0
+	for y in range(32):
+		for x in range(16):
+			if sheet.get_pixel(ax + x, ay + y) != sheet.get_pixel(bx + x, by + y):
+				changed += 1
+	return changed > 16
