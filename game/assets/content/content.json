@@ -43,6 +43,11 @@
     "village": "from_farm"
    },
    "config_id": "world",
+   "enterable": {
+    "interior_bakery": "open",
+    "interior_farmhouse": "open",
+    "interior_shop": "open"
+   },
    "locations": {
     "bakery": "village",
     "farm_yard": "farm",
@@ -58,6 +63,18 @@
     "farm": {
      "display": "Hof",
      "scene": "res://scenes/world/farm.tscn"
+    },
+    "interior_bakery": {
+     "display": "Bäckerei",
+     "scene": "res://scenes/world/interiors/bakery.tscn"
+    },
+    "interior_farmhouse": {
+     "display": "Zuhause",
+     "scene": "res://scenes/world/interiors/farmhouse.tscn"
+    },
+    "interior_shop": {
+     "display": "Laden",
+     "scene": "res://scenes/world/interiors/shop.tscn"
     },
     "village": {
      "display": "Dorf",

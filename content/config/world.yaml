@@ -21,6 +21,15 @@ maps:
   village:
     scene: "res://scenes/world/village.tscn"
     display: Dorf
+  interior_farmhouse:
+    scene: "res://scenes/world/interiors/farmhouse.tscn"
+    display: Zuhause
+  interior_bakery:
+    scene: "res://scenes/world/interiors/bakery.tscn"
+    display: Bäckerei
+  interior_shop:
+    scene: "res://scenes/world/interiors/shop.tscn"
+    display: Laden
 
 locations:
   farm_yard: farm
@@ -37,3 +46,11 @@ locations:
 arrivals:
   farm: from_village
   village: from_farm
+
+# Part 14 §3 MVP enterable policy: the player's own farmhouse and the
+# commercial ground floors. Every other home is a blackout interior until
+# 3 hearts (pre-wired, reachable once affection lands in Week 7).
+enterable:
+  interior_farmhouse: open
+  interior_bakery: open
+  interior_shop: open

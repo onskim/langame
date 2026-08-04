@@ -26,12 +26,16 @@ func _ready() -> void:
 	_root.visible = false
 
 
+## Idempotent — the phone persists across places, the quest engine does too.
 func setup(quest_engine: Node) -> void:
+	if _quests == quest_engine:
+		return
 	_quests = quest_engine
 	_quests.quest_started.connect(func(_q: String) -> void: refresh())
 	_quests.step_advanced.connect(func(_q: String, _i: int) -> void: refresh())
 	_quests.objective_progress.connect(func(_q: String, _d: int, _n: int) -> void: refresh())
 	_quests.quest_completed.connect(func(_q: String, _r: Dictionary) -> void: refresh())
+	_quests.quest_started.connect(func(_q: String) -> void: HUD.refresh())
 
 
 func toggle() -> void:

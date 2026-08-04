@@ -42,13 +42,13 @@ func _run() -> void:
 	add_child(farm)
 	await get_tree().process_frame
 
-	var runner: CanvasLayer = farm.get_node("DialogueRunner")
+	var runner: CanvasLayer = Dialogue
 	var cow: Node2D = farm.get_node("Cow")
 	var pig: Node2D = farm.get_node("Pig")
 	var hay: Node2D = farm.get_node("Hay")
 
 	# From Week 3 the engine chains from Q01, so clear Q01 before testing Q02.
-	var quests: Node = farm.quests
+	var quests: Node = Quests
 	var guard := 0
 	while quests.active_quest == "q01" and guard < 24:
 		guard += 1

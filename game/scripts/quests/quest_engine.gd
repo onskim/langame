@@ -24,10 +24,16 @@ var _runner: CanvasLayer  # DialogueRunner
 var _quest: Dictionary = {}
 
 
+## Idempotent: every place scene calls this on load, and the engine persists
+## across them, so the quest you are on survives walking through a door.
 func setup(dialogue_runner: CanvasLayer) -> void:
+	if _runner == dialogue_runner:
+		return
 	_runner = dialogue_runner
-	_runner.objective_resolved.connect(_on_objective_resolved)
-	_runner.line_finished.connect(_on_line_finished)
+	if not _runner.objective_resolved.is_connected(_on_objective_resolved):
+		_runner.objective_resolved.connect(_on_objective_resolved)
+	if not _runner.line_finished.is_connected(_on_line_finished):
+		_runner.line_finished.connect(_on_line_finished)
 
 
 ## Quests whose prereqs and reputation gate are satisfied and which are not
@@ -55,7 +61,19 @@ func is_available(quest_id: String) -> bool:
 		for p in prereq:
 			if not GameState.completed_quests.has(p):
 				return false
-	return true
+	return giver_present(quest_id)
+
+
+## A quest is handed over by a person. If the giver is not on this map, their
+## line must not play here — Anna greeting the player from the far side of the
+## village was the symptom that made this rule necessary.
+##
+## `auto` quests (the Q01 onboarding beat) have no giver to wait for.
+func giver_present(quest_id: String) -> bool:
+	var giver: String = ContentDB.get_quest(quest_id).get("giver", "")
+	if giver == "" or giver == "auto":
+		return true
+	return WorldRouter.npc_is_on_map(giver, WorldRouter.current_map, DayCycle.hour)
 
 
 ## Start the first available quest. Returns "" if none are unlocked.
@@ -78,6 +96,8 @@ func start(quest_id: String) -> bool:
 			% [quest_id, q.get("kind", "")])
 		return false
 	if not is_available(quest_id):
+		return false
+	if not giver_present(quest_id):
 		return false
 
 	_quest = q
@@ -170,4 +190,6 @@ func _complete() -> void:
 	active_quest = ""
 	step_index = -1
 	print("[quest] complete %s rewards=%s" % [finished, rewards])
+	GameState.complete_quest(finished, rewards)
 	quest_completed.emit(finished, rewards)
+	start_next_available()

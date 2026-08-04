@@ -120,3 +120,43 @@ static func paint_village(layer: TileMapLayer) -> void:
 		layer.set_cell(Vector2i(26, y), Tile.PATH, Vector2i.ZERO)
 	for y in range(21, 29):
 		layer.set_cell(Vector2i(23, y), Tile.PATH, Vector2i.ZERO)
+
+
+# ----------------------------------------------------------------- interiors
+
+const ROOM_W := 20
+const ROOM_H := 14
+
+
+## A room: floorboards inside, wall band along the top, solid walls around.
+## Interiors are small by design — one screen, no camera hunting for the door.
+static func paint_interior(layer: TileMapLayer, collision_parent: Node2D,
+		room_w: int = ROOM_W, room_h: int = ROOM_H) -> void:
+	layer.tile_set = build_tileset()
+
+	for y in range(room_h):
+		for x in range(room_w):
+			# Row 0-1 read as the back wall, the rest as floor.
+			var tile := Tile.PATH if y >= 2 else Tile.SOIL
+			layer.set_cell(Vector2i(x, y), tile, Vector2i.ZERO)
+
+	var body := StaticBody2D.new()
+	body.name = "RoomCollision"
+	collision_parent.add_child(body)
+
+	var walls: Array[Vector2i] = []
+	for x in range(room_w):
+		walls.append(Vector2i(x, 0))
+		walls.append(Vector2i(x, 1))
+		walls.append(Vector2i(x, room_h - 1))
+	for y in range(2, room_h - 1):
+		walls.append(Vector2i(0, y))
+		walls.append(Vector2i(room_w - 1, y))
+
+	for cell in walls:
+		var shape := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = Vector2(TILE, TILE)
+		shape.shape = rect
+		shape.position = Vector2(cell.x * TILE + TILE / 2.0, cell.y * TILE + TILE / 2.0)
+		body.add_child(shape)

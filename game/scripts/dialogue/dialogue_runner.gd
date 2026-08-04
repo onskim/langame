@@ -36,6 +36,24 @@ func register_target(object_id: String, node: Node2D) -> void:
 	_targets[object_id] = node
 
 
+## Targets are per-place; a stale reference to a freed cow would crash a gesture.
+func clear_targets() -> void:
+	_targets.clear()
+
+
+## The player character's inner voice — per Part 3 §3 the ONLY English in the
+## game, and it fades as the player's German grows. Not an NPC, so no speaker
+## name and no draft watermark: this is authored UI text, not curriculum.
+func play_inner_monologue(text: String) -> void:
+	current_line_id = ""
+	_speaker.text = ""
+	_line_label.text = "[i]%s[/i]" % text
+	_draft_mark.visible = false
+	_repair.text = "E continue"
+	_panel.visible = true
+	is_open = true
+
+
 ## Play one line by id. Returns immediately; listen to line_finished.
 func play_line(line_id: String) -> void:
 	var line := ContentDB.get_line(line_id)

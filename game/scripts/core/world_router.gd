@@ -10,6 +10,8 @@ extends Node
 signal map_changed(map_id: String)
 
 var current_map: String = "farm"
+## The place scene currently loaded, so systems can ask it to resync.
+var current_world: Node = null
 ## Which arrival marker the player should spawn on after a transition.
 var pending_arrival: String = ""
 
@@ -93,6 +95,13 @@ func travel_to(map_id: String, arrival_marker: String) -> void:
 	map_changed.emit(map_id)
 	print("[world] travel -> %s (arrive at %s)" % [map_id, arrival_marker])
 	get_tree().change_scene_to_file(path)
+
+
+## A home the player is not welcome in yet (Part 14 §3). Rather than an
+## invisible wall, they get the dark room and an inner-monologue line.
+func enter_blackout(map_id: String, sign_text: String) -> void:
+	print("[world] blackout interior: %s" % map_id)
+	Dialogue.play_inner_monologue("Es ist dunkel…")
 
 
 ## Consume the arrival marker set by the last transition.

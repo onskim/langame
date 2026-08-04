@@ -86,8 +86,8 @@ func _run() -> void:
 	var farm: Node2D = load("res://scenes/world/farm.tscn").instantiate()
 	add_child(farm)
 	await get_tree().process_frame
-	var quests: Node = farm.quests
-	var phone: CanvasLayer = farm.get_node("Phone")
+	var quests: Node = Quests
+	var phone: CanvasLayer = Phone
 
 	_check("Q01 available at start", quests.is_available("q01"))
 	_check("Q02 gated behind Q01", not quests.is_available("q02"))
@@ -119,7 +119,7 @@ func _run() -> void:
 	# Q03 needs 4 waterings — the counted objective must not complete early.
 	_check("Q03 objective needs 4", quests.objective_needed() == 4,
 		"needed=%d" % quests.objective_needed())
-	var runner: CanvasLayer = farm.get_node("DialogueRunner")
+	var runner: CanvasLayer = Dialogue
 	GameState.carrying = "wasser"
 	for i in range(3):
 		runner.submit_action("water", "obj_field", "wasser")
@@ -149,7 +149,7 @@ func _run() -> void:
 
 ## Drive whatever objective the current quest wants until it completes.
 func _finish_quest(farm: Node2D, quests: Node, quest_id: String) -> void:
-	var runner: CanvasLayer = farm.get_node("DialogueRunner")
+	var runner: CanvasLayer = Dialogue
 	var guard := 0
 	while quests.active_quest == quest_id and guard < 24:
 		guard += 1

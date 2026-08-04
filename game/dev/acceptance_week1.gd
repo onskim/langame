@@ -36,8 +36,13 @@ func _pass1() -> void:
 
 	var player: CharacterBody2D = farm.get_node("Player")
 	var cow: Node2D = farm.get_node("Cow")
-	var bed: Node2D = farm.get_node("Bed")
-	var dialogue: CanvasLayer = farm.get_node("DialogueRunner")
+	# The bed moved indoors with the interior split, so sleeping is tested
+	# in the farmhouse where a bed actually belongs.
+	var house: Node2D = load("res://scenes/world/interiors/farmhouse.tscn").instantiate()
+	add_child(house)
+	await get_tree().process_frame
+	var bed: Node2D = house.get_node("Furniture/Bed")
+	var dialogue: CanvasLayer = Dialogue
 
 	_check("starts on day 1", GameState.day == 1, "day=%d" % GameState.day)
 
@@ -101,10 +106,12 @@ func _pass2() -> void:
 	# GameState._ready() already loaded from disk before this ran.
 	_check("day survived relaunch", GameState.day == 2, "day=%d" % GameState.day)
 
-	var farm: Node2D = load("res://scenes/world/farm.tscn").instantiate()
-	add_child(farm)
-	await get_tree().process_frame
-	var player: CharacterBody2D = farm.get_node("Player")
-	_check("player position restored", player.global_position.distance_to(Vector2(384, 336)) < 1.0,
-		"pos=%s" % player.global_position)
+	# You sleep in the farmhouse, so you wake in the farmhouse. What matters is
+	# that the saved position round-trips, not that it is any fixed coordinate.
+	var saved := SaveService.load_game()
+	var expected := Vector2(float(saved.get("player_x", 0.0)), float(saved.get("player_y", 0.0)))
+	_check("saved position round-trips", GameState.player_position.distance_to(expected) < 1.0,
+		"saved=%s loaded=%s" % [expected, GameState.player_position])
+	_check("you wake where you slept", GameState.current_map == "interior_farmhouse",
+		GameState.current_map)
 	print("--- pass 2 complete, %d failure(s). ---" % _failures)

@@ -16,6 +16,8 @@ var money: int = 0
 var completed_quests: Array = []
 ## Which map the player is standing on (Part 14 §2 split world).
 var current_map: String = "farm"
+## Per-NPC affection tiers (Part 12). Week 7 fills these; doors read them now.
+var affection: Dictionary = {}
 
 var _loaded_position: Variant = null
 
@@ -35,6 +37,7 @@ func to_dict() -> Dictionary:
 		"completed_quests": completed_quests,
 		"word_stats": WordStats.to_dict(),
 		"current_map": current_map,
+		"affection": affection,
 	}
 
 
@@ -53,6 +56,7 @@ func load_state() -> void:
 	completed_quests = data.get("completed_quests", [])
 	WordStats.from_dict(data.get("word_stats", {}))
 	current_map = str(data.get("current_map", "farm"))
+	affection = data.get("affection", {})
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
 		player_position = _loaded_position
@@ -78,6 +82,7 @@ func complete_quest(quest_id: String, rewards: Dictionary) -> void:
 	money += int(rewards.get("money", 0))
 	save_state()
 	print("[state] quest %s complete — rep %d, money %d" % [quest_id, reputation, money])
+	HUD.refresh()
 
 
 ## Bed interaction: advance the day, reset the clock, autosave.
@@ -88,3 +93,11 @@ func sleep(spawn_position: Vector2) -> void:
 	save_state()
 	day_advanced.emit(day)
 	print("[state] slept -> day %d" % day)
+	HUD.refresh()
+
+
+## Affection tier with an NPC, 0 if never met (Part 12 §affection).
+func affection_of(npc_id: String) -> int:
+	if npc_id == "":
+		return 0
+	return int(affection.get(npc_id, 0))
