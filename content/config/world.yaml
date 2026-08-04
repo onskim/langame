@@ -33,6 +33,12 @@ maps:
   interior_shop:
     scene: "res://scenes/world/interiors/shop.tscn"
     display: Laden
+  # Elke's Café "Zur Tasse" — Part 14 §3 row 11 puts it on the square and makes
+  # it enterable from day one, as the village's social hub. The building and the
+  # room exist; Elke and her quest chain do not yet.
+  interior_cafe:
+    scene: "res://scenes/world/interiors/cafe.tscn"
+    display: Café
   interior_anna_kitchen:
     scene: "res://scenes/world/interiors/anna_kitchen.tscn"
     display: Annas Küche
@@ -53,6 +59,7 @@ locations:
   village_square: village
   bakery: village
   shop: village
+  cafe: village
   rathaus: village
   lane: village
   lakeshore: lake
@@ -66,12 +73,10 @@ arrivals:
 # commercial ground floors. Every other home is a blackout interior until
 # 3 hearts (pre-wired, reachable once affection lands in Week 7).
 enterable:
-  lake:
-    scene: "res://scenes/world/lake.tscn"
-    display: See
   interior_farmhouse: open
   interior_bakery: open
   interior_shop: open
+  interior_cafe: open
   # Mentor exception (Part 14 §3): Anna's kitchen is the one private home
   # open from the start, because she is the player's way in to the village.
   interior_anna_kitchen: open

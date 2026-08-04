@@ -15,6 +15,15 @@
 
 config_id: ui_strings
 
+# Which language the WORLD speaks — the language the player is here to learn.
+# Every diegetic string below is keyed by it, so a Spanish edition is this one
+# value plus an `es:` line per entry. Nothing diegetic may be BAKED INTO ART for
+# exactly this reason: the shop references arrived with "Bäckerei" and "Café"
+# painted on the signboards, which would have made those buildings German
+# forever. The lettering is erased from the sprite (tools/blank_sign.py) and
+# drawn at runtime from `signs` below.
+world_language: de
+
 chrome:
   hint_controls: "WASD move   E interact   TAB phone   Space talk   F5 shot"
   dialogue_continue: "E continue"
@@ -29,6 +38,43 @@ apps:
   words: Wörter
   weather: Wetter
   map: Karte
+
+# What is painted on each building's signboard, and what its door announces —
+# ONE record per building, so the sign and the prompt can never disagree.
+signs:
+  farmhouse:
+    de: "Zuhause"
+    en: "Home"
+    draft: true
+  bakery:
+    de: "Bäckerei"
+    en: "Bakery"
+    draft: true
+  cafe:
+    de: "Café"
+    en: "Café"
+    draft: true
+  shop:
+    de: "Laden"
+    en: "Shop"
+    draft: true
+  rathaus:
+    de: "Rathaus"
+    en: "Town hall"
+    draft: true
+  mila_house:
+    de: "Milas Haus"
+    en: "Mila's house"
+    draft: true
+  anna_kitchen:
+    de: "Annas Küche"
+    en: "Anna's kitchen"
+    draft: true
+  # What an interior's own door says on the way back out.
+  exit:
+    de: "raus"
+    en: "out"
+    draft: true
 
 diegetic:
   door_locked:

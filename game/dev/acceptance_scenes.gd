@@ -70,6 +70,20 @@ func _run() -> void:
 					"from": map_id, "name": str(exit_node.name), "to": target,
 					"marker": str(exit_node.get("arrival_marker")),
 				})
+		# A door that names its building with a literal is a building that stays
+		# German forever. Every one of them must resolve through the strings
+		# table, or a Spanish edition ships with a "Bäckerei" in it.
+		var holder := place.get_node_or_null("Doors")
+		if holder != null:
+			for door_node in holder.get_children():
+				var key: String = str(door_node.get("sign_key"))
+				var literal: String = str(door_node.get("sign_text"))
+				_check("%s/%s names its building from content"
+					% [map_id, door_node.name], key != "" and literal == "",
+					"sign_key='%s' sign_text='%s'" % [key, literal])
+				if key != "":
+					_check("  and '%s' exists in the strings table" % key,
+						Config.sign_text(key) != "")
 		place.free()
 
 	_check("the world has exits to check", exits.size() >= 8, "%d" % exits.size())
@@ -92,6 +106,47 @@ func _run() -> void:
 		landed.distance_to(front_door) < 32.0,
 		"landed %s, door %s" % [landed, front_door])
 	farm_place.queue_free()
+	await get_tree().process_frame
+
+	# ---------- a signboard is content, not paint ----------
+	# The founder's shopfront art arrived with the names painted on the boards.
+	# Baked in, those buildings are German forever. They are erased from the
+	# sprite and drawn from the strings table, so the test is that the world
+	# language actually reaches them.
+	var village_scene: Node2D = (load(WorldRouter.scene_path("village")) as PackedScene).instantiate()
+	add_child(village_scene)
+	await get_tree().process_frame
+	for shop_name in ["Bakery", "Cafe"]:
+		var sign_label := village_scene.get_node_or_null(
+			"Buildings/%s/Sign" % shop_name) as Label
+		_check("%s has a signboard" % shop_name, sign_label != null)
+		if sign_label == null:
+			continue
+		var key: String = str(sign_label.get("sign_key"))
+		_check("  it is painted from content, in the world's language",
+			sign_label.text == Config.sign_text(key) and sign_label.text != "",
+			"'%s' (key %s, lang %s)" % [sign_label.text, key, Config.world_language()])
+		# The board and the door are one fact: if they can disagree, one of them
+		# is wrong and the player is the one who finds out.
+		var door_node := village_scene.get_node_or_null(
+			"Doors/%sDoor" % shop_name) as Door
+		if door_node != null:
+			_check("  and its door says the same word",
+				door_node.label() == sign_label.text,
+				"door '%s' vs board '%s'" % [door_node.label(), sign_label.text])
+
+	# Switching the world language must move every sign at once. English stands
+	# in for the languages that do not exist yet — the mechanism is the same.
+	var german := Config.sign_text("bakery")
+	Config._section("ui_strings")["world_language"] = "en"
+	var english := Config.sign_text("bakery")
+	Config._section("ui_strings")["world_language"] = "de"
+	_check("changing the world language changes the sign",
+		german != english and english != "", "de='%s' en='%s'" % [german, english])
+	_check("and changing it back restores German",
+		Config.sign_text("bakery") == german)
+
+	village_scene.queue_free()
 	await get_tree().process_frame
 
 	# ---------- persistent systems are autoloads, not per-scene copies ----------

@@ -81,17 +81,8 @@ func _run() -> void:
 	# you would stand outside your house unable to open the front door. This is
 	# the same class of bug as a fence with no gap, so assert it the same way:
 	# every door's trigger must sit OUTSIDE every building's solid footprint.
-	var buried: Array[String] = []
-	for door in farm.get_node("Doors").get_children():
-		var here: Vector2 = (door as Node2D).global_position
-		for building in farm.get_node("Buildings").get_children():
-			var shape := building.get_node_or_null("Body/Shape") as CollisionShape2D
-			if shape == null or not (shape.shape is RectangleShape2D):
-				continue
-			var half: Vector2 = (shape.shape as RectangleShape2D).size * 0.5
-			if Rect2(shape.global_position - half, half * 2.0).has_point(here):
-				buried.append("%s inside %s" % [door.name, building.name])
-	_check("every farm door is reachable from outside", buried.is_empty(), str(buried))
+	_check("every farm door is reachable from outside",
+		_buried_doors(farm).is_empty(), str(_buried_doors(farm)))
 
 	farm.queue_free()
 	await get_tree().process_frame
@@ -116,13 +107,28 @@ func _run() -> void:
 		"count=%d" % village.get_node("Buildings").get_child_count())
 	_check("village has a way back", village.get_node("Gates/ToFarm").target_map == "farm")
 
+	# The shopfronts are much taller than the blocks they replaced and their
+	# collision covers the whole sprite, so every village door had to move clear
+	# of it. Same invariant as the farm's.
+	_check("every village door is reachable from outside",
+		_buried_doors(village).is_empty(), str(_buried_doors(village)))
+
 	# Each shop marker must sit at its building, or "Karl is in the Bäckerei"
 	# is still just a coordinate.
-	var bakery_marker: Marker2D = village.get_node("Locations/bakery")
-	var bakery_sprite: Sprite2D = village.get_node("Buildings/Bakery")
-	_check("the bakery marker is at the bakery",
-		bakery_marker.global_position.distance_to(bakery_sprite.global_position) < 64.0,
-		"%.0f px apart" % bakery_marker.global_position.distance_to(bakery_sprite.global_position))
+	# Measured against the building's FRONT, not its centre. A schedule marker is
+	# where an NPC stands, and standing in the middle of a shop means standing
+	# inside its roof; measuring to the centre also made the tolerance a function
+	# of how tall the art happens to be, so taller buildings broke a check that
+	# had nothing to do with them.
+	for shop_name in ["bakery", "shop", "cafe"]:
+		var marker: Marker2D = village.get_node("Locations/" + shop_name)
+		var sprite: Sprite2D = village.get_node(
+			"Buildings/" + shop_name.substr(0, 1).to_upper() + shop_name.substr(1))
+		var front: Vector2 = sprite.global_position \
+			+ Vector2(0, sprite.texture.get_height() * 0.5)
+		_check("the %s marker is at the %s door" % [shop_name, shop_name],
+			marker.global_position.distance_to(front) < 48.0,
+			"%.0f px from the shopfront" % marker.global_position.distance_to(front))
 
 	# ---------- NPCs move between maps as the day turns ----------
 	DayCycle.hour = 13.0
@@ -239,3 +245,29 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	print("--- split world acceptance complete, %d failure(s). ---" % _failures)
+
+
+## Doors whose trigger sits inside a building's solid footprint — a door you can
+## never reach, the same class of bug as a fence with no gap. The body node is
+## found by type rather than by name because scenes call it Body, BakeryBody,
+## CafeBody and so on, and a name-based lookup would silently check nothing.
+func _buried_doors(place: Node2D) -> Array[String]:
+	var buried: Array[String] = []
+	var doors := place.get_node_or_null("Doors")
+	var buildings := place.get_node_or_null("Buildings")
+	if doors == null or buildings == null:
+		return buried
+	for door in doors.get_children():
+		var here: Vector2 = (door as Node2D).global_position
+		for building in buildings.get_children():
+			for part in building.get_children():
+				if not (part is StaticBody2D):
+					continue
+				for shape_node in part.get_children():
+					var shape := shape_node as CollisionShape2D
+					if shape == null or not (shape.shape is RectangleShape2D):
+						continue
+					var half: Vector2 = (shape.shape as RectangleShape2D).size * 0.5
+					if Rect2(shape.global_position - half, half * 2.0).has_point(here):
+						buried.append("%s inside %s" % [door.name, building.name])
+	return buried

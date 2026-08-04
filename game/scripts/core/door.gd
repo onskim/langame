@@ -16,7 +16,12 @@ enum Access { OPEN, BLACKOUT, LOCKED }
 @export var target_map: String = ""
 @export var arrival_marker: String = "from_outside"
 @export var access: Access = Access.OPEN
-## Shown on the HUD when the player is standing here.
+## Which building this is, as a key into the strings table's `signs` block. It
+## names the door prompt AND the painted signboard from one record, so a change
+## of world language rewrites both and they can never disagree.
+@export var sign_key: String = ""
+## Literal fallback for doors that have no strings entry yet. A German literal
+## here is a Part 4 §2 violation waiting to happen — prefer `sign_key`.
 @export var sign_text: String = ""
 ## Affection tier at which a BLACKOUT home opens up (post-MVP hook).
 @export var unlock_at_affection: int = 3
@@ -44,14 +49,23 @@ func _on_body_exited(body: Node2D) -> void:
 	HUD.set_prompt("")
 
 
+## The building's name in the world's language, from content.
+func label() -> String:
+	if sign_key != "":
+		var from_content := Config.sign_text(sign_key)
+		if from_content != "":
+			return from_content
+		push_error("[door] no strings entry for sign key '%s'" % sign_key)
+	return sign_text
+
+
 func prompt_text() -> String:
+	var shown := label()
 	match effective_access():
-		Access.OPEN:
-			return "E   %s" % sign_text
-		Access.BLACKOUT:
-			return "E   %s" % sign_text
+		Access.OPEN, Access.BLACKOUT:
+			return "E   %s" % shown
 		_:
-			return sign_text
+			return shown
 
 
 ## BLACKOUT homes open once the relationship does (pre-wired, not yet reachable

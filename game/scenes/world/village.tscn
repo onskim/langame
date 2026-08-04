@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/village_map.gd" id="1_village"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -11,12 +11,17 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="11_cottage"]
 [ext_resource type="Script" path="res://scripts/core/world_object.gd" id="12_worldobj"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hay_bale.png" id="13_stall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_cafe.png" id="14_cafe"]
+[ext_resource type="Script" path="res://scripts/core/building_sign.gd" id="15_sign"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(20, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
 size = Vector2(28, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shopfront"]
+size = Vector2(84, 95)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bld"]
 size = Vector2(60, 40)
@@ -37,17 +42,37 @@ position = Vector2(320, 128)
 texture = ExtResource("6_bakery")
 
 [node name="BakeryBody" type="StaticBody2D" parent="Buildings/Bakery"]
-position = Vector2(0, 6)
+position = Vector2(0, 0)
 
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Bakery/BakeryBody"]
-shape = SubResource("RectangleShape2D_bld")
+shape = SubResource("RectangleShape2D_shopfront")
+
+[node name="Sign" type="Label" parent="Buildings/Bakery"]
+script = ExtResource("15_sign")
+sign_key = "bakery"
+plank = Rect2(-14, -2.5, 46, 9)
+
+[node name="Cafe" type="Sprite2D" parent="Buildings"]
+position = Vector2(512, 128)
+texture = ExtResource("14_cafe")
+
+[node name="CafeBody" type="StaticBody2D" parent="Buildings/Cafe"]
+position = Vector2(0, 0)
+
+[node name="Shape" type="CollisionShape2D" parent="Buildings/Cafe/CafeBody"]
+shape = SubResource("RectangleShape2D_shopfront")
+
+[node name="Sign" type="Label" parent="Buildings/Cafe"]
+script = ExtResource("15_sign")
+sign_key = "cafe"
+plank = Rect2(-16, -3, 33, 9)
 
 [node name="Shop" type="Sprite2D" parent="Buildings"]
-position = Vector2(416, 128)
+position = Vector2(416, 145)
 texture = ExtResource("7_shop")
 
 [node name="ShopBody" type="StaticBody2D" parent="Buildings/Shop"]
-position = Vector2(0, 6)
+position = Vector2(0, 0)
 
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Shop/ShopBody"]
 shape = SubResource("RectangleShape2D_bld")
@@ -83,10 +108,13 @@ texture = ExtResource("9_well")
 position = Vector2(368, 320)
 
 [node name="bakery" type="Marker2D" parent="Locations"]
-position = Vector2(320, 184)
+position = Vector2(320, 200)
 
 [node name="shop" type="Marker2D" parent="Locations"]
-position = Vector2(416, 184)
+position = Vector2(416, 200)
+
+[node name="cafe" type="Marker2D" parent="Locations"]
+position = Vector2(512, 200)
 
 [node name="rathaus" type="Marker2D" parent="Locations"]
 position = Vector2(560, 320)
@@ -100,10 +128,13 @@ position = Vector2(368, 432)
 position = Vector2(48, 264)
 
 [node name="from_bakery" type="Marker2D" parent="Arrivals"]
-position = Vector2(320, 178)
+position = Vector2(320, 204)
 
 [node name="from_shop" type="Marker2D" parent="Arrivals"]
-position = Vector2(416, 178)
+position = Vector2(416, 204)
+
+[node name="from_cafe" type="Marker2D" parent="Arrivals"]
+position = Vector2(512, 204)
 
 [node name="from_mila" type="Marker2D" parent="Arrivals"]
 position = Vector2(240, 442)
@@ -123,23 +154,33 @@ shape = SubResource("RectangleShape2D_gate")
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="BakeryDoor" type="Area2D" parent="Doors" groups=["door"]]
-position = Vector2(320, 162)
+position = Vector2(320, 190)
 script = ExtResource("10_door")
 target_map = "interior_bakery"
 arrival_marker = "from_outside"
-sign_text = "Bäckerei"
+sign_key = "bakery"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/BakeryDoor"]
 shape = SubResource("RectangleShape2D_door")
 
 [node name="ShopDoor" type="Area2D" parent="Doors" groups=["door"]]
-position = Vector2(416, 162)
+position = Vector2(416, 190)
 script = ExtResource("10_door")
 target_map = "interior_shop"
 arrival_marker = "from_outside"
-sign_text = "Laden"
+sign_key = "shop"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/ShopDoor"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="CafeDoor" type="Area2D" parent="Doors" groups=["door"]]
+position = Vector2(512, 190)
+script = ExtResource("10_door")
+target_map = "interior_cafe"
+arrival_marker = "from_outside"
+sign_key = "cafe"
+
+[node name="Shape" type="CollisionShape2D" parent="Doors/CafeDoor"]
 shape = SubResource("RectangleShape2D_door")
 
 [node name="MilaCottageDoor" type="Area2D" parent="Doors" groups=["door"]]
@@ -149,7 +190,7 @@ target_map = "interior_mila"
 arrival_marker = "from_outside"
 access = 1
 owner_npc_id = "npc_mila"
-sign_text = "Milas Haus"
+sign_key = "mila_house"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/MilaCottageDoor"]
 shape = SubResource("RectangleShape2D_door")
@@ -161,7 +202,7 @@ target_map = ""
 arrival_marker = "from_outside"
 access = 2
 owner_npc_id = "npc_weber"
-sign_text = "Rathaus"
+sign_key = "rathaus"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/RathausDoor"]
 shape = SubResource("RectangleShape2D_door")

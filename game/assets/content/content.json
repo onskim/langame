@@ -139,7 +139,50 @@
      "draft": true,
      "en": "It's dark in here…"
     }
-   }
+   },
+   "signs": {
+    "anna_kitchen": {
+     "de": "Annas Küche",
+     "draft": true,
+     "en": "Anna's kitchen"
+    },
+    "bakery": {
+     "de": "Bäckerei",
+     "draft": true,
+     "en": "Bakery"
+    },
+    "cafe": {
+     "de": "Café",
+     "draft": true,
+     "en": "Café"
+    },
+    "exit": {
+     "de": "raus",
+     "draft": true,
+     "en": "out"
+    },
+    "farmhouse": {
+     "de": "Zuhause",
+     "draft": true,
+     "en": "Home"
+    },
+    "mila_house": {
+     "de": "Milas Haus",
+     "draft": true,
+     "en": "Mila's house"
+    },
+    "rathaus": {
+     "de": "Rathaus",
+     "draft": true,
+     "en": "Town hall"
+    },
+    "shop": {
+     "de": "Laden",
+     "draft": true,
+     "en": "Shop"
+    }
+   },
+   "world_language": "de"
   },
   "world": {
    "arrivals": {
@@ -150,18 +193,16 @@
    "enterable": {
     "interior_anna_kitchen": "open",
     "interior_bakery": "open",
+    "interior_cafe": "open",
     "interior_farmhouse": "open",
-    "interior_shop": "open",
-    "lake": {
-     "display": "See",
-     "scene": "res://scenes/world/lake.tscn"
-    }
+    "interior_shop": "open"
    },
    "locations": {
     "anna_farmhouse": "farm",
     "anna_field": "farm",
     "anna_yard": "farm",
     "bakery": "village",
+    "cafe": "village",
     "farm_yard": "farm",
     "farmhouse": "farm",
     "field": "farm",
@@ -184,6 +225,10 @@
     "interior_bakery": {
      "display": "Bäckerei",
      "scene": "res://scenes/world/interiors/bakery.tscn"
+    },
+    "interior_cafe": {
+     "display": "Café",
+     "scene": "res://scenes/world/interiors/cafe.tscn"
     },
     "interior_farmhouse": {
      "display": "Zuhause",

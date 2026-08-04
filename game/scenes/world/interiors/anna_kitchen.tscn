@@ -38,7 +38,7 @@ position = Vector2(160, 200)
 script = ExtResource("3_door")
 target_map = "farm"
 arrival_marker = "from_anna_kitchen"
-sign_text = "raus"
+sign_key = "exit"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/Exit"]
 shape = SubResource("RectangleShape2D_door")

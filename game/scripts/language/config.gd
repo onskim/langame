@@ -51,6 +51,35 @@ func app_name(key: String, fallback: String = "") -> String:
 	return fallback
 
 
+## The language the world speaks — what the player is here to learn.
+func world_language() -> String:
+	return str(_section("ui_strings").get("world_language", "de"))
+
+
+## A building's name, in the world's language. ONE record drives both the
+## painted signboard and the door prompt, so the two cannot drift apart, and
+## switching the world language rewrites both without repainting any art.
+## Named `sign_record`, not `sign`: GDScript already has a global `sign()`, and a
+## method that shadows it resolves to the built-in at the call site — returning a
+## number where a Dictionary was expected.
+func sign_record(key: String) -> Dictionary:
+	var block: Variant = _section("ui_strings").get("signs")
+	if block is Dictionary:
+		var entry: Variant = (block as Dictionary).get(key)
+		if entry is Dictionary:
+			return entry
+	return {}
+
+
+func sign_text(key: String) -> String:
+	var entry := sign_record(key)
+	if entry.is_empty():
+		return ""
+	# Fall back to German rather than to nothing: an unlocalised sign should
+	# still name its building.
+	return str(entry.get(world_language(), entry.get("de", "")))
+
+
 ## World-facing German (signs, the locked-door line). Returns the whole record
 ## so callers can honour its draft flag.
 func diegetic(key: String) -> Dictionary:

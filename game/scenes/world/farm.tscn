@@ -209,7 +209,7 @@ position = Vector2(169, 214)
 script = ExtResource("15_door")
 target_map = "interior_farmhouse"
 arrival_marker = "from_outside"
-sign_text = "Zuhause"
+sign_key = "farmhouse"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/FarmhouseDoor"]
 shape = SubResource("RectangleShape2D_door")
@@ -219,7 +219,7 @@ position = Vector2(560, 178)
 script = ExtResource("15_door")
 target_map = "interior_anna_kitchen"
 arrival_marker = "from_outside"
-sign_text = "Annas Küche"
+sign_key = "anna_kitchen"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/AnnaKitchenDoor"]
 shape = SubResource("RectangleShape2D_door")
