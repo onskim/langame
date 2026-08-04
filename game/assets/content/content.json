@@ -1147,6 +1147,226 @@
   }
  },
  "monologue": {
+  "beat_a1_close": {
+   "class": "act_beat",
+   "de_full": "Mein eigenes Feld. Mein Feld.",
+   "draft": true,
+   "en_template": "My own field. {c1}.",
+   "family": "farm",
+   "focus_words": [
+    "feld"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Das ist mein Feld.",
+     "en": "This is my field.",
+     "words": [
+      "feld"
+     ]
+    }
+   },
+   "m2_template": "{f1} Mine.",
+   "mono_id": "beat_a1_close",
+   "once": true,
+   "spans": {
+    "c1": {
+     "de": "Mein Feld",
+     "en": "My field",
+     "words": [
+      "feld"
+     ]
+    }
+   },
+   "subkey": "a1_close"
+  },
+  "beat_a1_open": {
+   "band_max": 0.15,
+   "class": "act_beat",
+   "de_full": "Wo bin ich?",
+   "draft": true,
+   "en_template": "Where am I?",
+   "family": "social",
+   "focus_words": [],
+   "mono_id": "beat_a1_open",
+   "once": true,
+   "spans": {},
+   "subkey": "a1_open"
+  },
+  "beat_a2_close": {
+   "class": "act_beat",
+   "de_full": "Sie kennen meinen Namen. Sie kennen mich.",
+   "draft": true,
+   "en_template": "They know my name. … {c1}",
+   "family": "social",
+   "focus_words": [
+    "dorf"
+   ],
+   "mono_id": "beat_a2_close",
+   "once": true,
+   "spans": {
+    "c1": {
+     "de": "Sie kennen meinen Namen.",
+     "en": "They know my name.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "subkey": "a2_close"
+  },
+  "beat_a2_mid": {
+   "class": "act_beat",
+   "de_full": "Die Kuh ist weg! Der Zaun — wo ist sie?",
+   "draft": true,
+   "en_template": "{c1} The fence — {c2} — where IS she?",
+   "family": "farm",
+   "focus_words": [
+    "kuh",
+    "zaun"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Die Kuh ist weg. Der Zaun ist kaputt.",
+     "en": "The cow is gone. The fence is broken.",
+     "words": [
+      "kuh",
+      "zaun"
+     ]
+    }
+   },
+   "m2_template": "{f1} Where IS she?",
+   "mono_id": "beat_a2_mid",
+   "once": true,
+   "spans": {
+    "c1": {
+     "de": "Die Kuh!",
+     "en": "The cow!",
+     "words": [
+      "kuh"
+     ]
+    },
+    "c2": {
+     "de": "der Zaun",
+     "en": "the fence",
+     "words": [
+      "zaun"
+     ]
+    }
+   },
+   "subkey": "a2_mid"
+  },
+  "beat_a3_close": {
+   "class": "act_beat",
+   "de_full": "Wir haben es geschafft. Alle zusammen.",
+   "draft": true,
+   "en_template": "We did it. {c1}",
+   "family": "social",
+   "focus_words": [
+    "dorf"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Wir haben es geschafft",
+     "en": "We made it",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "m2_template": "{f1} … we actually did.",
+   "mono_id": "beat_a3_close",
+   "once": true,
+   "spans": {
+    "c1": {
+     "de": "Wir haben es geschafft.",
+     "en": "We made it.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "subkey": "a3_close"
+  },
+  "beat_a3_open": {
+   "class": "act_beat",
+   "de_full": "Der Bürgermeister fragt mich. Das ganze Dorf wartet.",
+   "draft": true,
+   "en_template": "The mayor is asking me. {c1}",
+   "family": "formal",
+   "focus_words": [
+    "dorf"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Der Bürgermeister fragt mich.",
+     "en": "The mayor is asking me.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "m2_template": "{f1} … me, of all people.",
+   "mono_id": "beat_a3_open",
+   "once": true,
+   "spans": {
+    "c1": {
+     "de": "Das ganze Dorf.",
+     "en": "The whole village.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "subkey": "a3_open"
+  },
+  "beat_a4_close": {
+   "class": "act_beat",
+   "de_full": "Die Fahrkarte. Die Stadt. Ich bin bereit. … how did I get here?",
+   "draft": true,
+   "en_template": "The ticket. The city. … how did I get here?",
+   "family": "social",
+   "focus_words": [
+    "dorf"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Die Fahrkarte. Die Stadt.",
+     "en": "The ticket. The city.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "m2_template": "{f1} … how did I get here?",
+   "mono_id": "beat_a4_close",
+   "once": true,
+   "spans": {},
+   "subkey": "a4_close"
+  },
+  "beat_a4_mid": {
+   "class": "act_beat",
+   "de_full": "Schnee am Fenster. Alles ist ruhig. Ist das … home?",
+   "draft": true,
+   "en_template": "Snow on the window. Quiet. Is this home?",
+   "family": "home",
+   "focus_words": [
+    "schnee"
+   ],
+   "m2_spans": {
+    "f1": {
+     "de": "Schnee am Fenster. Alles ist ruhig.",
+     "en": "Snow on the window. Everything is quiet.",
+     "words": [
+      "schnee"
+     ]
+    }
+   },
+   "m2_template": "{f1} … home?",
+   "mono_id": "beat_a4_mid",
+   "once": true,
+   "spans": {},
+   "subkey": "a4_mid"
+  },
   "mono_craving_brot_01": {
    "class": "craving",
    "de_full": "Ich habe Hunger. Vielleicht Brot.",
@@ -1240,6 +1460,16 @@
    "focus_words": [
     "dorf"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Ich bin im Dorf.",
+     "en": "I'm in the village.",
+     "words": [
+      "dorf"
+     ]
+    }
+   },
+   "m2_template": "{f1} Someone always needs something.",
    "mono_id": "mono_loc_village_01",
    "spans": {
     "c1": {
@@ -1262,6 +1492,17 @@
     "feld",
     "wasser"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Das Feld braucht Wasser.",
+     "en": "The field needs water.",
+     "words": [
+      "feld",
+      "wasser"
+     ]
+    }
+   },
+   "m2_template": "{f1} Nothing else can wait either.",
    "mono_id": "mono_obj_field_01",
    "spans": {
     "c1": {
@@ -1291,6 +1532,17 @@
     "huhn",
     "ei"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Das Huhn legt ein Ei.",
+     "en": "The hen lays an egg.",
+     "words": [
+      "huhn",
+      "ei"
+     ]
+    }
+   },
+   "m2_template": "{f1} Maybe today.",
    "mono_id": "mono_obj_hen_01",
    "spans": {
     "c1": {
@@ -1320,6 +1572,17 @@
     "kuh",
     "markt"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Ich muss die Kuh füttern",
+     "en": "I should feed the cow",
+     "words": [
+      "kuh",
+      "fuettern"
+     ]
+    }
+   },
+   "m2_template": "{f1} … before the market, anyway.",
    "mono_id": "mono_obj_kuh_01",
    "spans": {
     "c1": {
@@ -1389,6 +1652,19 @@
     "kuh",
     "feld"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Die Kuh hat Heu, das Feld hat Wasser.",
+     "en": "The cow has hay, the field has water.",
+     "words": [
+      "kuh",
+      "heu",
+      "feld",
+      "wasser"
+     ]
+    }
+   },
+   "m2_template": "{f1} Enough for today.",
    "mono_id": "mono_sleep_01",
    "spans": {
     "c1": {
@@ -1436,6 +1712,16 @@
    "focus_words": [
     "kuh"
    ],
+   "m2_spans": {
+    "f1": {
+     "de": "Die Kuh hat Hunger.",
+     "en": "The cow is hungry.",
+     "words": [
+      "kuh"
+     ]
+    }
+   },
+   "m2_template": "{f1} Then the rest of it.",
    "mono_id": "mono_wake_01",
    "spans": {
     "c1": {
@@ -1532,6 +1818,71 @@
  },
  "npcs": {
   "npc_anna": {
+   "callbacks": [
+    {
+     "cb_id": "cb_anna_retest_farm",
+     "context": "greeting",
+     "de": "Guten Morgen! Na — was ist das?",
+     "draft": true,
+     "en": "Good morning! Well — what is that?",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ],
+     "gestures": [
+      {
+       "point_at": "{word_object}",
+       "word": "{word}"
+      }
+     ]
+    },
+    {
+     "cb_id": "cb_anna_triumph_farm",
+     "context": "greeting",
+     "de": "Du kannst es jetzt. Ich habe es gehört!",
+     "draft": true,
+     "en": "You can say it now. I heard you!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_anna_quest_memory",
+     "context": "greeting",
+     "de": "Weißt du noch? Dein erster Tag hier.",
+     "draft": true,
+     "en": "Do you remember? Your first day here.",
+     "fact_kind": "quest_memory",
+     "focus_words": [
+      "chunk_guten_morgen"
+     ]
+    },
+    {
+     "cb_id": "cb_anna_first_meeting",
+     "context": "greeting",
+     "de": "Da bist du ja wieder.",
+     "draft": true,
+     "en": "There you are again.",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_anna_coached",
+     "context": "greeting",
+     "de": "Sag es noch einmal für mich. Bitte.",
+     "draft": true,
+     "en": "Say it once more for me. Please.",
+     "fact_kind": "drill_coached",
+     "focus_words": [
+      "{word}"
+     ]
+    }
+   ],
    "home": "anna_farmhouse",
    "name": "Anna",
    "npc_id": "npc_anna",
@@ -1569,6 +1920,68 @@
    "wants": "help_on_the_farm"
   },
   "npc_karl": {
+   "callbacks": [
+    {
+     "cb_id": "cb_karl_retest_bakery",
+     "context": "greeting",
+     "de": "Na? Sag's noch mal!",
+     "draft": true,
+     "en": "Well? Say it again!",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_karl_triumph_gift",
+     "context": "greeting",
+     "de": "Du hast es verdient. Hier — ein Brot!",
+     "draft": true,
+     "en": "You've earned it. Here — a bread!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "brot"
+     ],
+     "reward": {
+      "affection": 2,
+      "item": "brot",
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_karl_usual",
+     "context": "greeting",
+     "de": "Das Übliche?",
+     "draft": true,
+     "en": "The usual?",
+     "fact_kind": "usual_order",
+     "focus_words": [
+      "brot"
+     ]
+    },
+    {
+     "cb_id": "cb_karl_quest_memory",
+     "context": "greeting",
+     "de": "Danke noch mal für die Butter.",
+     "draft": true,
+     "en": "Thanks again for the butter.",
+     "fact_kind": "quest_memory",
+     "focus_words": [
+      "butter"
+     ]
+    },
+    {
+     "cb_id": "cb_karl_first_meeting",
+     "context": "greeting",
+     "de": "Guten Morgen, Nachbar!",
+     "draft": true,
+     "en": "Good morning, neighbour!",
+     "fact_kind": "first_meeting",
+     "focus_words": [
+      "chunk_guten_morgen"
+     ]
+    }
+   ],
    "home": "bakery",
    "name": "Karl",
    "npc_id": "npc_karl",
@@ -1600,6 +2013,64 @@
    "wants": "bread_delivered"
   },
   "npc_mila": {
+   "callbacks": [
+    {
+     "cb_id": "cb_mila_coached",
+     "context": "greeting",
+     "de": "Noch mal! Ich höre zu.",
+     "draft": true,
+     "en": "Again! I'm listening.",
+     "fact_kind": "drill_coached",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_mila_pet_retest",
+     "context": "greeting",
+     "de": "Zeig mal, was der Hund kann!",
+     "draft": true,
+     "en": "Show me what the dog can do!",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "hund",
+      "sitz"
+     ]
+    },
+    {
+     "cb_id": "cb_mila_triumph",
+     "context": "greeting",
+     "de": "Hast du gehört? Du warst das!",
+     "draft": true,
+     "en": "Did you hear that? That was you!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_mila_quest_memory",
+     "context": "greeting",
+     "de": "Das war lustig. Noch mal?",
+     "draft": true,
+     "en": "That was fun. Again?",
+     "fact_kind": "quest_memory",
+     "focus_words": []
+    },
+    {
+     "cb_id": "cb_mila_first_meeting",
+     "context": "greeting",
+     "de": "Hallo! Wie heißt du?",
+     "draft": true,
+     "en": "Hello! What's your name?",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
    "home": "village_square",
    "name": "Mila",
    "npc_id": "npc_mila",
@@ -1632,6 +2103,65 @@
    "wants": "someone_to_play_with"
   },
   "npc_petra": {
+   "callbacks": [
+    {
+     "cb_id": "cb_petra_purchase",
+     "context": "greeting",
+     "de": "Wieder Samen?",
+     "draft": true,
+     "en": "Seeds again?",
+     "fact_kind": "purchase_pattern",
+     "focus_words": [
+      "samen"
+     ]
+    },
+    {
+     "cb_id": "cb_petra_price_retest",
+     "context": "greeting",
+     "de": "Du weißt doch, was das kostet?",
+     "draft": true,
+     "en": "You know what that costs, don't you?",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "chunk_was_kostet_das"
+     ]
+    },
+    {
+     "cb_id": "cb_petra_triumph",
+     "context": "greeting",
+     "de": "Perfekt gesagt. Sehr gut!",
+     "draft": true,
+     "en": "Perfectly said. Very good!",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 2,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_petra_quest_memory",
+     "context": "greeting",
+     "de": "Der Markt war gut, oder?",
+     "draft": true,
+     "en": "The market was good, wasn't it?",
+     "fact_kind": "quest_memory",
+     "focus_words": [
+      "markt"
+     ]
+    },
+    {
+     "cb_id": "cb_petra_first_meeting",
+     "context": "greeting",
+     "de": "Ah, du bist neu hier.",
+     "draft": true,
+     "en": "Ah, you're new here.",
+     "fact_kind": "first_meeting",
+     "focus_words": []
+    }
+   ],
    "home": "shop",
    "name": "Petra",
    "npc_id": "npc_petra",
@@ -1664,6 +2194,56 @@
    "wants": "prices_learned"
   },
   "npc_weber": {
+   "callbacks": [
+    {
+     "cb_id": "cb_weber_quest_memory",
+     "context": "greeting",
+     "de": "Das Dorf dankt Ihnen.",
+     "draft": true,
+     "en": "The village thanks you.",
+     "fact_kind": "quest_memory",
+     "focus_words": [
+      "dorf"
+     ]
+    },
+    {
+     "cb_id": "cb_weber_triumph",
+     "context": "greeting",
+     "de": "Sie sprechen gut. Wirklich gut.",
+     "draft": true,
+     "en": "You speak well. Really well.",
+     "fact_kind": "word_triumph",
+     "focus_words": [
+      "{word}"
+     ],
+     "reward": {
+      "affection": 1,
+      "once_per_ref": true
+     }
+    },
+    {
+     "cb_id": "cb_weber_retest",
+     "context": "greeting",
+     "de": "Einen Moment — wie sagt man das?",
+     "draft": true,
+     "en": "One moment — how do you say that?",
+     "fact_kind": "word_struggle",
+     "focus_words": [
+      "{word}"
+     ]
+    },
+    {
+     "cb_id": "cb_weber_first_meeting",
+     "context": "greeting",
+     "de": "Willkommen in Talfeld.",
+     "draft": true,
+     "en": "Welcome to Talfeld.",
+     "fact_kind": "first_meeting",
+     "focus_words": [
+      "dorf"
+     ]
+    }
+   ],
    "home": "village_square",
    "name": "Weber",
    "npc_id": "npc_weber",

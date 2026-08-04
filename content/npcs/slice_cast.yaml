@@ -17,6 +17,46 @@
     - {from: "13:00", to: "17:00", at: village_square}
     - {from: "17:00", to: "24:00", at: bakery}
   shop: {sells: [brot]}
+  # Memory callbacks — GDD Part 15 §3.7 schema, flavour from §3.8's
+  # signature-callback column. `{word}` slots bind from the fact's ref_id at
+  # selection time, so ONE template covers a whole family. Draft German.
+  callbacks:
+    - cb_id: cb_karl_retest_bakery
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Na? Sag's noch mal!"
+      en: "Well? Say it again!"
+      focus_words: ["{word}"]
+    - cb_id: cb_karl_triumph_gift
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Du hast es verdient. Hier — ein Brot!"
+      en: "You've earned it. Here — a bread!"
+      focus_words: [brot]
+      reward: {item: brot, affection: 2, once_per_ref: true}
+    - cb_id: cb_karl_usual
+      context: greeting
+      fact_kind: usual_order
+      draft: true
+      de: "Das Übliche?"
+      en: "The usual?"
+      focus_words: [brot]
+    - cb_id: cb_karl_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Danke noch mal für die Butter."
+      en: "Thanks again for the butter."
+      focus_words: [butter]
+    - cb_id: cb_karl_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Guten Morgen, Nachbar!"
+      en: "Good morning, neighbour!"
+      focus_words: [chunk_guten_morgen]
 
 - npc_id: npc_petra
   name: Petra
@@ -30,6 +70,45 @@
     - {from: "09:00", to: "18:00", at: village_square}
     - {from: "18:00", to: "24:00", at: shop}
   shop: {sells: [heu, brot]}
+  # §3.8: purchase_pattern is Petra's specialty, and her price-retest is
+  # retrieval practice wearing an apron (Part 9 m3).
+  callbacks:
+    - cb_id: cb_petra_purchase
+      context: greeting
+      fact_kind: purchase_pattern
+      draft: true
+      de: "Wieder Samen?"
+      en: "Seeds again?"
+      focus_words: [samen]
+    - cb_id: cb_petra_price_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Du weißt doch, was das kostet?"
+      en: "You know what that costs, don't you?"
+      focus_words: [chunk_was_kostet_das]
+    - cb_id: cb_petra_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Perfekt gesagt. Sehr gut!"
+      en: "Perfectly said. Very good!"
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_petra_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Der Markt war gut, oder?"
+      en: "The market was good, wasn't it?"
+      focus_words: [markt]
+    - cb_id: cb_petra_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Ah, du bist neu hier."
+      en: "Ah, you're new here."
+      focus_words: []
 
 - npc_id: npc_weber
   name: Weber
@@ -43,6 +122,38 @@
     - {from: "11:00", to: "16:00", at: bakery}
     - {from: "16:00", to: "24:00", at: rathaus}
   shop: null
+  # §3.8: Weber keeps the civic ledger, and his Sie-register enters the
+  # player's own thoughts only in Act 3 (§2.8) — he is the formal voice.
+  callbacks:
+    - cb_id: cb_weber_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Das Dorf dankt Ihnen."
+      en: "The village thanks you."
+      focus_words: [dorf]
+    - cb_id: cb_weber_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Sie sprechen gut. Wirklich gut."
+      en: "You speak well. Really well."
+      focus_words: ["{word}"]
+      reward: {affection: 1, once_per_ref: true}
+    - cb_id: cb_weber_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Einen Moment — wie sagt man das?"
+      en: "One moment — how do you say that?"
+      focus_words: ["{word}"]
+    - cb_id: cb_weber_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Willkommen in Talfeld."
+      en: "Welcome to Talfeld."
+      focus_words: [dorf]
 
 - npc_id: npc_mila
   name: Mila
@@ -59,3 +170,43 @@
     - {from: "14:00", to: "19:00", at: rathaus}
     - {from: "19:00", to: "24:00", at: lane}
   shop: null
+  # §3.8: Mila gives most of the drills, so drill_coached is hers, and her
+  # pet-trick retest turns spoken dog commands into pronunciation reps.
+  callbacks:
+    - cb_id: cb_mila_coached
+      context: greeting
+      fact_kind: drill_coached
+      draft: true
+      de: "Noch mal! Ich höre zu."
+      en: "Again! I'm listening."
+      focus_words: ["{word}"]
+    - cb_id: cb_mila_pet_retest
+      context: greeting
+      fact_kind: word_struggle
+      draft: true
+      de: "Zeig mal, was der Hund kann!"
+      en: "Show me what the dog can do!"
+      focus_words: [hund, sitz]
+    - cb_id: cb_mila_triumph
+      context: greeting
+      fact_kind: word_triumph
+      draft: true
+      de: "Hast du gehört? Du warst das!"
+      en: "Did you hear that? That was you!"
+      focus_words: ["{word}"]
+      reward: {affection: 2, once_per_ref: true}
+    - cb_id: cb_mila_quest_memory
+      context: greeting
+      fact_kind: quest_memory
+      draft: true
+      de: "Das war lustig. Noch mal?"
+      en: "That was fun. Again?"
+      focus_words: []
+    - cb_id: cb_mila_first_meeting
+      context: greeting
+      fact_kind: first_meeting
+      draft: true
+      de: "Hallo! Wie heißt du?"
+      en: "Hello! What's your name?"
+      focus_words: []
+

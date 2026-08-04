@@ -1,0 +1,148 @@
+# The fade's narrative spine — GDD Part 15 §2.7, the eight scripted act beats.
+#
+# These are the moments where the fade stops being a background effect and
+# becomes the story. Each is authored in fade-BAND variants selected by
+# `fade_index`, so the tale of English retreating is told by the retreat itself.
+#
+# FAIL-SOFT (§2.7): if the player reaches a beat below its intended band, the
+# lower-band variant plays. The story never claims progress the stats cannot
+# back — a triumphant German thought from a player who has not earned it would
+# be the single most hollow moment the game could produce.
+#
+# `once: true` on every one of them. A scripted beat that repeats is not a beat.
+# All German LLM-drafted, `draft: true` (Part 5 §4 gate).
+
+# --- ACT 1 -------------------------------------------------------------------
+# The last fully-English day of this character's life. No spans at all: nothing
+# can swap here because the player has met nothing yet, and that is the point.
+- mono_id: beat_a1_open
+  class: act_beat
+  subkey: a1_open
+  once: true
+  band_max: 0.15
+  draft: true
+  en_template: "Where am I?"
+  spans: {}
+  de_full: "Wo bin ich?"
+  focus_words: []
+  family: social
+
+# The first German intrusion mid-thought. The English VO retires here — the
+# SOUND of English leaving is itself a designed moment (§2.1 rule 7).
+- mono_id: beat_a1_close
+  class: act_beat
+  subkey: a1_close
+  once: true
+  draft: true
+  en_template: "My own field. {c1}."
+  spans:
+    c1: {de: "Mein Feld", en: "My field", words: [feld]}
+  m2_template: "{f1} Mine."
+  m2_spans:
+    f1: {de: "Das ist mein Feld.", en: "This is my field.", words: [feld]}
+  de_full: "Mein eigenes Feld. Mein Feld."
+  focus_words: [feld]
+  family: farm
+
+# --- ACT 2 -------------------------------------------------------------------
+# The cow escapes. Panic is where code-switching gets real: under stress the
+# strongest words surface first, and by now the strongest words are German.
+- mono_id: beat_a2_mid
+  class: act_beat
+  subkey: a2_mid
+  once: true
+  draft: true
+  en_template: "{c1} The fence — {c2} — where IS she?"
+  spans:
+    c1: {de: "Die Kuh!", en: "The cow!", words: [kuh]}
+    c2: {de: "der Zaun", en: "the fence", words: [zaun]}
+  m2_template: "{f1} Where IS she?"
+  m2_spans:
+    f1: {de: "Die Kuh ist weg. Der Zaun ist kaputt.", en: "The cow is gone. The fence is broken.", words: [kuh, zaun]}
+  de_full: "Die Kuh ist weg! Der Zaun — wo ist sie?"
+  focus_words: [kuh, zaun]
+  family: farm
+
+# The translation moment. The same thought, twice, in two languages — this is
+# the one players will screenshot, so it is authored as a literal repetition
+# rather than as a swap.
+- mono_id: beat_a2_close
+  class: act_beat
+  subkey: a2_close
+  once: true
+  draft: true
+  en_template: "They know my name. … {c1}"
+  spans:
+    c1: {de: "Sie kennen meinen Namen.", en: "They know my name.", words: [dorf]}
+  de_full: "Sie kennen meinen Namen. Sie kennen mich."
+  focus_words: [dorf]
+  family: social
+
+# --- ACT 3 -------------------------------------------------------------------
+# First full M2 clause, and it arrives under formality pressure — Weber's
+# Sie-register enters the player's own head only here (§2.8).
+- mono_id: beat_a3_open
+  class: act_beat
+  subkey: a3_open
+  once: true
+  draft: true
+  en_template: "The mayor is asking me. {c1}"
+  spans:
+    c1: {de: "Das ganze Dorf.", en: "The whole village.", words: [dorf]}
+  m2_template: "{f1} … me, of all people."
+  m2_spans:
+    f1: {de: "Der Bürgermeister fragt mich.", en: "The mayor is asking me.", words: [dorf]}
+  de_full: "Der Bürgermeister fragt mich. Das ganze Dorf wartet."
+  focus_words: [dorf]
+  family: formal
+
+# German first, English trailing behind. The order of the languages in the
+# sentence IS the progress bar.
+- mono_id: beat_a3_close
+  class: act_beat
+  subkey: a3_close
+  once: true
+  draft: true
+  en_template: "We did it. {c1}"
+  spans:
+    c1: {de: "Wir haben es geschafft.", en: "We made it.", words: [dorf]}
+  m2_template: "{f1} … we actually did."
+  m2_spans:
+    f1: {de: "Wir haben es geschafft", en: "We made it", words: [dorf]}
+  de_full: "Wir haben es geschafft. Alle zusammen."
+  focus_words: [dorf]
+  family: social
+
+# --- ACT 4 -------------------------------------------------------------------
+# A long quiet M3 thought with ONE English word left deliberately. The word is
+# "home", and leaving it in English is the whole ache of the scene.
+- mono_id: beat_a4_mid
+  class: act_beat
+  subkey: a4_mid
+  once: true
+  draft: true
+  en_template: "Snow on the window. Quiet. Is this home?"
+  spans: {}
+  m2_template: "{f1} … home?"
+  m2_spans:
+    f1: {de: "Schnee am Fenster. Alles ist ruhig.", en: "Snow on the window. Everything is quiet.", words: [schnee]}
+  de_full: "Schnee am Fenster. Alles ist ruhig. Ist das … home?"
+  focus_words: [schnee]
+  family: home
+
+# The final beat. The whole monologue is German EXCEPT the game's last English
+# line, which is permanent by design: the mystery hook stays in the mother
+# tongue, because that question was never about German.
+- mono_id: beat_a4_close
+  class: act_beat
+  subkey: a4_close
+  once: true
+  draft: true
+  en_template: "The ticket. The city. … how did I get here?"
+  spans: {}
+  m2_template: "{f1} … how did I get here?"
+  m2_spans:
+    f1: {de: "Die Fahrkarte. Die Stadt.", en: "The ticket. The city.", words: [dorf]}
+  de_full: "Die Fahrkarte. Die Stadt. Ich bin bereit. … how did I get here?"
+  focus_words: [dorf]
+  family: social

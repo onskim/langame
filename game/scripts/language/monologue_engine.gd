@@ -93,6 +93,15 @@ func _candidates(trigger_class: String, subkey: String) -> Array[String]:
 		# `once` lines are the scripted beats — they must never repeat.
 		if bool(entry.get("once", false)) and int(record.get("times_shown", 0)) > 0:
 			continue
+		# Fail-soft (§2.7): a beat authored for a higher fade band than the
+		# player has reached is skipped, so its lower-band sibling plays. The
+		# story never claims progress the stats cannot back — a triumphant
+		# German thought from a player who has not earned it is the hollowest
+		# moment the game could produce.
+		if entry.has("band_min") and FadeRules.fade_index() < float(entry["band_min"]):
+			continue
+		if entry.has("band_max") and FadeRules.fade_index() > float(entry["band_max"]):
+			continue
 		var last := int(record.get("last_day", -1))
 		if last >= 0 and GameState.day - last < min_days:
 			continue

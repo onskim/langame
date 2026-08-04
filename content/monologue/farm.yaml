@@ -22,6 +22,9 @@
   en_template: "Another morning. {c1} will be hungry."
   spans:
     c1: {de: "Die Kuh", en: "The cow", words: [kuh]}
+  m2_template: "{f1} Then the rest of it."
+  m2_spans:
+    f1: {de: "Die Kuh hat Hunger.", en: "The cow is hungry.", words: [kuh]}
   de_full: "Wieder Morgen. Die Kuh hat Hunger."
   focus_words: [kuh]
   family: farm
@@ -53,6 +56,9 @@
   spans:
     c1: {de: "Die Kuh", en: "The cow", words: [kuh]}
     c2: {de: "Das Feld", en: "The field", words: [feld]}
+  m2_template: "{f1} Enough for today."
+  m2_spans:
+    f1: {de: "Die Kuh hat Heu, das Feld hat Wasser.", en: "The cow has hay, the field has water.", words: [kuh, heu, feld, wasser]}
   de_full: "Die Kuh hat Heu. Das Feld hat Wasser. Genug für heute."
   focus_words: [kuh, feld]
   family: farm
@@ -74,6 +80,9 @@
   en_template: "{c1}. Someone always needs something."
   spans:
     c1: {de: "Das Dorf", en: "The village", words: [dorf]}
+  m2_template: "{f1} Someone always needs something."
+  m2_spans:
+    f1: {de: "Ich bin im Dorf.", en: "I'm in the village.", words: [dorf]}
   de_full: "Das Dorf. Hier braucht immer jemand etwas."
   focus_words: [dorf]
   family: places
@@ -108,6 +117,9 @@
   spans:
     c1: {de: "die Kuh", en: "the cow", words: [kuh]}
     c2: {de: "der Markt", en: "the market", words: [markt]}
+  m2_template: "{f1} … before the market, anyway."
+  m2_spans:
+    f1: {de: "Ich muss die Kuh füttern", en: "I should feed the cow", words: [kuh, fuettern]}
   de_full: "Ich muss die Kuh füttern, bevor der Markt beginnt."
   focus_words: [kuh, markt]
   family: farm
@@ -120,6 +132,9 @@
   spans:
     c1: {de: "Das Feld", en: "The field", words: [feld]}
     c2: {de: "Wasser", en: "water", words: [wasser]}
+  m2_template: "{f1} Nothing else can wait either."
+  m2_spans:
+    f1: {de: "Das Feld braucht Wasser.", en: "The field needs water.", words: [feld, wasser]}
   de_full: "Das Feld braucht Wasser."
   focus_words: [feld, wasser]
   family: farm
@@ -132,6 +147,9 @@
   spans:
     c1: {de: "Das Huhn", en: "The hen", words: [huhn]}
     c2: {de: "ein Ei", en: "an egg", words: [ei]}
+  m2_template: "{f1} Maybe today."
+  m2_spans:
+    f1: {de: "Das Huhn legt ein Ei.", en: "The hen lays an egg.", words: [huhn, ei]}
   de_full: "Das Huhn. Vielleicht gibt es heute ein Ei."
   focus_words: [huhn, ei]
   family: farm

@@ -20,3 +20,53 @@ schedule:
   - {from: "17:00", to: "19:00", at: village_square}
   - {from: "19:00", to: "24:00", at: anna_farmhouse}
 shop: null
+
+# Memory callbacks — GDD Part 15 §3.7 schema, §3.8 signature flavour.
+# Anna holds the whole farm-domain word history and the tutorial arc, so she
+# gets prime retest position: she is the first person the player sees each day.
+#
+# `{word}` slots bind from the fact's ref_id at selection time, so ONE authored
+# template covers a whole family — the side-quest template economics applied to
+# memory (§3.7). All German LLM-drafted, `draft: true` (Part 5 §4 gate).
+callbacks:
+  - cb_id: cb_anna_retest_farm
+    context: greeting
+    fact_kind: word_struggle
+    draft: true
+    de: "Guten Morgen! Na — was ist das?"
+    en: "Good morning! Well — what is that?"
+    focus_words: ["{word}"]
+    gestures: [{word: "{word}", point_at: "{word_object}"}]
+
+  - cb_id: cb_anna_triumph_farm
+    context: greeting
+    fact_kind: word_triumph
+    draft: true
+    de: "Du kannst es jetzt. Ich habe es gehört!"
+    en: "You can say it now. I heard you!"
+    focus_words: ["{word}"]
+    reward: {affection: 2, once_per_ref: true}
+
+  - cb_id: cb_anna_quest_memory
+    context: greeting
+    fact_kind: quest_memory
+    draft: true
+    de: "Weißt du noch? Dein erster Tag hier."
+    en: "Do you remember? Your first day here."
+    focus_words: [chunk_guten_morgen]
+
+  - cb_id: cb_anna_first_meeting
+    context: greeting
+    fact_kind: first_meeting
+    draft: true
+    de: "Da bist du ja wieder."
+    en: "There you are again."
+    focus_words: []
+
+  - cb_id: cb_anna_coached
+    context: greeting
+    fact_kind: drill_coached
+    draft: true
+    de: "Sag es noch einmal für mich. Bitte."
+    en: "Say it once more for me. Please."
+    focus_words: ["{word}"]

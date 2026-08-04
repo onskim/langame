@@ -232,4 +232,138 @@ func _run() -> void:
 		int(Monologue.state.get("mono_wake_01", {}).get("times_shown", 0)) >= 1,
 		str(Monologue.state.get("mono_wake_01", {})))
 
+	await _run_stage_two()
+
 	print("--- Part 15 acceptance complete, %d failure(s). ---" % _failures)
+
+
+## Extra coverage: the M2/M3 render paths and the callback content, added once
+## the founder lifted the §6 slice cut that had capped the fade at M1.
+func _run_stage_two() -> void:
+	print("--- Part 15b: M2, M3 and the callback content ---")
+	WordStats.reset()
+	Monologue.reset()
+	Memory.reset()
+	Callbacks.reset()
+
+	# --- M2: an authored German CLAUSE, never generated grammar ---
+	# Act 2 is where the ceiling first allows it.
+	GameState.day = 30
+	_check("act 2 is reached by day 30", GameState.act() >= 2, "%d" % GameState.act())
+	_check("act 2 allows M2", FadeRules.act_ceiling(2) >= FadeRules.Stage.M2,
+		"ceiling=%d" % FadeRules.act_ceiling(2))
+
+	for word_id in ["kuh", "fuettern", "markt"]:
+		_master(word_id, 0.80, 6)
+	var m2 := Monologue.render("mono_obj_kuh_01")
+	_check("a strong clause thinks in German", int(m2["stage"]) == FadeRules.Stage.M2,
+		"M%d: %s" % [m2["stage"], m2["text"]])
+	_check("...as the authored fragment, verbatim",
+		str(m2["text"]).contains("Ich muss die Kuh füttern"), str(m2["text"]))
+	_check("...with the English tail still attached",
+		str(m2["text"]).contains("before the market"), str(m2["text"]))
+
+	# M2 must NOT fire on a half-learned clause: verbs never mix mid-syntax.
+	_master("fuettern", 0.55, 6)
+	var half := Monologue.render("mono_obj_kuh_01")
+	_check("a half-learned clause falls back below M2",
+		int(half["stage"]) < FadeRules.Stage.M2, "M%d: %s" % [half["stage"], half["text"]])
+
+	# --- M3: the whole thought, and only when the family is strong too ---
+	GameState.day = 80
+	_check("act 4 allows M3", FadeRules.act_ceiling(GameState.act()) >= FadeRules.Stage.M3,
+		"act=%d ceiling=%d" % [GameState.act(), FadeRules.act_ceiling(GameState.act())])
+	for word_id in ["kuh", "fuettern", "markt"]:
+		_master(word_id, 0.95, 8)
+	# The family average gate: one strong noun in a weak family must not produce
+	# a sentence the player cannot read.
+	_master("heu", 0.10, 8)
+	var blocked := Monologue.render("mono_obj_kuh_01")
+	_check("a weak family blocks the full German thought",
+		int(blocked["stage"]) < FadeRules.Stage.M3,
+		"family avg %.2f" % FadeRules.family_average("farm"))
+	for word_id in ["heu", "feld", "wasser", "huhn", "ei", "milch", "giessen"]:
+		_master(word_id, 0.95, 8)
+	var m3 := Monologue.render("mono_obj_kuh_01")
+	_check("a strong family thinks entirely in German",
+		int(m3["stage"]) == FadeRules.Stage.M3, "M%d: %s" % [m3["stage"], m3["text"]])
+	_check("...and it is the authored de_full",
+		str(m3["text"]) == "Ich muss die Kuh füttern, bevor der Markt beginnt.",
+		str(m3["text"]))
+	_check("...with no English left in it",
+		not str(m3["text"]).contains("should") and not str(m3["text"]).contains("before the"),
+		str(m3["text"]))
+
+	# --- the act beats, and their fail-soft ---
+	var beats := 0
+	for mono_id in Monologue.all_lines():
+		if str(Monologue.line(str(mono_id)).get("class", "")) == "act_beat":
+			beats += 1
+	_check("all eight act beats are authored", beats == 8, "%d beats" % beats)
+	var opener := Monologue.line("beat_a1_open")
+	_check("the first beat is pure English", (opener.get("spans", {}) as Dictionary).is_empty(),
+		str(opener.get("spans", {})))
+	_check("the last beat keeps one English line, permanently",
+		str(Monologue.line("beat_a4_close").get("de_full", "")).contains("how did I get here?"),
+		str(Monologue.line("beat_a4_close").get("de_full", "")))
+	_check("a beat is `once` and never repeats",
+		bool(Monologue.line("beat_a2_close").get("once", false)))
+
+	# --- the callbacks are authored now ---
+	GameState.day = 10
+	Memory.reset()
+	Callbacks.reset()
+	var with_callbacks := 0
+	for npc_id in ["npc_anna", "npc_karl", "npc_petra", "npc_weber", "npc_mila"]:
+		var listed: Variant = ContentDB.get_npc(npc_id).get("callbacks")
+		if listed is Array and not (listed as Array).is_empty():
+			with_callbacks += 1
+	_check("every slice NPC has callbacks", with_callbacks == 5, "%d/5" % with_callbacks)
+
+	var total := 0
+	for npc_id in ContentDB.npcs:
+		var listed: Variant = ContentDB.get_npc(str(npc_id)).get("callbacks")
+		if listed is Array:
+			total += (listed as Array).size()
+	_check("the slice's 25-callback target is met", total >= 24, "%d callbacks" % total)
+
+	# Every callback names a declared fact kind, or it can never fire.
+	var bad_kinds: Array[String] = []
+	for npc_id in ContentDB.npcs:
+		var listed: Variant = ContentDB.get_npc(str(npc_id)).get("callbacks")
+		if not (listed is Array):
+			continue
+		for entry in (listed as Array):
+			var kind := str((entry as Dictionary).get("fact_kind", ""))
+			if not Memory.kinds().has(kind):
+				bad_kinds.append("%s:%s" % [entry.get("cb_id", "?"), kind])
+	_check("every callback names a declared fact kind", bad_kinds.is_empty(),
+		str(bad_kinds))
+
+	# --- a callback actually fires, and the slot binds ---
+	Memory.record("npc_karl", "word_struggle", "brot", null, true)
+	var chosen := Callbacks.select("npc_karl", "greeting")
+	_check("Karl brings up the word you struggled with", not chosen.is_empty(),
+		str(chosen.get("cb_id", "")))
+	if not chosen.is_empty():
+		_check("...and the slot bound to the real word",
+			(chosen["line"]["focus_words"] as Array).has("brot"),
+			str(chosen["line"]["focus_words"]))
+		_check("...leaving no unbound template slot",
+			not str(chosen["line"]["de"]).contains("{word}"), str(chosen["line"]["de"]))
+	_check("and only one callback per NPC per day",
+		Callbacks.select("npc_karl", "greeting").is_empty())
+
+	# --- the village cap ---
+	Callbacks.reset()
+	Memory.reset()
+	GameState.day = 11
+	for npc_id in ["npc_anna", "npc_karl", "npc_petra", "npc_weber", "npc_mila"]:
+		Memory.record(npc_id, "first_meeting", npc_id, null, true)
+	var fired := 0
+	for npc_id in ["npc_anna", "npc_karl", "npc_petra", "npc_weber", "npc_mila"]:
+		if not Callbacks.select(npc_id, "greeting").is_empty():
+			fired += 1
+	_check("the village cap holds at three a day", fired <= 3, "%d fired" % fired)
+
+	print("--- Part 15b complete, %d failure(s) total. ---" % _failures)

@@ -110,9 +110,46 @@ func select(npc_id: String, context: String = "greeting") -> Dictionary:
 		_retest_done_day = GameState.day
 	else:
 		_spend(npc_id)
+	best["line"] = bind_slots(best["line"], str(best["ref_id"]))
 	callback_selected.emit(npc_id, str(best["cb_id"]), str(best["kind"]),
 		str(best["ref_id"]))
 	return best
+
+
+## Fill `{word}`-class slots from the fact's ref_id (Part 15 §3.7).
+##
+## One authored template covers a whole family — the side-quest template
+## economics applied to memory. Karl's "Na? Sag's noch mal!" works for every
+## bakery word he ever coached the player through, and the gesture points at
+## whatever that word's object is.
+func bind_slots(entry: Dictionary, ref_id: String) -> Dictionary:
+	if ref_id == "":
+		return entry
+	var word := ContentDB.get_word(ref_id)
+	var bound := entry.duplicate(true)
+	var article := str(word.get("article", ""))
+	var lemma := str(word.get("lemma", ref_id))
+	var replacements := {
+		"{word}": ref_id,
+		"{word_lemma}": lemma,
+		"{word_with_article}": ("%s %s" % [article, lemma]).strip_edges(),
+		"{word_family}": str(word.get("family", "")),
+	}
+	for field in ["de", "en"]:
+		if bound.has(field):
+			var text := str(bound[field])
+			for token in replacements:
+				text = text.replace(token, str(replacements[token]))
+			bound[field] = text
+	# focus_words is what the scheduler credits, so an unbound "{word}" here
+	# would credit a word that does not exist.
+	var focus: Variant = bound.get("focus_words")
+	if focus is Array:
+		var resolved: Array[String] = []
+		for item in (focus as Array):
+			resolved.append(ref_id if str(item) == "{word}" else str(item))
+		bound["focus_words"] = resolved
+	return bound
 
 
 ## The morning retest (§3.4): the day's weakest word gets asked by somebody who
