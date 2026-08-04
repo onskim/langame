@@ -1,0 +1,33 @@
+# Calendar and weather — GDD Part 12 §5.
+#
+# Season = 24 game-days. Year = 96 days. The A1 campaign spans one full year:
+# arrive early Frühling, Act 3 festival in Herbst, Act 4 winter, departure
+# ticket the next Frühling.
+#
+# Weekdays teach themselves: shops shut Sonntag, market is Samstag. Weather
+# words are among the highest-frequency spoken German in real life, and the
+# Wetter app makes reading them a daily habit rather than a lesson.
+
+config_id: calendar
+
+days_per_season: 24
+seasons: [Frühling, Sommer, Herbst, Winter]
+weekdays: [Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag]
+
+market_day: Samstag
+rest_day: Sonntag
+
+# Weather weights per season. Regen auto-waters crops — a *reward* day for the
+# farm time budget, not a punishment.
+weather:
+  Frühling: {sonne: 45, regen: 35, wind: 15, gewitter: 5, schnee: 0}
+  Sommer:   {sonne: 60, regen: 20, wind: 12, gewitter: 8, schnee: 0}
+  Herbst:   {sonne: 35, regen: 35, wind: 25, gewitter: 5, schnee: 0}
+  Winter:   {sonne: 30, regen: 15, wind: 20, gewitter: 0, schnee: 35}
+
+# One festival per season — the review exams that don't look like exams.
+festivals:
+  Frühling: {day_in_season: 20, name: Saatfest}
+  Sommer:   {day_in_season: 20, name: Sommermarkt}
+  Herbst:   {day_in_season: 20, name: Erntefest}
+  Winter:   {day_in_season: 20, name: Winterfest}

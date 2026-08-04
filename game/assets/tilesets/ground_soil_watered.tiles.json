@@ -1,0 +1,227 @@
+{
+  "source": "pixellab",
+  "tileset_id": "d42b2688-fe33-4c68-9743-1433b4f61f94",
+  "lower": "freshly tilled dark brown farm soil in neat parallel furrows, dry and crumbly",
+  "upper": "the same tilled soil after watering, rich damp chocolate-brown earth with a soft moist sheen",
+  "transition": "",
+  "transition_size": 0.0,
+  "tile_size": 16,
+  "grid": {
+    "cols": 4,
+    "rows": 4
+  },
+  "base_tile_ids": {
+    "lower": "baa6bcdc-06da-443a-95c6-d640689e7e67",
+    "upper": "f7a10fd3-5b1a-4983-bbf8-8374432332a7"
+  },
+  "tiles": [
+    {
+      "atlas_coords": [
+        0,
+        0
+      ],
+      "wang": "wang_13",
+      "corners": {
+        "NE": "upper",
+        "NW": "upper",
+        "SE": "upper",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        1,
+        0
+      ],
+      "wang": "wang_10",
+      "corners": {
+        "NE": "lower",
+        "NW": "upper",
+        "SE": "lower",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        2,
+        0
+      ],
+      "wang": "wang_4",
+      "corners": {
+        "NE": "upper",
+        "NW": "lower",
+        "SE": "lower",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        3,
+        0
+      ],
+      "wang": "wang_12",
+      "corners": {
+        "NE": "upper",
+        "NW": "upper",
+        "SE": "lower",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        0,
+        1
+      ],
+      "wang": "wang_6",
+      "corners": {
+        "NE": "upper",
+        "NW": "lower",
+        "SE": "lower",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        1,
+        1
+      ],
+      "wang": "wang_8",
+      "corners": {
+        "NE": "lower",
+        "NW": "upper",
+        "SE": "lower",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        2,
+        1
+      ],
+      "wang": "wang_0",
+      "corners": {
+        "NE": "lower",
+        "NW": "lower",
+        "SE": "lower",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        3,
+        1
+      ],
+      "wang": "wang_1",
+      "corners": {
+        "NE": "lower",
+        "NW": "lower",
+        "SE": "upper",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        0,
+        2
+      ],
+      "wang": "wang_11",
+      "corners": {
+        "NE": "lower",
+        "NW": "upper",
+        "SE": "upper",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        1,
+        2
+      ],
+      "wang": "wang_3",
+      "corners": {
+        "NE": "lower",
+        "NW": "lower",
+        "SE": "upper",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        2,
+        2
+      ],
+      "wang": "wang_2",
+      "corners": {
+        "NE": "lower",
+        "NW": "lower",
+        "SE": "lower",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        3,
+        2
+      ],
+      "wang": "wang_5",
+      "corners": {
+        "NE": "upper",
+        "NW": "lower",
+        "SE": "upper",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        0,
+        3
+      ],
+      "wang": "wang_15",
+      "corners": {
+        "NE": "upper",
+        "NW": "upper",
+        "SE": "upper",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        1,
+        3
+      ],
+      "wang": "wang_14",
+      "corners": {
+        "NE": "upper",
+        "NW": "upper",
+        "SE": "lower",
+        "SW": "upper"
+      }
+    },
+    {
+      "atlas_coords": [
+        2,
+        3
+      ],
+      "wang": "wang_9",
+      "corners": {
+        "NE": "lower",
+        "NW": "upper",
+        "SE": "upper",
+        "SW": "lower"
+      }
+    },
+    {
+      "atlas_coords": [
+        3,
+        3
+      ],
+      "wang": "wang_7",
+      "corners": {
+        "NE": "upper",
+        "NW": "lower",
+        "SE": "upper",
+        "SW": "upper"
+      }
+    }
+  ]
+}

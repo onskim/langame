@@ -93,6 +93,11 @@ func _pass1() -> void:
 	# --- sleep -------------------------------------------------------------
 	bed.interact()
 	await get_tree().process_frame
+	# Sleeping now shows the day-end payoff card and waits on it (Part 3 §3).
+	if DayEndCard.is_open:
+		DayEndCard.dismiss()
+	await get_tree().process_frame
+	await get_tree().process_frame
 	_check("sleep advances the day", GameState.day == 2, "day=%d" % GameState.day)
 	_check("sleep resets clock to morning", is_equal_approx(DayCycle.hour, DayCycle.START_HOUR),
 		"hour=%.2f" % DayCycle.hour)

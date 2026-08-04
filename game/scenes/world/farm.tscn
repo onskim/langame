@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm_map.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_shop.png" id="16_house"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_barn.png" id="17_barn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="18_annahouse"]
+[ext_resource type="PackedScene" path="res://scenes/actors/pet.tscn" id="19_pet"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pet_cat.png" id="20_cat"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
@@ -35,6 +37,8 @@ map_height_tiles = 40
 default_spawn = Vector2(384, 336)
 
 [node name="Ground" type="TileMapLayer" parent="."]
+
+[node name="Crops" type="TileMapLayer" parent="."]
 
 [node name="Fence" type="TileMapLayer" parent="."]
 
@@ -210,6 +214,35 @@ sign_text = "Annas Küche"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/AnnaKitchenDoor"]
 shape = SubResource("RectangleShape2D_door")
+
+[node name="Eggs" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(704, 240)
+script = ExtResource("5_worldobj")
+object_id = "obj_eggs"
+action = "fetch"
+consumes_item = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Eggs"]
+texture = ExtResource("8_hay")
+modulate = Color(1, 0.98, 0.9, 1)
+
+[node name="Area2D" type="Area2D" parent="Eggs"]
+
+[node name="Shape" type="CollisionShape2D" parent="Eggs/Area2D"]
+shape = SubResource("RectangleShape2D_small")
+
+[node name="Pets" type="Node2D" parent="."]
+
+[node name="Dog" parent="Pets" instance=ExtResource("19_pet")]
+position = Vector2(360, 352)
+pet_id = "hund"
+
+[node name="Cat" parent="Pets" instance=ExtResource("19_pet")]
+position = Vector2(408, 352)
+pet_id = "katze"
+
+[node name="Sprite2D" parent="Pets/Cat" index="0"]
+texture = ExtResource("20_cat")
 
 [node name="NPCs" type="Node2D" parent="."]
 

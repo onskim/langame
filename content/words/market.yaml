@@ -1,0 +1,171 @@
+# Market and numbers — GDD Part 10 §5.3 (Q04 Eier zählen, Q05 Zum Markt).
+#
+# DRAFT — unreviewed (Part 5 §4 gate).
+
+- word_id: ei
+  concept: egg
+  lemma: Ei
+  article: das
+  plural: Eier
+  pos: noun
+  english: egg
+  family: farm
+  cefr: A1.1
+  intro_quest: q04
+  distractors: [brot, milch]
+  draft: true
+
+- word_id: holen
+  concept: to_fetch
+  lemma: holen
+  pos: verb
+  forms: {ich: hole, du: holst, er_sie: holt, imperativ: hol}
+  english: to fetch
+  family: farm
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: milch
+  concept: milk
+  lemma: Milch
+  article: die
+  pos: noun
+  english: milk
+  family: food
+  cefr: A1.1
+  intro_quest: q04
+  distractors: [brot, ei]
+  draft: true
+
+- word_id: markt
+  concept: market
+  lemma: Markt
+  article: der
+  plural: Märkte
+  pos: noun
+  english: market
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  distractors: [laden, dorf]
+  draft: true
+
+- word_id: kaufen
+  concept: to_buy
+  lemma: kaufen
+  pos: verb
+  forms: {ich: kaufe, du: kaufst, er_sie: kauft, imperativ: kauf}
+  english: to buy
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  draft: true
+
+- word_id: samen
+  concept: seeds
+  lemma: Samen
+  article: der
+  pos: noun
+  english: seeds
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  distractors: [heu, gras]
+  draft: true
+
+- word_id: laden
+  concept: shop
+  lemma: Laden
+  article: der
+  plural: Läden
+  pos: noun
+  english: shop
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  distractors: [markt, dorf]
+  draft: true
+
+- word_id: dorf
+  concept: village
+  lemma: Dorf
+  article: das
+  plural: Dörfer
+  pos: noun
+  english: village
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  distractors: [markt, laden]
+  draft: true
+
+- word_id: chunk_was_kostet_das
+  concept: how_much_is_that
+  lemma: Was kostet das?
+  pos: phrase
+  english: how much is that?
+  family: markt
+  cefr: A1.1
+  intro_quest: q05
+  draft: true
+
+- word_id: num_1
+  concept: number_1
+  lemma: eins
+  pos: number
+  english: "1"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: num_2
+  concept: number_2
+  lemma: zwei
+  pos: number
+  english: "2"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: num_3
+  concept: number_3
+  lemma: drei
+  pos: number
+  english: "3"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: num_4
+  concept: number_4
+  lemma: vier
+  pos: number
+  english: "4"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: num_5
+  concept: number_5
+  lemma: fünf
+  pos: number
+  english: "5"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: num_6
+  concept: number_6
+  lemma: sechs
+  pos: number
+  english: "6"
+  family: zahlen
+  cefr: A1.1
+  intro_quest: q04
+  draft: true

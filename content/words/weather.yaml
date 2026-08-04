@@ -1,0 +1,67 @@
+# Weather vocabulary — GDD Part 12 §5.
+#
+# "Weather words are among the highest-frequency spoken German in real life;
+# the mechanic makes them daily." Checking the Wetter app before deciding
+# whether to water is forecast-reading practice that never looks like practice.
+#
+# DRAFT — unreviewed (Part 5 §4 gate).
+
+- word_id: sonne
+  concept: sun
+  lemma: Sonne
+  article: die
+  pos: noun
+  english: sun
+  family: weather
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [regen, wind, schnee]
+  draft: true
+
+- word_id: regen
+  concept: rain
+  lemma: Regen
+  article: der
+  pos: noun
+  english: rain
+  family: weather
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [sonne, wind, schnee]
+  draft: true
+
+- word_id: wind
+  concept: wind
+  lemma: Wind
+  article: der
+  pos: noun
+  english: wind
+  family: weather
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [sonne, regen, schnee]
+  draft: true
+
+- word_id: gewitter
+  concept: thunderstorm
+  lemma: Gewitter
+  article: das
+  pos: noun
+  english: thunderstorm
+  family: weather
+  cefr: A1.2
+  intro_quest: q03
+  distractors: [regen, wind]
+  draft: true
+
+- word_id: schnee
+  concept: snow
+  lemma: Schnee
+  article: der
+  pos: noun
+  english: snow
+  family: weather
+  cefr: A1.1
+  intro_quest: q03
+  distractors: [regen, sonne, wind]
+  draft: true

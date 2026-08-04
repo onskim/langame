@@ -9,3 +9,24 @@
   response:
     tier_1: {action: fetch, target: "{ITEM}"}
   draft: true
+
+# Q05: the market stall. The player buys silently this week by choosing the
+# seeds; from Week 6 they may ask "Was kostet das?" aloud instead. Petra says
+# the price either way, so the phrase is HEARD before it is ever required —
+# comprehension precedes production (Part 9 method 1).
+- line_id: petra_q05_stall
+  npc_id: npc_petra
+  de: "Der Markt ist offen."
+  en: "The market is open."
+  focus_words: [markt]
+  gestures:
+    - {word: markt, point_at: obj_market_stall}
+  draft: true
+
+- line_id: petra_q05_price
+  npc_id: npc_petra
+  de: "Was kostet das? Zwei Münzen."
+  en: "How much is that? Two coins."
+  focus_words: [chunk_was_kostet_das, num_2]
+  gestures: []
+  draft: true

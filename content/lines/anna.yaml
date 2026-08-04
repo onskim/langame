@@ -98,3 +98,46 @@
   response:
     tier_1: {action: water, target: "{TARGET}"}
   draft: true
+
+- line_id: anna_q04_ask
+  npc_id: npc_anna
+  de: "Hol bitte sechs Eier."
+  en: "Please fetch six eggs."
+  focus_words: [ei, holen, num_6]
+  gestures:
+    - {word: ei, point_at: obj_eggs}
+  response:
+    tier_1: {action: fetch, target: obj_eggs}
+  recasts:
+    wrong_action: "Nein — die EIER, bitte."
+    repeat_slow: "Hol bitte … sechs … Eier."
+  draft: true
+
+- line_id: anna_q04_done
+  npc_id: npc_anna
+  de: "Sechs! Sehr gut."
+  en: "Six! Very good."
+  focus_words: [num_6]
+  gestures: []
+  draft: true
+
+- line_id: anna_q05_ask
+  npc_id: npc_anna
+  de: "Kauf bitte Samen im Dorf."
+  en: "Please buy seeds in the village."
+  focus_words: [kaufen, samen, dorf]
+  gestures: []
+  response:
+    tier_1: {action: buy, target: obj_market_stall}
+  recasts:
+    wrong_action: "Nein — die Samen, bitte."
+    repeat_slow: "Kauf bitte … Samen … im Dorf."
+  draft: true
+
+- line_id: anna_q05_done
+  npc_id: npc_anna
+  de: "Danke! Jetzt können wir pflanzen."
+  en: "Thanks! Now we can plant."
+  focus_words: [samen, chunk_danke]
+  gestures: []
+  draft: true

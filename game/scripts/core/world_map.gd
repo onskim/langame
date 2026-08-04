@@ -56,6 +56,7 @@ func _ready() -> void:
 		DayCycle.time_changed.connect(_on_time_changed)
 
 	populate_npcs()
+	_bind_pets()
 	_apply_light()
 	HUD.refresh()
 
@@ -136,7 +137,31 @@ func resync_npcs() -> void:
 			_spawn_npc(npc_id)
 
 
+## Pets follow whoever is playing. Addendum §10 constraint 4: commands are
+## tap-input this week; Week 6 routes scored speech into the same `obey()`.
+func _bind_pets() -> void:
+	for pet in get_tree().get_nodes_in_group("pet"):
+		pet.set_player(_player)
+
+
+const PET_COMMAND_ACTIONS := {
+	"pet_command_sitz": "sitz",
+	"pet_command_komm": "komm",
+	"pet_command_hier": "hier",
+}
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	# The day-end card owns input while it is up — it is the session ritual,
+	# not something to walk away from.
+	if DayEndCard.is_open:
+		return
+
+	for action in PET_COMMAND_ACTIONS:
+		if event.is_action_pressed(action):
+			_command_pets(PET_COMMAND_ACTIONS[action])
+			return
+
 	if event.is_action_pressed("phone"):
 		Phone.toggle()
 		_player.can_move = not Phone.is_open
@@ -149,6 +174,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("debug_screenshot"):
 		_save_screenshot()
+
+
+func _command_pets(command_id: String) -> void:
+	for pet in get_tree().get_nodes_in_group("pet"):
+		pet.obey(command_id)
 
 
 func _on_interact_pressed() -> void:
@@ -210,7 +240,13 @@ func _on_step_advanced(_quest_id: String, _index: int) -> void:
 	HUD.refresh()
 
 
-func _sleep() -> void:
+## Sleep = save = the day-end card. Part 3 §3/§5: this card is the session-end
+## ritual for the whole game, so it fires BEFORE the day rolls over — it is a
+## summary of the day just lived, not a preview of the next one.
+func _sleep(show_card: bool = true) -> void:
+	if show_card:
+		DayEndCard.show_card()
+		await DayEndCard.dismissed
 	GameState.sleep(default_spawn)
 	_player.global_position = default_spawn
 	resync_npcs()

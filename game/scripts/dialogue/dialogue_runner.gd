@@ -118,6 +118,7 @@ func _record_exposure(line: Dictionary) -> void:
 	for word_id in focus:
 		if not WordStats.has_word(word_id):
 			WordStats.introduce(word_id, GameState.day)
+		DayEndCard.note_word(word_id)
 		var s := WordStats.get_stat(word_id)
 		s["times_heard"] += 1
 

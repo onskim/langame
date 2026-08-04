@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/village_map.gd" id="1_village"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_rathaus.png" id="8_rathaus"]
 [ext_resource type="Texture2D" path="res://assets/sprites/well.png" id="9_well"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="11_cottage"]
+[ext_resource type="Script" path="res://scripts/core/world_object.gd" id="12_worldobj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hay_bale.png" id="13_stall"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(20, 48)
@@ -153,6 +155,23 @@ owner_npc_id = "npc_weber"
 sign_text = "Rathaus"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/RathausDoor"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="MarketStall" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(416, 320)
+script = ExtResource("12_worldobj")
+object_id = "obj_market_stall"
+action = "buy"
+consumes_item = false
+
+[node name="Sprite2D" type="Sprite2D" parent="MarketStall"]
+texture = ExtResource("13_stall")
+modulate = Color(0.95, 0.8, 0.55, 1)
+scale = Vector2(2, 2)
+
+[node name="Area2D" type="Area2D" parent="MarketStall"]
+
+[node name="Shape" type="CollisionShape2D" parent="MarketStall/Area2D"]
 shape = SubResource("RectangleShape2D_door")
 
 [node name="NPCs" type="Node2D" parent="."]

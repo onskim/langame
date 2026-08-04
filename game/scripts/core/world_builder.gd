@@ -1,68 +1,143 @@
 extends Node
 class_name WorldBuilder
-## Builds the Week 1 gray-box farm ground + fence collision in code.
+## Builds the farm/village ground + fence collision in code.
 ##
-## Deliberately procedural: the real hand-authored tilemaps arrive with the
-## style bible and PixelLab tilesets (Part 11 §2). Keeping this in code means
-## the gray-box is reproducible and no fragile .tres is hand-maintained.
+## Deliberately procedural: keeping the layout in code means it is reproducible
+## and no fragile .tres is hand-maintained.
+##
+## Ground art is the PixelLab corner-Wang packs in assets/tilesets/ (Addendum
+## §10 Week 3 art pass). Painting MATCHES CORNERS via WangTileset rather than
+## stamping one full-terrain tile per material: a map is described as boolean
+## regions — where is grass, where is soil — and the autotiler resolves every
+## edge and corner, so material boundaries blend instead of stepping.
+##
+## Which atlas cell means which corner combination is never guessed: it comes
+## from each sheet's `.tiles.json` sidecar, so regenerating a tileset in
+## PixelLab cannot silently shuffle the terrain under the map.
 
 const TILE := 16
+
 ## Larger than the 640x360 viewport (40x22 tiles) so the camera actually has to
 ## follow the player — a farm that fits on one screen hides camera bugs.
 const FARM_W := 56
 const FARM_H := 40
+const VILLAGE_W := 46
+const VILLAGE_H := 34
 
-
-static func build_tileset() -> TileSet:
-	var ts := TileSet.new()
-	ts.tile_size = Vector2i(TILE, TILE)
-	for path in [
-		"res://assets/tilesets/grass.png",
-		"res://assets/tilesets/path.png",
-		"res://assets/tilesets/soil_tilled.png",
-		"res://assets/tilesets/fence.png",
-	]:
-		var source := TileSetAtlasSource.new()
-		source.texture = load(path)
-		source.texture_region_size = Vector2i(TILE, TILE)
-		source.create_tile(Vector2i.ZERO)
-		ts.add_source(source)
-	return ts
-
-
-## Source ids, in the order added above.
-enum Tile { GRASS = 0, PATH = 1, SOIL = 2, FENCE = 3 }
-
-
-static func paint_ground(layer: TileMapLayer) -> void:
-	layer.tile_set = build_tileset()
-
-	for y in range(FARM_H):
-		for x in range(FARM_W):
-			layer.set_cell(Vector2i(x, y), Tile.GRASS, Vector2i.ZERO)
-
-	# Paths give movement a readable destination rather than open field, and
-	# run past the edge of one screen so scrolling is obvious.
-	for x in range(3, FARM_W - 3):
-		layer.set_cell(Vector2i(x, 20), Tile.PATH, Vector2i.ZERO)
-	for y in range(4, FARM_H - 4):
-		layer.set_cell(Vector2i(24, y), Tile.PATH, Vector2i.ZERO)
-
-	# Tilled field — the farm sim proper is Part 14, this is just readable ground.
-	for y in range(25, 33):
-		for x in range(5, 19):
-			layer.set_cell(Vector2i(x, y), Tile.SOIL, Vector2i.ZERO)
-
-	# Anna's plot, north of the divider (Part 14 §3: adjacent farm plot).
-	# Her field is tilled too, so the two holdings read as the same kind of work.
-	for y in range(4, 9):
-		for x in range(34, 46):
-			layer.set_cell(Vector2i(x, y), Tile.SOIL, Vector2i.ZERO)
-	for x in range(30, FARM_W - 2):
-		layer.set_cell(Vector2i(x, 12), Tile.PATH, Vector2i.ZERO)
-
+const PACK_PATH_GRASS := "res://assets/tilesets/ground_ref"
+const PACK_GRASS_SOIL := "res://assets/tilesets/ground_grass_soil"
+const PACK_SOIL_WATERED := "res://assets/tilesets/ground_soil_watered"
+const PACK_GRASS_WILD := "res://assets/tilesets/ground_grass_wild"
+const PACK_GRASS_WATER := "res://assets/tilesets/ground_grass_water"
 
 enum GateSide { NONE, EAST, WEST }
+
+
+## A wandering path, not a ruled line.
+##
+## Straight one-tile lanes were the thing that read worst: real tracks bend
+## around obstacles, widen where people cut a corner, and have ragged grass
+## edges. The centreline wobbles with two out-of-phase sine waves plus a hash
+## jitter, and the width breathes — all deterministic, so the map is identical
+## every run but never looks drawn with a ruler.
+static func _path_offset(t: float, seed_value: int) -> float:
+	return sin(t * 0.11 + seed_value) * 2.6 \
+		+ sin(t * 0.29 + seed_value * 2.0) * 1.1
+
+
+## Half-width in tiles. A track is something one or two people walk abreast —
+## about three tiles — not an avenue. The first pass used 2.4±0.9, which read as
+## a dirt field with grass islands rather than a path through a meadow.
+static func _path_width(t: float, seed_value: int) -> float:
+	return 1.15 + sin(t * 0.19 + seed_value * 1.7) * 0.35
+
+
+## Is (x, y) inside a horizontal track whose centre runs along `centre_y`?
+static func on_h_path(x: int, y: int, centre_y: int, from_x: int, to_x: int,
+		seed_value: int) -> bool:
+	if x < from_x or x > to_x:
+		return false
+	var centre: float = float(centre_y) + _path_offset(float(x), seed_value)
+	return abs(float(y) - centre) <= _path_width(float(x), seed_value)
+
+
+static func on_v_path(x: int, y: int, centre_x: int, from_y: int, to_y: int,
+		seed_value: int) -> bool:
+	if y < from_y or y > to_y:
+		return false
+	var centre: float = float(centre_x) + _path_offset(float(y), seed_value)
+	return abs(float(x) - centre) <= _path_width(float(y), seed_value)
+
+
+## Scattered bare patches where the grass has worn through — the reference is
+## full of them, and they are most of what stops open ground reading as a sheet.
+static func on_scuff(x: int, y: int) -> bool:
+	var h: int = abs(int(hash(Vector2i(x / 3, y / 3))))
+	if h % 41 != 0:
+		return false
+	# Only the centre of each 3x3 block, so scuffs stay small and rounded.
+	return (x % 3 == 1) and (y % 3 == 1)
+
+
+## Give `layer` a one-pack TileSet and return the loaded pack.
+static func pack_layer(layer: TileMapLayer, base_path: String) -> WangTileset:
+	var pack := WangTileset.load_pack(base_path)
+	if not pack.is_valid():
+		push_error("WorldBuilder: tileset pack %s failed to load" % base_path)
+		return pack
+	var ts := TileSet.new()
+	ts.tile_size = Vector2i(TILE, TILE)
+	ts.add_source(pack.make_source(), 0)
+	layer.tile_set = ts
+	return pack
+
+
+## Stamp only cells that touch the region, leaving the rest of the layer
+## transparent so whatever is painted below shows through at the seams.
+static func stamp(layer: TileMapLayer, pack: WangTileset, width: int, height: int,
+		in_region: Callable) -> void:
+	for y in range(height):
+		for x in range(width):
+			var nw: bool = in_region.call(x, y)
+			var ne: bool = in_region.call(x + 1, y)
+			var sw: bool = in_region.call(x, y + 1)
+			var se: bool = in_region.call(x + 1, y + 1)
+			if nw or ne or sw or se:
+				layer.set_cell(Vector2i(x, y), 0, pack.atlas_for(ne, nw, se, sw))
+
+
+# --------------------------------------------------------------------- farm
+
+## Ground is two layers so material edges blend: lanes carved out of grass on
+## the base, tilled soil stamped on top wherever a field is.
+static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null) -> void:
+	# ground_path_grass: lower = dirt path, upper = grass. "Upper" therefore
+	# means grass, and a lane is simply where grass is absent.
+	var pack := pack_layer(layer, PACK_PATH_GRASS)
+	if not pack.is_valid():
+		return
+
+	var is_grass := func(x: int, y: int) -> bool:
+		# Tracks give movement a readable destination rather than open field, and
+		# run past the edge of one screen so scrolling is obvious.
+		var track_main: bool = on_h_path(x, y, 20, 2, FARM_W - 2, 11)
+		var track_north: bool = on_v_path(x, y, 24, 3, FARM_H - 3, 29)
+		var track_anna: bool = on_h_path(x, y, 12, 29, FARM_W - 2, 47)
+		return not (track_main or track_north or track_anna or on_scuff(x, y))
+	pack.paint(layer, 0, FARM_W, FARM_H, is_grass)
+
+	if crops == null:
+		return
+	# ground_grass_soil: lower = grass, upper = tilled soil.
+	var soil := pack_layer(crops, PACK_GRASS_SOIL)
+	if not soil.is_valid():
+		return
+	var is_soil := func(x: int, y: int) -> bool:
+		var player_field: bool = x >= 5 and x <= 19 and y >= 25 and y <= 33
+		# Anna's plot is tilled too, so the two holdings read as the same work.
+		var anna_field: bool = x >= 34 and x <= 46 and y >= 4 and y <= 9
+		return player_field or anna_field
+	stamp(crops, soil, FARM_W, FARM_H, is_soil)
 
 
 ## Perimeter fence: visual tiles on `fence_layer`, collision as StaticBody2D
@@ -70,7 +145,14 @@ enum GateSide { NONE, EAST, WEST }
 ## out — a fenced field with no gate is a prison, not a smallholding.
 static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D,
 		gate: GateSide = GateSide.NONE) -> void:
-	fence_layer.tile_set = build_tileset()
+	var ts := TileSet.new()
+	ts.tile_size = Vector2i(TILE, TILE)
+	var source := TileSetAtlasSource.new()
+	source.texture = load("res://assets/tilesets/fence.png")
+	source.texture_region_size = Vector2i(TILE, TILE)
+	source.create_tile(Vector2i.ZERO)
+	ts.add_source(source, 0)
+	fence_layer.tile_set = ts
 
 	var cells: Array[Vector2i] = []
 	for x in range(FARM_W):
@@ -92,7 +174,7 @@ static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D,
 				cells.append(Vector2i(x, 14))
 
 	for cell in cells:
-		fence_layer.set_cell(cell, Tile.FENCE, Vector2i.ZERO)
+		fence_layer.set_cell(cell, 0, Vector2i.ZERO)
 
 	var body := StaticBody2D.new()
 	body.name = "FenceCollision"
@@ -109,52 +191,46 @@ static func build_fence(fence_layer: TileMapLayer, collision_parent: Node2D,
 
 # ------------------------------------------------------------------ village
 
-const VILLAGE_W := 46
-const VILLAGE_H := 34
-
-
 ## The village square and its lanes. Buildings are placed in the scene; this
 ## lays the ground they stand on.
-static func paint_village(layer: TileMapLayer) -> void:
-	layer.tile_set = build_tileset()
+static func paint_village(layer: TileMapLayer, _crops: TileMapLayer = null) -> void:
+	var pack := pack_layer(layer, PACK_PATH_GRASS)
+	if not pack.is_valid():
+		return
 
-	for y in range(VILLAGE_H):
-		for x in range(VILLAGE_W):
-			layer.set_cell(Vector2i(x, y), Tile.GRASS, Vector2i.ZERO)
-
-	# The square itself — paved, central, the place people gather.
-	for y in range(12, 22):
-		for x in range(15, 31):
-			layer.set_cell(Vector2i(x, y), Tile.PATH, Vector2i.ZERO)
-
-	# The lane in from the farm (west edge) and the lanes to each shopfront.
-	for x in range(0, 16):
-		layer.set_cell(Vector2i(x, 16), Tile.PATH, Vector2i.ZERO)
-		layer.set_cell(Vector2i(x, 17), Tile.PATH, Vector2i.ZERO)
-	for y in range(6, 13):
-		layer.set_cell(Vector2i(20, y), Tile.PATH, Vector2i.ZERO)
-		layer.set_cell(Vector2i(26, y), Tile.PATH, Vector2i.ZERO)
-	for y in range(21, 29):
-		layer.set_cell(Vector2i(23, y), Tile.PATH, Vector2i.ZERO)
+	var is_grass := func(x: int, y: int) -> bool:
+		# The square is worn bare by footfall — its edge is rounded, not ruled.
+		var dx := float(x) - 23.0
+		var dy := (float(y) - 17.0) * 1.5
+		var wobble: float = sin(atan2(dy, dx) * 3.0) * 1.2
+		var square: bool = sqrt(dx * dx + dy * dy) <= 7.0 + wobble
+		var lane_west: bool = on_h_path(x, y, 17, 0, 18, 5)
+		var lane_bakery: bool = on_v_path(x, y, 20, 6, 14, 61)
+		var lane_shop: bool = on_v_path(x, y, 26, 6, 14, 73)
+		var lane_south: bool = on_v_path(x, y, 23, 20, 30, 83)
+		return not (square or lane_west or lane_bakery or lane_shop
+			or lane_south or on_scuff(x, y))
+	pack.paint(layer, 0, VILLAGE_W, VILLAGE_H, is_grass)
 
 
-# ----------------------------------------------------------------- interiors
+# ---------------------------------------------------------------- interiors
 
 const ROOM_W := 20
 const ROOM_H := 14
 
 
-## A room: floorboards inside, wall band along the top, solid walls around.
-## Interiors are small by design — one screen, no camera hunting for the door.
+## A room: a packed-earth floor and solid walls. Interiors are small by design —
+## one screen, no camera hunting for the door.
 static func paint_interior(layer: TileMapLayer, collision_parent: Node2D,
 		room_w: int = ROOM_W, room_h: int = ROOM_H) -> void:
-	layer.tile_set = build_tileset()
-
-	for y in range(room_h):
-		for x in range(room_w):
-			# Row 0-1 read as the back wall, the rest as floor.
-			var tile := Tile.PATH if y >= 2 else Tile.SOIL
-			layer.set_cell(Vector2i(x, y), tile, Vector2i.ZERO)
+	var pack := pack_layer(layer, PACK_PATH_GRASS)
+	if pack.is_valid():
+		# All "lower" is the packed-dirt terrain — it reads as a floor indoors
+		# and needs no transitions.
+		var floor_coords := pack.all_lower()
+		for y in range(room_h):
+			for x in range(room_w):
+				layer.set_cell(Vector2i(x, y), 0, floor_coords)
 
 	var body := StaticBody2D.new()
 	body.name = "RoomCollision"

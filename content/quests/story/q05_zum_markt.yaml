@@ -1,0 +1,22 @@
+# Q05 "Zum Markt" — GDD Part 10 §5.3, first market trip.
+#
+# Part 10 §6 Wk4 acceptance: "Q05 market trip completes SILENTLY." Buying by
+# speaking is the Week 6 retrofit; the silent path must always exist and always
+# complete the quest (Part 3 §1 Tier IV: the game is completable mute).
+
+quest_id: q05
+kind: story
+giver: npc_anna
+rep_gate: 8
+prereq: [q04]
+vocab_tags: [markt, kaufen, samen, chunk_was_kostet_das]
+steps:
+  - line: anna_q05_ask
+    presentation: scene
+    objective: {action: buy, target: obj_market_stall, item: samen}
+    hint_line: petra_q05_stall
+  - line: petra_q05_price
+  - line: anna_q05_done
+rewards:
+  rep: {npc_anna: 5}
+  money: 4

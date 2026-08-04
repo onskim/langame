@@ -101,7 +101,10 @@ func _run() -> void:
 	_check("phone opens", phone.is_open)
 	var rows: Array = phone._task_rows()
 	_check("phone lists the active task", rows.size() >= 1, str(rows))
-	_check("task names the giver", rows.size() > 0 and (rows[0] as String).contains("Anna"),
+	# Phone rows are declarative dicts ({text, color, dim}) since the app
+	# framework landed, not bare strings.
+	_check("task names the giver",
+		rows.size() > 0 and str((rows[0] as Dictionary).get("text", "")).contains("Anna"),
 		str(rows))
 	phone.close()
 
@@ -146,8 +149,16 @@ func _run() -> void:
 
 	phone.open()
 	await get_tree().process_frame
-	_check("phone shows three finished quests", phone._task_rows().size() == 3,
-		str(phone._task_rows()))
+	# Q01-Q03 done, and Q04 has auto-chained in (its rep gate of 5 is met by
+	# the 8 the chain paid Anna), so the list is 3 completed + 1 active.
+	var final_rows: Array = phone._task_rows()
+	var completed := 0
+	for row: Dictionary in final_rows:
+		if str(row.get("text", "")).begins_with("✓"):
+			completed += 1
+	_check("phone shows three finished quests", completed == 3, str(final_rows))
+	_check("Q04 chained in once its rep gate was met", Quests.active_quest == "q04",
+		"active=%s anna_rep=%d" % [Quests.active_quest, GameState.reputation_of("npc_anna")])
 
 	print("--- Week 3 acceptance complete, %d failure(s). ---" % _failures)
 

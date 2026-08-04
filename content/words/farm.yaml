@@ -159,3 +159,60 @@
   intro_quest: q03
   distractors: [gras, heu]
   draft: true
+
+# --- pet commands (Addendum §6). Tapped this week, spoken from Week 6. ---
+- word_id: sitz
+  concept: sit_command
+  lemma: Sitz!
+  pos: phrase
+  english: sit!
+  family: tiere
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: komm
+  concept: come_command
+  lemma: Komm!
+  pos: phrase
+  english: come!
+  family: tiere
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: hier
+  concept: here_command
+  lemma: Hier!
+  pos: phrase
+  english: here!
+  family: tiere
+  cefr: A1.1
+  intro_quest: q04
+  draft: true
+
+- word_id: hund
+  concept: dog
+  lemma: Hund
+  article: der
+  plural: Hunde
+  pos: noun
+  english: dog
+  family: tiere
+  cefr: A1.1
+  intro_quest: q01
+  distractors: [katze, kuh]
+  draft: true
+
+- word_id: katze
+  concept: cat
+  lemma: Katze
+  article: die
+  plural: Katzen
+  pos: noun
+  english: cat
+  family: tiere
+  cefr: A1.1
+  intro_quest: q01
+  distractors: [hund, kuh]
+  draft: true

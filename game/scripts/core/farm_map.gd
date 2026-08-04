@@ -6,5 +6,5 @@ extends WorldMap
 
 
 func build_ground() -> void:
-	WorldBuilder.paint_ground($Ground)
+	WorldBuilder.paint_ground($Ground, $Crops)
 	WorldBuilder.build_fence($Fence, self, WorldBuilder.GateSide.EAST)

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/shot_harness_w4.gd" id="1_w4"]
+[node name="ShotHarnessW4" type="Node"]
+script = ExtResource("1_w4")

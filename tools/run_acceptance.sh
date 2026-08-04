@@ -34,6 +34,7 @@ run "week2" res://dev/acceptance_week2.tscn
 run "week3" res://dev/acceptance_week3.tscn
 run "week4" res://dev/acceptance_week4.tscn
 run "week5" res://dev/acceptance_week5.tscn
+run "worlddeep" res://dev/acceptance_worlddeep.tscn
 run "world" res://dev/acceptance_world.tscn
 run "scenes" res://dev/acceptance_scenes.tscn
 

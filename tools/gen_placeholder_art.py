@@ -9,6 +9,7 @@ as art direction.
 Pure stdlib — no Pillow dependency.
 """
 
+import math
 import os
 import struct
 import zlib
@@ -41,6 +42,19 @@ C = {
     "pig_ear": (198, 122, 130, 255),
     "pig_snout": (176, 104, 114, 255),
     "pig_hoof": (86, 62, 62, 255),
+    "leaf_dk": (58, 122, 46, 255),
+    "leaf_md": (86, 158, 62, 255),
+    "leaf_lt": (122, 190, 84, 255),
+    "flower_w": (246, 248, 236, 255),
+    "flower_y": (244, 214, 92, 255),
+    "flower_p": (238, 176, 186, 255),
+    "rock_md": (146, 146, 138, 255),
+    "rock_dk": (104, 104, 98, 255),
+    "rock_lt": (178, 178, 168, 255),
+    "dog_body": (196, 142, 84, 255),
+    "dog_dark": (154, 104, 58, 255),
+    "cat_body": (232, 152, 78, 255),
+    "cat_dark": (196, 118, 54, 255),
     "hay": (214, 182, 96, 255),
     "hay_dark": (184, 152, 74, 255),
     "water": (86, 152, 196, 255),
@@ -350,6 +364,157 @@ def well():
     return px
 
 
+def pet_frame(direction, frame, body, dark, height):
+    """Pets share one behaviour system and differ only by sprite (Addendum §6).
+    Dog 16x24, cat 16x16 per Part 11 §2."""
+    px = blank(16, height)
+
+    def rect(x0, y0, x1, y1, col):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if 0 <= x < 16 and 0 <= y < height:
+                    px[y][x] = col
+
+    base = height - 1
+    bob = [0, -1, 0, 0][frame]
+    rect(3, base - 9 + bob, 12, base - 3 + bob, body)          # body
+    head_x = 9 if direction == 3 else (1 if direction == 2 else 5)
+    rect(head_x, base - 13 + bob, head_x + 5, base - 8 + bob, body)   # head
+    rect(head_x, base - 15 + bob, head_x + 1, base - 13 + bob, dark)  # ears
+    rect(head_x + 4, base - 15 + bob, head_x + 5, base - 13 + bob, dark)
+    if direction != 1:                                          # eye
+        px[base - 11 + bob][head_x + (4 if direction == 3 else 1)] = C["outline"]
+    swing = [0, 1, 0, -1][frame]
+    rect(4, base - 3 + bob, 5, base - max(0, swing) + bob, dark)      # legs
+    rect(10, base - 3 + bob, 11, base + min(0, swing) + bob, dark)
+    tail_x = 2 if direction == 3 else 13                        # tail
+    rect(tail_x, base - 11 + bob, tail_x + 1, base - 7 + bob, dark)
+    return px
+
+
+def pet_sheet(body, dark, height):
+    """4 directions x 4 frames."""
+    sheet = blank(64, height * 4)
+    for d in range(4):
+        for f in range(4):
+            cell = pet_frame(d, f, body, dark, height)
+            for y in range(height):
+                for x in range(16):
+                    sheet[d * height + y][f * 16 + x] = cell[y][x]
+    return sheet
+
+
+# ------------------------------------------------------- ground decoration
+#
+# The reference ground reads lush not because the base tile is busy, but
+# because it is SCATTERED with small props: leafy clumps, wildflower clusters,
+# stones. A repeated base tile always reads flat; the scatter is what breaks it.
+# 16x16, transparent, drawn onto a decor layer above the terrain.
+
+def _leaf_clump(seedv):
+    """A leafy plant clump — the biggest scatter element."""
+    px = blank(16, 16)
+    rnd = _Rnd(seedv)
+    cx, cy = 8, 10
+    for i in range(6):
+        ang = i * 1.05 + rnd.f() * 0.4
+        length = 3 + rnd.i(3)
+        for t in range(length):
+            x = int(cx + math.cos(ang) * t)
+            y = int(cy - abs(math.sin(ang)) * t * 0.8)
+            for dx in (-1, 0, 1):
+                if 0 <= x + dx < 16 and 0 <= y < 16:
+                    shade = "leaf_lt" if t >= length - 1 else ("leaf_md" if dx == 0 else "leaf_dk")
+                    px[y][x + dx] = C[shade]
+    return px
+
+
+def _flower_cluster(seedv, petal):
+    """Three or four tiny blossoms with stems."""
+    px = blank(16, 16)
+    rnd = _Rnd(seedv)
+    for _ in range(3 + rnd.i(2)):
+        x = 2 + rnd.i(11)
+        y = 4 + rnd.i(8)
+        for sy in range(y + 1, min(15, y + 4)):       # stem
+            px[sy][x] = C["leaf_dk"]
+        px[y][x] = C[petal]                            # blossom
+        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            if 0 <= x + dx < 16 and 0 <= y + dy < 16:
+                px[y + dy][x + dx] = C[petal]
+        px[y][x] = C["flower_y"] if petal != "flower_y" else C["flower_w"]
+    return px
+
+
+def _stone(seedv):
+    """A small rounded stone with a highlight."""
+    px = blank(16, 16)
+    rnd = _Rnd(seedv)
+    w = 4 + rnd.i(3)
+    h = 3 + rnd.i(2)
+    ox, oy = 5, 8
+    for y in range(h):
+        span = w - abs(y - h // 2)
+        for x in range(span):
+            px[oy + y][ox + x] = C["rock_md"]
+    for x in range(w - 2):
+        px[oy][ox + 1 + x] = C["rock_lt"]
+    for x in range(w - 1):
+        px[oy + h - 1][ox + x] = C["rock_dk"]
+    return px
+
+
+def _grass_tuft(seedv):
+    """A few blades — the lightest scatter, used most often."""
+    px = blank(16, 16)
+    rnd = _Rnd(seedv)
+    for _ in range(3 + rnd.i(3)):
+        x = 2 + rnd.i(12)
+        h = 2 + rnd.i(3)
+        lean = rnd.i(3) - 1
+        for t in range(h):
+            y = 13 - t
+            xx = x + int(lean * t / max(h - 1, 1))
+            if 0 <= xx < 16 and 0 <= y < 16:
+                px[y][xx] = C["leaf_lt"] if t == h - 1 else C["leaf_md"]
+    return px
+
+
+class _Rnd:
+    """Tiny deterministic RNG so the decor atlas is reproducible."""
+    def __init__(self, seedv):
+        self.s = (seedv * 1103515245 + 12345) & 0x7FFFFFFF
+
+    def next(self):
+        self.s = (self.s * 1103515245 + 12345) & 0x7FFFFFFF
+        return self.s
+
+    def i(self, n):
+        return self.next() % max(n, 1)
+
+    def f(self):
+        return self.next() / float(0x7FFFFFFF)
+
+
+def decor_atlas():
+    """One row of 16x16 scatter props: tufts, clumps, flowers, stones."""
+    kinds = []
+    for i in range(4):
+        kinds.append(_grass_tuft(i + 1))
+    for i in range(3):
+        kinds.append(_leaf_clump(i + 40))
+    for i, petal in enumerate(["flower_w", "flower_y", "flower_p"]):
+        kinds.append(_flower_cluster(i + 90, petal))
+    for i in range(2):
+        kinds.append(_stone(i + 200))
+    sheet = blank(16 * len(kinds), 16)
+    for k, cell in enumerate(kinds):
+        for y in range(16):
+            for x in range(16):
+                sheet[y][k * 16 + x] = cell[y][x]
+    return sheet, len(kinds)
+
+
 def hay_bale():
     px = blank(16, 16)
     for y in range(5, 15):
@@ -417,6 +582,13 @@ def main():
     write_png(os.path.join(s, "bld_shop.png"), 64, 64, building("roof_shop"))
     write_png(os.path.join(s, "bld_rathaus.png"), 80, 72, building("roof_hall", 80, 72))
     write_png(os.path.join(s, "well.png"), 32, 32, well())
+    atlas, count = decor_atlas()
+    write_png(os.path.join(ASSETS, "tilesets", "decor.png"), 16 * count, 16, atlas)
+    print("  decor atlas: %d props" % count)
+    write_png(os.path.join(s, "pet_dog.png"), 64, 96,
+              pet_sheet(C["dog_body"], C["dog_dark"], 24))
+    write_png(os.path.join(s, "pet_cat.png"), 64, 64,
+              pet_sheet(C["cat_body"], C["cat_dark"], 16))
     write_png(os.path.join(s, "bld_barn.png"), 80, 64, barn())
     write_png(os.path.join(s, "bld_anna_house.png"), 64, 64, building("roof_hall"))
     print("Done. ALL PLACEHOLDER — regenerate via PixelLab MCP per Part 11 §2.")

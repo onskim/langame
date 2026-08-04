@@ -1,0 +1,20 @@
+# Q04 "Eier zählen" — GDD Part 10 §5.3.
+# Methods 3 (retrieval), 5 (production), 10 (numbers in context) per Part 9.
+#
+# Counting aloud is the Week 6 speech retrofit; this week the count is proved
+# by fetching, which is Tier I (action-as-answer).
+
+quest_id: q04
+kind: story
+giver: npc_anna
+rep_gate: 5
+prereq: [q03]
+vocab_tags: [ei, holen, num_6]
+steps:
+  - line: anna_q04_ask
+    presentation: scene
+    objective: {action: fetch, target: obj_eggs, count: 6}
+  - line: anna_q04_done
+rewards:
+  rep: {npc_anna: 4}
+  money: 8

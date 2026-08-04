@@ -23,6 +23,8 @@ var current_map: String = "farm"
 var affection: Dictionary = {}
 ## Silent path (Part 3 §1): the game must be completable mute.
 var quiet_mode: bool = false
+## Seeds deterministic weather so tomorrow's forecast is honest (Part 12 §5).
+var weather_seed: int = 20260804
 
 var _loaded_position: Variant = null
 
@@ -44,6 +46,7 @@ func to_dict() -> Dictionary:
 		"current_map": current_map,
 		"affection": affection,
 		"quiet_mode": quiet_mode,
+		"weather_seed": weather_seed,
 		"drills": DrillSpawner.to_dict(),
 	}
 
@@ -65,6 +68,7 @@ func load_state() -> void:
 	current_map = str(data.get("current_map", "farm"))
 	affection = data.get("affection", {})
 	quiet_mode = bool(data.get("quiet_mode", false))
+	weather_seed = int(data.get("weather_seed", 20260804))
 	DrillSpawner.from_dict(data.get("drills", {}))
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
