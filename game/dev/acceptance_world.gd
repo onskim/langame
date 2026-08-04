@@ -77,6 +77,22 @@ func _run() -> void:
 		fence.get_cell_source_id(Vector2i(WorldBuilder.FARM_W - 1, mid)) == -1,
 		"cell=%d" % fence.get_cell_source_id(Vector2i(WorldBuilder.FARM_W - 1, mid)))
 
+	# A door swallowed by its own building's collision can never be reached —
+	# you would stand outside your house unable to open the front door. This is
+	# the same class of bug as a fence with no gap, so assert it the same way:
+	# every door's trigger must sit OUTSIDE every building's solid footprint.
+	var buried: Array[String] = []
+	for door in farm.get_node("Doors").get_children():
+		var here: Vector2 = (door as Node2D).global_position
+		for building in farm.get_node("Buildings").get_children():
+			var shape := building.get_node_or_null("Body/Shape") as CollisionShape2D
+			if shape == null or not (shape.shape is RectangleShape2D):
+				continue
+			var half: Vector2 = (shape.shape as RectangleShape2D).size * 0.5
+			if Rect2(shape.global_position - half, half * 2.0).has_point(here):
+				buried.append("%s inside %s" % [door.name, building.name])
+	_check("every farm door is reachable from outside", buried.is_empty(), str(buried))
+
 	farm.queue_free()
 	await get_tree().process_frame
 

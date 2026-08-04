@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm_map.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/pig.png" id="11_pig"]
 [ext_resource type="Script" path="res://scripts/core/map_gate.gd" id="14_gate"]
 [ext_resource type="Script" path="res://scripts/core/door.gd" id="15_door"]
-[ext_resource type="Texture2D" path="res://assets/sprites/bld_shop.png" id="16_house"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bld_farmhouse.png" id="16_house"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_barn.png" id="17_barn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="18_annahouse"]
 [ext_resource type="PackedScene" path="res://scenes/actors/pet.tscn" id="19_pet"]
@@ -19,6 +19,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_farmhouse"]
+size = Vector2(118, 34)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_small"]
 size = Vector2(20, 20)
@@ -167,13 +170,12 @@ shape = SubResource("RectangleShape2D_small")
 [node name="Farmhouse" type="Sprite2D" parent="Buildings"]
 position = Vector2(208, 152)
 texture = ExtResource("16_house")
-modulate = Color(0.96, 0.86, 0.72, 1)
 
 [node name="Body" type="StaticBody2D" parent="Buildings/Farmhouse"]
-position = Vector2(0, 4)
+position = Vector2(0, 20)
 
 [node name="Shape" type="CollisionShape2D" parent="Buildings/Farmhouse/Body"]
-shape = SubResource("RectangleShape2D_big")
+shape = SubResource("RectangleShape2D_farmhouse")
 
 [node name="AnnaHouse" type="Sprite2D" parent="Buildings"]
 position = Vector2(560, 144)
@@ -198,7 +200,7 @@ shape = SubResource("RectangleShape2D_big")
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="FarmhouseDoor" type="Area2D" parent="Doors" groups=["door"]]
-position = Vector2(208, 186)
+position = Vector2(180, 198)
 script = ExtResource("15_door")
 target_map = "interior_farmhouse"
 arrival_marker = "from_outside"
