@@ -1,0 +1,19 @@
+# Mastery formula weights — GDD Part 10 §4.
+#
+#   mastery = clamp(0.35*recog + 0.25*prod + 0.25*pron + 0.15*recency, 0, 1)
+#
+# These live in content, not code, so the pedagogy can be retuned from the
+# simulation without an engine change (Part 4 §architecture).
+
+config_id: mastery_weights
+
+recognition: 0.35   # correct/(correct+wrong), recency-decayed
+production: 0.25    # Tier II/III success rate
+pronunciation: 0.25 # pron_avg / 100
+recency: 0.15       # decays toward 0 as a word goes unseen
+
+# Addendum §1: a spoken success counts double into recognition and production.
+spoken_multiplier: 2.0
+
+# Days after which the recency term has fully decayed to 0.
+recency_horizon_days: 14

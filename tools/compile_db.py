@@ -113,11 +113,13 @@ def compile_all(quiet=False):
     npcs = load_yaml_dir("npcs")
     lines = load_yaml_dir("lines")
     quests = load_yaml_dir("quests")
+    configs = load_yaml_dir("config")
 
     _check_unique(words, "word_id", "word")
     _check_unique(npcs, "npc_id", "npc")
     _check_unique(lines, "line_id", "line")
     _check_unique(quests, "quest_id", "quest")
+    _check_unique(configs, "config_id", "config")
 
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     if os.path.exists(DB_PATH):
@@ -173,7 +175,7 @@ def compile_all(quiet=False):
 
     con.commit()
 
-    bundle = _write_bundle(words, npcs, lines, quests)
+    bundle = _write_bundle(words, npcs, lines, quests, configs)
     con.close()
 
     if not quiet:
@@ -205,7 +207,7 @@ def _strip(entry):
     return {k: v for k, v in entry.items() if k != "_source"}
 
 
-def _write_bundle(words, npcs, lines, quests):
+def _write_bundle(words, npcs, lines, quests, configs=()):
     """Runtime bundle: dicts keyed by id so the engine does no scanning."""
     bundle = {
         "schema": 1,
@@ -213,6 +215,7 @@ def _write_bundle(words, npcs, lines, quests):
         "npcs": {n["npc_id"]: _strip(n) for n in npcs},
         "lines": {l["line_id"]: _strip(l) for l in lines},
         "quests": {q["quest_id"]: _strip(q) for q in quests},
+        "config": {c["config_id"]: _strip(c) for c in configs if "config_id" in c},
     }
     os.makedirs(os.path.dirname(BUNDLE_PATH), exist_ok=True)
     with open(BUNDLE_PATH, "w", encoding="utf-8") as f:

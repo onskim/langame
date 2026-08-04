@@ -31,6 +31,7 @@ func to_dict() -> Dictionary:
 		"reputation": reputation,
 		"money": money,
 		"completed_quests": completed_quests,
+		"word_stats": WordStats.to_dict(),
 	}
 
 
@@ -47,6 +48,7 @@ func load_state() -> void:
 	reputation = int(data.get("reputation", 0))
 	money = int(data.get("money", 0))
 	completed_quests = data.get("completed_quests", [])
+	WordStats.from_dict(data.get("word_stats", {}))
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
 		player_position = _loaded_position

@@ -52,6 +52,7 @@ func play_line(line_id: String) -> void:
 	is_open = true
 
 	_apply_gestures(line)
+	_record_exposure(line)
 
 	var response: Dictionary = line.get("response", {}) if line.get("response") != null else {}
 	var tier_1: Dictionary = response.get("tier_1", {}) if response.get("tier_1") != null else {}
@@ -75,6 +76,18 @@ func _render_german(line: Dictionary) -> String:
 		var hex := ContentDB.article_color(word_id).to_html(false)
 		text = text.replace(lemma, "[color=#%s]%s[/color]" % [hex, lemma])
 	return text
+
+
+## Every line the player hears is exposure for its focus words. A word met for
+## the first time is introduced into the learner model here — the world is the
+## review system, so meeting a word IS the review event (Part 2 §7).
+func _record_exposure(line: Dictionary) -> void:
+	var focus: Array = line.get("focus_words", []) if line.get("focus_words") != null else []
+	for word_id in focus:
+		if not WordStats.has_word(word_id):
+			WordStats.introduce(word_id, GameState.day)
+		var s := WordStats.get_stat(word_id)
+		s["times_heard"] += 1
 
 
 func _apply_gestures(line: Dictionary) -> void:
@@ -107,6 +120,7 @@ func submit_action(action: String, target: String, item: String = "") -> bool:
 
 	# Wrong-action detection logs a miss on the focus word (Part 3 §1) —
 	# feeding the pig instead of the cow is a comprehension failure, not noise.
+	_score_focus_words(correct)
 	if not correct:
 		_show_recast()
 		objective_resolved.emit(false, target)
@@ -116,6 +130,13 @@ func submit_action(action: String, target: String, item: String = "") -> bool:
 	clear_gestures()
 	objective_resolved.emit(true, target)
 	return true
+
+
+func _score_focus_words(correct: bool) -> void:
+	var line := ContentDB.get_line(current_line_id)
+	var focus: Array = line.get("focus_words", []) if line.get("focus_words") != null else []
+	for word_id in focus:
+		WordStats.record(word_id, correct, GameState.day)
 
 
 func _show_recast() -> void:

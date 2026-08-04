@@ -47,6 +47,18 @@ func _run() -> void:
 	var pig: Node2D = farm.get_node("Pig")
 	var hay: Node2D = farm.get_node("Hay")
 
+	# From Week 3 the engine chains from Q01, so clear Q01 before testing Q02.
+	var quests: Node = farm.quests
+	var guard := 0
+	while quests.active_quest == "q01" and guard < 24:
+		guard += 1
+		var objective: Dictionary = runner.current_objective
+		if objective.is_empty():
+			runner.close()
+		else:
+			runner.submit_action(objective.get("action", ""), objective.get("target", ""), "")
+		await get_tree().process_frame
+
 	# --- step 1: Anna asks, and points --------------------------------------
 	_check("quest auto-started", runner.is_open, "line=%s" % runner.current_line_id)
 	_check("playing the YAML line", runner.current_line_id == "anna_q02_ask")
@@ -90,7 +102,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	_check("Q02 recorded complete", GameState.completed_quests.has("q02"),
 		str(GameState.completed_quests))
-	_check("rewards applied from YAML", GameState.reputation == 3 and GameState.money == 5,
+	# Q01 pays 1 rep, Q02 pays 3 more and 5 money.
+	_check("rewards applied from YAML", GameState.reputation == 4 and GameState.money == 5,
 		"rep=%d money=%d" % [GameState.reputation, GameState.money])
 
 	print("--- Week 2 acceptance complete, %d failure(s). ---" % _failures)

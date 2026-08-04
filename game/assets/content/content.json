@@ -1,4 +1,43 @@
 {
+ "config": {
+  "mastery_weights": {
+   "config_id": "mastery_weights",
+   "production": 0.25,
+   "pronunciation": 0.25,
+   "recency": 0.15,
+   "recency_horizon_days": 14,
+   "recognition": 0.35,
+   "spoken_multiplier": 2.0
+  },
+  "thresholds": {
+   "config_id": "thresholds",
+   "drill": {
+    "max_cycles": 3,
+    "passes_to_clear": 2,
+    "pron_fails_to_flag": 2
+   },
+   "pronunciation": {
+    "a1_pass_accuracy": 60,
+    "tighten_per_act": 5
+   },
+   "scheduler": {
+    "new_words_blocked_at": 8,
+    "new_words_per_day": 5,
+    "review_target_max": 15,
+    "review_target_min": 5,
+    "wantlist_size": 12
+   },
+   "sm2": {
+    "ease_bonus": 0.1,
+    "ease_penalty": 0.2,
+    "first_interval_days": 1.0,
+    "initial_ease": 2.5,
+    "min_ease": 1.3,
+    "second_interval_days": 3.0
+   },
+   "starvation_days": 12
+  }
+ },
  "lines": {
   "anna_q01_greet": {
    "de": "Guten Morgen! Ich bin Anna.",
@@ -131,6 +170,58 @@
    ],
    "line_id": "anna_q03_hint",
    "npc_id": "npc_anna"
+  },
+  "tpl_feed_animal_ask": {
+   "de": "Kannst du {ANIMAL} füttern?",
+   "draft": true,
+   "en": "Can you feed {ANIMAL}?",
+   "focus_words": [
+    "fuettern"
+   ],
+   "gestures": [],
+   "line_id": "tpl_feed_animal_ask",
+   "npc_id": "npc_anna",
+   "recasts": {
+    "wrong_action": "Nein — {ANIMAL}, bitte."
+   },
+   "response": {
+    "tier_1": {
+     "action": "feed",
+     "target": "{ANIMAL}"
+    }
+   }
+  },
+  "tpl_fetch_item_ask": {
+   "de": "Hol bitte zwei {ITEM}.",
+   "draft": true,
+   "en": "Please fetch two {ITEM}.",
+   "focus_words": [],
+   "gestures": [],
+   "line_id": "tpl_fetch_item_ask",
+   "npc_id": "npc_petra",
+   "response": {
+    "tier_1": {
+     "action": "fetch",
+     "target": "{ITEM}"
+    }
+   }
+  },
+  "tpl_water_thing_ask": {
+   "de": "Bitte gieß {TARGET}.",
+   "draft": true,
+   "en": "Please water {TARGET}.",
+   "focus_words": [
+    "giessen"
+   ],
+   "gestures": [],
+   "line_id": "tpl_water_thing_ask",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "water",
+     "target": "{TARGET}"
+    }
+   }
   }
  },
  "npcs": {
@@ -380,6 +471,100 @@
     "giessen",
     "feld"
    ]
+  },
+  "tpl_feed_animal": {
+   "giver": "npc_anna",
+   "kind": "template",
+   "prereq": [
+    "q02"
+   ],
+   "quest_id": "tpl_feed_animal",
+   "rep_gate": 0,
+   "rewards": {
+    "money": 2,
+    "rep": {
+     "npc_anna": 1
+    }
+   },
+   "slots": {
+    "ANIMAL": {
+     "family": "farm",
+     "pos": "noun"
+    }
+   },
+   "steps": [
+    {
+     "line": "tpl_feed_animal_ask",
+     "objective": {
+      "action": "feed",
+      "target": "{ANIMAL}"
+     }
+    }
+   ],
+   "vocab_tags": []
+  },
+  "tpl_fetch_item": {
+   "giver": "npc_petra",
+   "kind": "template",
+   "prereq": [
+    "q02"
+   ],
+   "quest_id": "tpl_fetch_item",
+   "rep_gate": 0,
+   "rewards": {
+    "money": 2,
+    "rep": {
+     "npc_petra": 1
+    }
+   },
+   "slots": {
+    "ITEM": {
+     "pos": "noun"
+    }
+   },
+   "steps": [
+    {
+     "line": "tpl_fetch_item_ask",
+     "objective": {
+      "action": "fetch",
+      "count": 2,
+      "target": "{ITEM}"
+     }
+    }
+   ],
+   "vocab_tags": []
+  },
+  "tpl_water_thing": {
+   "giver": "npc_anna",
+   "kind": "template",
+   "prereq": [
+    "q03"
+   ],
+   "quest_id": "tpl_water_thing",
+   "rep_gate": 0,
+   "rewards": {
+    "money": 2,
+    "rep": {
+     "npc_anna": 1
+    }
+   },
+   "slots": {
+    "TARGET": {
+     "family": "farm",
+     "pos": "noun"
+    }
+   },
+   "steps": [
+    {
+     "line": "tpl_water_thing_ask",
+     "objective": {
+      "action": "water",
+      "count": 2,
+      "target": "{TARGET}"
+     }
+    }
+   ],
+   "vocab_tags": []
   }
  },
  "schema": 1,

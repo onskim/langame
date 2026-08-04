@@ -23,6 +23,11 @@ config/icon="res://icon.svg"
 [autoload]
 
 ContentDB="*res://scripts/language/content_db.gd"
+Config="*res://scripts/language/config.gd"
+WordStats="*res://scripts/language/word_stats.gd"
+Mastery="*res://scripts/language/mastery.gd"
+Scheduler="*res://scripts/language/scheduler.gd"
+TemplateBinder="*res://scripts/quests/template_binder.gd"
 GameState="*res://scripts/core/game_state.gd"
 DayCycle="*res://scripts/core/day_cycle.gd"
 SaveService="*res://scripts/core/save_service.gd"

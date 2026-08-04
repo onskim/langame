@@ -75,3 +75,26 @@
   focus_words: [chunk_danke]
   gestures: []
   draft: true
+
+# --- template lines. {SLOT} is filled by template_binder.gd at bind time. ---
+- line_id: tpl_feed_animal_ask
+  npc_id: npc_anna
+  de: "Kannst du {ANIMAL} füttern?"
+  en: "Can you feed {ANIMAL}?"
+  focus_words: [fuettern]
+  gestures: []
+  response:
+    tier_1: {action: feed, target: "{ANIMAL}"}
+  recasts:
+    wrong_action: "Nein — {ANIMAL}, bitte."
+  draft: true
+
+- line_id: tpl_water_thing_ask
+  npc_id: npc_anna
+  de: "Bitte gieß {TARGET}."
+  en: "Please water {TARGET}."
+  focus_words: [giessen]
+  gestures: []
+  response:
+    tier_1: {action: water, target: "{TARGET}"}
+  draft: true

@@ -11,6 +11,7 @@ var words: Dictionary = {}
 var npcs: Dictionary = {}
 var lines: Dictionary = {}
 var quests: Dictionary = {}
+var config: Dictionary = {}
 
 var loaded: bool = false
 
@@ -35,6 +36,7 @@ func load_bundle() -> bool:
 	npcs = bundle.get("npcs", {})
 	lines = bundle.get("lines", {})
 	quests = bundle.get("quests", {})
+	config = bundle.get("config", {})
 	loaded = true
 	print("[content] %d words, %d npcs, %d lines, %d quests"
 		% [words.size(), npcs.size(), lines.size(), quests.size()])

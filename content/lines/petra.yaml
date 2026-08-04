@@ -1,0 +1,11 @@
+# Petra's lines. DRAFT GERMAN — unreviewed, Part 5 §4 gate applies.
+
+- line_id: tpl_fetch_item_ask
+  npc_id: npc_petra
+  de: "Hol bitte zwei {ITEM}."
+  en: "Please fetch two {ITEM}."
+  focus_words: []
+  gestures: []
+  response:
+    tier_1: {action: fetch, target: "{ITEM}"}
+  draft: true
