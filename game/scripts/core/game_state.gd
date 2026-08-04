@@ -48,6 +48,9 @@ func to_dict() -> Dictionary:
 		"quiet_mode": quiet_mode,
 		"weather_seed": weather_seed,
 		"drills": DrillSpawner.to_dict(),
+		"inventory": Inventory.to_dict(),
+		"plots": Farm.to_dict(),
+		"animals": Livestock.to_dict(),
 	}
 
 
@@ -70,6 +73,13 @@ func load_state() -> void:
 	quiet_mode = bool(data.get("quiet_mode", false))
 	weather_seed = int(data.get("weather_seed", 20260804))
 	DrillSpawner.from_dict(data.get("drills", {}))
+	Inventory.from_dict(data.get("inventory", {}))
+	Farm.from_dict(data.get("plots", {}))
+	Livestock.from_dict(data.get("animals", {}))
+	# The inventory is the store of record. An item "in hand" the player does
+	# not actually own would let them feed the cow with hay that is not there.
+	if carrying != "" and not Inventory.has(carrying):
+		carrying = ""
 	if data.has("player_x") and data.has("player_y"):
 		_loaded_position = Vector2(float(data["player_x"]), float(data["player_y"]))
 		player_position = _loaded_position
@@ -103,6 +113,9 @@ func sleep(spawn_position: Vector2) -> void:
 	day += 1
 	player_position = spawn_position
 	DayCycle.reset_to_morning()
+	# The field grows overnight, so it must roll forward AFTER the day number
+	# advances and BEFORE the save — otherwise a reload replays or skips a night.
+	Farm.advance_day(day)
 	save_state()
 	day_advanced.emit(day)
 	print("[state] slept -> day %d" % day)

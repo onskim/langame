@@ -141,3 +141,136 @@
   focus_words: [samen, chunk_danke]
   gestures: []
   draft: true
+
+# --- Q07 "Die erste Saat" — the crop tutorial (Part 14 §4) -------------------
+- line_id: anna_q07_ask
+  npc_id: npc_anna
+  de: "Pflanze drei Kartoffeln im Feld."
+  en: "Plant three potatoes in the field."
+  focus_words: [pflanzen, kartoffel, feld]
+  gestures:
+    - {word: feld, point_at: obj_field}
+  response:
+    tier_1: {action: plant, target: obj_field}
+  recasts:
+    wrong_action: "Nein — im FELD. Pflanze die Kartoffeln."
+    repeat_slow: "Pflanze … drei Kartoffeln … im Feld."
+  draft: true
+
+- line_id: anna_q07_hint_seed
+  npc_id: npc_anna
+  de: "Der Samen ist im Laden."
+  en: "The seed is in the shop."
+  focus_words: [samen, laden]
+  gestures: []
+  draft: true
+
+- line_id: anna_q07_water
+  npc_id: npc_anna
+  de: "Gut! Jetzt gieß die Kartoffeln."
+  en: "Good! Now water the potatoes."
+  focus_words: [giessen, kartoffel]
+  gestures:
+    - {word: kartoffel, point_at: obj_field}
+  response:
+    tier_1: {action: water, target: obj_field}
+  draft: true
+
+- line_id: anna_q07_wait
+  npc_id: npc_anna
+  de: "Warte. Morgen ist die Kartoffel groß."
+  en: "Wait. Tomorrow the potato is big."
+  focus_words: [kartoffel]
+  gestures: []
+  response:
+    tier_1: {action: harvest, target: obj_field}
+  draft: true
+
+- line_id: anna_q07_hint_wait
+  npc_id: npc_anna
+  de: "Noch nicht reif. Gieß und schlaf."
+  en: "Not ripe yet. Water it and sleep."
+  focus_words: [giessen]
+  gestures: []
+  draft: true
+
+- line_id: anna_q07_done
+  npc_id: npc_anna
+  de: "Du erntest! Sehr gut."
+  en: "You're harvesting! Very good."
+  focus_words: [ernten]
+  gestures: []
+  draft: true
+
+# --- Q08 "Milch und Ei" — the animal contract (Part 14 §4) -------------------
+- line_id: anna_q08_ask
+  npc_id: npc_anna
+  de: "Füttere die Kuh. Heute Heu, morgen Milch."
+  en: "Feed the cow. Hay today, milk tomorrow."
+  focus_words: [fuettern, kuh, milch]
+  gestures:
+    - {word: kuh, point_at: obj_cow}
+  response:
+    tier_1: {action: feed, target: obj_cow}
+  recasts:
+    wrong_action: "Nein — die KUH. Muuuh!"
+    repeat_slow: "Füttere … die Kuh."
+  draft: true
+
+- line_id: anna_q08_hint_feed
+  npc_id: npc_anna
+  de: "Nimm das Heu. Dann füttere."
+  en: "Take the hay. Then feed."
+  focus_words: [heu, fuettern]
+  gestures:
+    - {word: heu, point_at: obj_hay}
+  draft: true
+
+- line_id: anna_q08_hen
+  npc_id: npc_anna
+  de: "Das Huhn hat auch Hunger. Füttere das Huhn."
+  en: "The hen is hungry too. Feed the hen."
+  focus_words: [huhn, fuettern]
+  gestures:
+    - {word: huhn, point_at: obj_hen}
+  response:
+    tier_1: {action: feed, target: obj_hen}
+  draft: true
+
+- line_id: anna_q08_tomorrow
+  npc_id: npc_anna
+  de: "Morgen melkst du die Kuh."
+  en: "Tomorrow you milk the cow."
+  focus_words: [melken, kuh, milch]
+  gestures:
+    - {word: kuh, point_at: obj_cow}
+  response:
+    tier_1: {action: collect, target: obj_cow}
+  draft: true
+
+- line_id: anna_q08_hint_wait
+  npc_id: npc_anna
+  de: "Die Kuh gibt morgen Milch. Schlaf gut!"
+  en: "The cow gives milk tomorrow. Sleep well!"
+  focus_words: [milch, kuh]
+  gestures: []
+  draft: true
+
+- line_id: anna_q08_egg
+  npc_id: npc_anna
+  de: "Und das Huhn? Sammle das Ei."
+  en: "And the hen? Collect the egg."
+  focus_words: [sammeln, ei, huhn]
+  gestures:
+    - {word: huhn, point_at: obj_hen}
+  response:
+    tier_1: {action: collect, target: obj_hen}
+  draft: true
+
+- line_id: anna_q08_done
+  npc_id: npc_anna
+  de: "Milch und Ei! Das ist ein guter Hof."
+  en: "Milk and egg! That's a good farm."
+  focus_words: [milch, ei]
+  gestures: []
+  draft: true

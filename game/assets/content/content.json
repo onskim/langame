@@ -69,6 +69,131 @@
     "Sonntag"
    ]
   },
+  "economy": {
+   "animals": {
+    "obj_cow": {
+     "animal_word": "kuh",
+     "feed_item": "heu",
+     "interval_days": 1,
+     "product": "milch",
+     "sell": 14
+    },
+    "obj_hen": {
+     "animal_word": "huhn",
+     "feed_item": "gras",
+     "interval_days": 1,
+     "product": "ei",
+     "sell": 6
+    },
+    "obj_pig": {
+     "animal_word": "schwein",
+     "feed_item": "heu",
+     "interval_days": 6,
+     "product": "fleisch",
+     "sell": 40
+    }
+   },
+   "config_id": "economy",
+   "crops": {
+    "erdbeere": {
+     "days": 7,
+     "regrows": true,
+     "season": "fruehling",
+     "seed_price": 12,
+     "sell": 15
+    },
+    "gurke": {
+     "days": 5,
+     "season": "sommer",
+     "seed_price": 7,
+     "sell": 11
+    },
+    "karotte": {
+     "days": 4,
+     "season": "fruehling",
+     "seed_price": 5,
+     "sell": 9
+    },
+    "kartoffel": {
+     "days": 5,
+     "season": "fruehling",
+     "seed_price": 6,
+     "sell": 12
+    },
+    "kohl": {
+     "days": 7,
+     "season": "herbst",
+     "seed_price": 9,
+     "sell": 16
+    },
+    "kuerbis": {
+     "days": 9,
+     "season": "herbst",
+     "seed_price": 15,
+     "sell": 30
+    },
+    "mais": {
+     "days": 8,
+     "season": "sommer",
+     "seed_price": 10,
+     "sell": 18
+    },
+    "salat": {
+     "days": 3,
+     "season": "fruehling",
+     "seed_price": 4,
+     "sell": 7
+    },
+    "tomate": {
+     "days": 6,
+     "regrows": true,
+     "season": "sommer",
+     "seed_price": 8,
+     "sell": 13
+    },
+    "zwiebel": {
+     "days": 5,
+     "season": "herbst",
+     "seed_price": 6,
+     "sell": 11
+    }
+   },
+   "growth": {
+    "die_after_dry_days": 4,
+    "rain_waters": [
+     "regen",
+     "gewitter"
+    ],
+    "revive_growth_penalty_days": 1,
+    "stages": 4,
+    "wilt_after_dry_days": 2
+   },
+   "recipes": {
+    "butter": {
+     "inputs": {
+      "milch": 2
+     },
+     "output": "butter",
+     "output_count": 1,
+     "sell": 22,
+     "station": "obj_butterfass"
+    },
+    "kaese": {
+     "inputs": {
+      "milch": 3
+     },
+     "output": "kaese",
+     "output_count": 1,
+     "sell": 30,
+     "station": "obj_butterfass"
+    }
+   },
+   "sell_prices": {
+    "gras": 1,
+    "heu": 2,
+    "samen": 3
+   }
+  },
   "mastery_weights": {
    "config_id": "mastery_weights",
    "no_speech": {
@@ -129,6 +254,31 @@
    },
    "config_id": "ui_strings",
    "diegetic": {
+    "already_planted": {
+     "de": "Hier wächst schon etwas.",
+     "draft": true,
+     "en": "Something is already growing here."
+    },
+    "already_watered": {
+     "de": "Schon gegossen.",
+     "draft": true,
+     "en": "Already watered."
+    },
+    "animal_already_collected": {
+     "de": "Heute schon. Morgen wieder.",
+     "draft": true,
+     "en": "Already today. Tomorrow again."
+    },
+    "animal_hungry": {
+     "de": "Das Tier hat Hunger.",
+     "draft": true,
+     "en": "The animal is hungry."
+    },
+    "animal_not_yet": {
+     "de": "Morgen, ja? Heute nicht.",
+     "draft": true,
+     "en": "Tomorrow, yes? Not today."
+    },
     "door_locked": {
      "de": "Es ist zu.",
      "draft": true,
@@ -138,6 +288,41 @@
      "de": "Es ist dunkel…",
      "draft": true,
      "en": "It's dark in here…"
+    },
+    "missing_ingredients": {
+     "de": "Das reicht noch nicht.",
+     "draft": true,
+     "en": "That's not enough yet."
+    },
+    "no_seed": {
+     "de": "Du hast keinen Samen.",
+     "draft": true,
+     "en": "You have no seed."
+    },
+    "no_water": {
+     "de": "Du brauchst Wasser.",
+     "draft": true,
+     "en": "You need water."
+    },
+    "not_a_field": {
+     "de": "Hier ist kein Feld.",
+     "draft": true,
+     "en": "There's no field here."
+    },
+    "not_ripe": {
+     "de": "Das ist noch nicht reif.",
+     "draft": true,
+     "en": "That isn't ripe yet."
+    },
+    "nothing_planted": {
+     "de": "Hier wächst nichts.",
+     "draft": true,
+     "en": "Nothing is growing here."
+    },
+    "rained_overnight": {
+     "de": "Es hat geregnet.",
+     "draft": true,
+     "en": "It rained."
     }
    },
    "signs": {
@@ -459,6 +644,295 @@
    "gestures": [],
    "line_id": "anna_q05_done",
    "npc_id": "npc_anna"
+  },
+  "anna_q07_ask": {
+   "de": "Pflanze drei Kartoffeln im Feld.",
+   "draft": true,
+   "en": "Plant three potatoes in the field.",
+   "focus_words": [
+    "pflanzen",
+    "kartoffel",
+    "feld"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_field",
+     "word": "feld"
+    }
+   ],
+   "line_id": "anna_q07_ask",
+   "npc_id": "npc_anna",
+   "recasts": {
+    "repeat_slow": "Pflanze … drei Kartoffeln … im Feld.",
+    "wrong_action": "Nein — im FELD. Pflanze die Kartoffeln."
+   },
+   "response": {
+    "tier_1": {
+     "action": "plant",
+     "target": "obj_field"
+    }
+   }
+  },
+  "anna_q07_done": {
+   "de": "Du erntest! Sehr gut.",
+   "draft": true,
+   "en": "You're harvesting! Very good.",
+   "focus_words": [
+    "ernten"
+   ],
+   "gestures": [],
+   "line_id": "anna_q07_done",
+   "npc_id": "npc_anna"
+  },
+  "anna_q07_hint_seed": {
+   "de": "Der Samen ist im Laden.",
+   "draft": true,
+   "en": "The seed is in the shop.",
+   "focus_words": [
+    "samen",
+    "laden"
+   ],
+   "gestures": [],
+   "line_id": "anna_q07_hint_seed",
+   "npc_id": "npc_anna"
+  },
+  "anna_q07_hint_wait": {
+   "de": "Noch nicht reif. Gieß und schlaf.",
+   "draft": true,
+   "en": "Not ripe yet. Water it and sleep.",
+   "focus_words": [
+    "giessen"
+   ],
+   "gestures": [],
+   "line_id": "anna_q07_hint_wait",
+   "npc_id": "npc_anna"
+  },
+  "anna_q07_wait": {
+   "de": "Warte. Morgen ist die Kartoffel groß.",
+   "draft": true,
+   "en": "Wait. Tomorrow the potato is big.",
+   "focus_words": [
+    "kartoffel"
+   ],
+   "gestures": [],
+   "line_id": "anna_q07_wait",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "harvest",
+     "target": "obj_field"
+    }
+   }
+  },
+  "anna_q07_water": {
+   "de": "Gut! Jetzt gieß die Kartoffeln.",
+   "draft": true,
+   "en": "Good! Now water the potatoes.",
+   "focus_words": [
+    "giessen",
+    "kartoffel"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_field",
+     "word": "kartoffel"
+    }
+   ],
+   "line_id": "anna_q07_water",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "water",
+     "target": "obj_field"
+    }
+   }
+  },
+  "anna_q08_ask": {
+   "de": "Füttere die Kuh. Heute Heu, morgen Milch.",
+   "draft": true,
+   "en": "Feed the cow. Hay today, milk tomorrow.",
+   "focus_words": [
+    "fuettern",
+    "kuh",
+    "milch"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_cow",
+     "word": "kuh"
+    }
+   ],
+   "line_id": "anna_q08_ask",
+   "npc_id": "npc_anna",
+   "recasts": {
+    "repeat_slow": "Füttere … die Kuh.",
+    "wrong_action": "Nein — die KUH. Muuuh!"
+   },
+   "response": {
+    "tier_1": {
+     "action": "feed",
+     "target": "obj_cow"
+    }
+   }
+  },
+  "anna_q08_done": {
+   "de": "Milch und Ei! Das ist ein guter Hof.",
+   "draft": true,
+   "en": "Milk and egg! That's a good farm.",
+   "focus_words": [
+    "milch",
+    "ei"
+   ],
+   "gestures": [],
+   "line_id": "anna_q08_done",
+   "npc_id": "npc_anna"
+  },
+  "anna_q08_egg": {
+   "de": "Und das Huhn? Sammle das Ei.",
+   "draft": true,
+   "en": "And the hen? Collect the egg.",
+   "focus_words": [
+    "sammeln",
+    "ei",
+    "huhn"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_hen",
+     "word": "huhn"
+    }
+   ],
+   "line_id": "anna_q08_egg",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "collect",
+     "target": "obj_hen"
+    }
+   }
+  },
+  "anna_q08_hen": {
+   "de": "Das Huhn hat auch Hunger. Füttere das Huhn.",
+   "draft": true,
+   "en": "The hen is hungry too. Feed the hen.",
+   "focus_words": [
+    "huhn",
+    "fuettern"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_hen",
+     "word": "huhn"
+    }
+   ],
+   "line_id": "anna_q08_hen",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "feed",
+     "target": "obj_hen"
+    }
+   }
+  },
+  "anna_q08_hint_feed": {
+   "de": "Nimm das Heu. Dann füttere.",
+   "draft": true,
+   "en": "Take the hay. Then feed.",
+   "focus_words": [
+    "heu",
+    "fuettern"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_hay",
+     "word": "heu"
+    }
+   ],
+   "line_id": "anna_q08_hint_feed",
+   "npc_id": "npc_anna"
+  },
+  "anna_q08_hint_wait": {
+   "de": "Die Kuh gibt morgen Milch. Schlaf gut!",
+   "draft": true,
+   "en": "The cow gives milk tomorrow. Sleep well!",
+   "focus_words": [
+    "milch",
+    "kuh"
+   ],
+   "gestures": [],
+   "line_id": "anna_q08_hint_wait",
+   "npc_id": "npc_anna"
+  },
+  "anna_q08_tomorrow": {
+   "de": "Morgen melkst du die Kuh.",
+   "draft": true,
+   "en": "Tomorrow you milk the cow.",
+   "focus_words": [
+    "melken",
+    "kuh",
+    "milch"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_cow",
+     "word": "kuh"
+    }
+   ],
+   "line_id": "anna_q08_tomorrow",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "collect",
+     "target": "obj_cow"
+    }
+   }
+  },
+  "karl_q13_ask": {
+   "de": "Ich brauche Butter. Machst du Butter aus Milch?",
+   "draft": true,
+   "en": "I need butter. Will you make butter from milk?",
+   "focus_words": [
+    "butter",
+    "milch",
+    "machen"
+   ],
+   "gestures": [],
+   "line_id": "karl_q13_ask",
+   "npc_id": "npc_karl",
+   "recasts": {
+    "repeat_slow": "Machst du … Butter … aus Milch?",
+    "wrong_action": "Nein — BUTTER. Aus Milch."
+   },
+   "response": {
+    "tier_1": {
+     "action": "craft",
+     "target": "obj_butterfass"
+    }
+   }
+  },
+  "karl_q13_done": {
+   "de": "Danke! Die Butter ist gut.",
+   "draft": true,
+   "en": "Thank you! The butter is good.",
+   "focus_words": [
+    "butter",
+    "chunk_danke"
+   ],
+   "gestures": [],
+   "line_id": "karl_q13_done",
+   "npc_id": "npc_karl"
+  },
+  "karl_q13_hint_milk": {
+   "de": "Zwei Milch, dann ein Butterfass.",
+   "draft": true,
+   "en": "Two milk, then a churn.",
+   "focus_words": [
+    "milch",
+    "butter"
+   ],
+   "gestures": [],
+   "line_id": "karl_q13_hint_milk",
+   "npc_id": "npc_karl"
   },
   "mila_q06_ask": {
    "de": "Sag Guten Morgen!",
@@ -935,6 +1409,148 @@
     "chunk_guten_morgen"
    ]
   },
+  "q07": {
+   "giver": "npc_anna",
+   "kind": "story",
+   "prereq": [
+    "q05"
+   ],
+   "quest_id": "q07",
+   "rep_gate": 10,
+   "rewards": {
+    "money": 10,
+    "rep": {
+     "npc_anna": 5
+    }
+   },
+   "steps": [
+    {
+     "hint_line": "anna_q07_hint_seed",
+     "line": "anna_q07_ask",
+     "objective": {
+      "action": "plant",
+      "count": 3,
+      "target": "obj_field"
+     }
+    },
+    {
+     "line": "anna_q07_water",
+     "objective": {
+      "action": "water",
+      "count": 3,
+      "target": "obj_field"
+     }
+    },
+    {
+     "hint_line": "anna_q07_hint_wait",
+     "line": "anna_q07_wait",
+     "objective": {
+      "action": "harvest",
+      "count": 1,
+      "target": "obj_field"
+     }
+    },
+    {
+     "line": "anna_q07_done"
+    }
+   ],
+   "vocab_tags": [
+    "pflanzen",
+    "kartoffel",
+    "giessen",
+    "ernten"
+   ]
+  },
+  "q08": {
+   "giver": "npc_anna",
+   "kind": "story",
+   "prereq": [
+    "q07"
+   ],
+   "quest_id": "q08",
+   "rep_gate": 12,
+   "rewards": {
+    "money": 12,
+    "rep": {
+     "npc_anna": 5
+    }
+   },
+   "steps": [
+    {
+     "hint_line": "anna_q08_hint_feed",
+     "line": "anna_q08_ask",
+     "objective": {
+      "action": "feed",
+      "target": "obj_cow"
+     }
+    },
+    {
+     "line": "anna_q08_hen",
+     "objective": {
+      "action": "feed",
+      "target": "obj_hen"
+     }
+    },
+    {
+     "hint_line": "anna_q08_hint_wait",
+     "line": "anna_q08_tomorrow",
+     "objective": {
+      "action": "collect",
+      "target": "obj_cow"
+     }
+    },
+    {
+     "line": "anna_q08_egg",
+     "objective": {
+      "action": "collect",
+      "target": "obj_hen"
+     }
+    },
+    {
+     "line": "anna_q08_done"
+    }
+   ],
+   "vocab_tags": [
+    "milch",
+    "ei",
+    "melken",
+    "sammeln"
+   ]
+  },
+  "q13": {
+   "giver": "npc_karl",
+   "kind": "story",
+   "prereq": [
+    "q08"
+   ],
+   "quest_id": "q13",
+   "rep_gate": 18,
+   "rewards": {
+    "money": 25,
+    "rep": {
+     "npc_karl": 6
+    }
+   },
+   "steps": [
+    {
+     "hint_line": "karl_q13_hint_milk",
+     "line": "karl_q13_ask",
+     "objective": {
+      "action": "craft",
+      "item": "butter",
+      "target": "obj_butterfass"
+     }
+    },
+    {
+     "line": "karl_q13_done"
+    }
+   ],
+   "vocab_tags": [
+    "milch",
+    "butter",
+    "machen"
+   ]
+  },
   "tpl_feed_animal": {
    "giver": "npc_anna",
    "kind": "template",
@@ -1032,6 +1648,24 @@
  },
  "schema": 1,
  "words": {
+  "apfel": {
+   "article": "der",
+   "cefr": "A1.1",
+   "concept": "apple",
+   "distractors": [
+    "brot",
+    "erdbeere",
+    "kartoffel"
+   ],
+   "draft": true,
+   "english": "apple",
+   "family": "food",
+   "intro_quest": "q07",
+   "lemma": "Apfel",
+   "plural": "Äpfel",
+   "pos": "noun",
+   "word_id": "apfel"
+  },
   "brot": {
    "article": "das",
    "cefr": "A1.1",
@@ -1048,6 +1682,23 @@
    "plural": "Brote",
    "pos": "noun",
    "word_id": "brot"
+  },
+  "butter": {
+   "article": "die",
+   "cefr": "A1.1",
+   "concept": "butter",
+   "distractors": [
+    "milch",
+    "kaese",
+    "ei"
+   ],
+   "draft": true,
+   "english": "butter",
+   "family": "farm",
+   "intro_quest": "q13",
+   "lemma": "Butter",
+   "pos": "noun",
+   "word_id": "butter"
   },
   "chunk_danke": {
    "cefr": "A1.1",
@@ -1116,6 +1767,58 @@
    "pos": "noun",
    "word_id": "ei"
   },
+  "eimer": {
+   "article": "der",
+   "cefr": "A1.2",
+   "concept": "bucket",
+   "distractors": [
+    "wasser",
+    "milch"
+   ],
+   "draft": true,
+   "english": "bucket",
+   "family": "farm",
+   "intro_quest": "q08",
+   "lemma": "Eimer",
+   "plural": "Eimer",
+   "pos": "noun",
+   "word_id": "eimer"
+  },
+  "erdbeere": {
+   "article": "die",
+   "cefr": "A1.1",
+   "concept": "strawberry",
+   "distractors": [
+    "karotte",
+    "salat",
+    "apfel"
+   ],
+   "draft": true,
+   "english": "strawberry",
+   "family": "food",
+   "intro_quest": "q07",
+   "lemma": "Erdbeere",
+   "plural": "Erdbeeren",
+   "pos": "noun",
+   "word_id": "erdbeere"
+  },
+  "ernten": {
+   "cefr": "A1.1",
+   "concept": "to_harvest",
+   "draft": true,
+   "english": "to harvest",
+   "family": "farm",
+   "forms": {
+    "du": "erntest",
+    "er_sie": "erntet",
+    "ich": "ernte",
+    "imperativ": "ernte"
+   },
+   "intro_quest": "q07",
+   "lemma": "ernten",
+   "pos": "verb",
+   "word_id": "ernten"
+  },
   "feld": {
    "article": "das",
    "cefr": "A1.1",
@@ -1132,6 +1835,23 @@
    "plural": "Felder",
    "pos": "noun",
    "word_id": "feld"
+  },
+  "fleisch": {
+   "article": "das",
+   "cefr": "A1.2",
+   "concept": "meat",
+   "distractors": [
+    "brot",
+    "kaese",
+    "ei"
+   ],
+   "draft": true,
+   "english": "meat",
+   "family": "farm",
+   "intro_quest": "q08",
+   "lemma": "Fleisch",
+   "pos": "noun",
+   "word_id": "fleisch"
   },
   "fuettern": {
    "cefr": "A1.1",
@@ -1198,6 +1918,24 @@
    "lemma": "Gras",
    "pos": "noun",
    "word_id": "gras"
+  },
+  "haus": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "house",
+   "distractors": [
+    "stall",
+    "laden",
+    "dorf"
+   ],
+   "draft": true,
+   "english": "house",
+   "family": "places",
+   "intro_quest": "q01",
+   "lemma": "Haus",
+   "plural": "Häuser",
+   "pos": "noun",
+   "word_id": "haus"
   },
   "heu": {
    "article": "das",
@@ -1277,6 +2015,59 @@
    "plural": "Hunde",
    "pos": "noun",
    "word_id": "hund"
+  },
+  "kaese": {
+   "article": "der",
+   "cefr": "A1.1",
+   "concept": "cheese",
+   "distractors": [
+    "butter",
+    "milch",
+    "brot"
+   ],
+   "draft": true,
+   "english": "cheese",
+   "family": "farm",
+   "intro_quest": "q13",
+   "lemma": "Käse",
+   "pos": "noun",
+   "word_id": "kaese"
+  },
+  "karotte": {
+   "article": "die",
+   "cefr": "A1.1",
+   "concept": "carrot",
+   "distractors": [
+    "kartoffel",
+    "salat",
+    "erdbeere"
+   ],
+   "draft": true,
+   "english": "carrot",
+   "family": "food",
+   "intro_quest": "q07",
+   "lemma": "Karotte",
+   "plural": "Karotten",
+   "pos": "noun",
+   "word_id": "karotte"
+  },
+  "kartoffel": {
+   "article": "die",
+   "cefr": "A1.1",
+   "concept": "potato",
+   "distractors": [
+    "karotte",
+    "salat",
+    "erdbeere"
+   ],
+   "draft": true,
+   "english": "potato",
+   "family": "food",
+   "intro_quest": "q07",
+   "lemma": "Kartoffel",
+   "plural": "Kartoffeln",
+   "pos": "noun",
+   "word_id": "kartoffel"
   },
   "katze": {
    "article": "die",
@@ -1358,6 +2149,23 @@
    "pos": "noun",
    "word_id": "laden"
   },
+  "machen": {
+   "cefr": "A1.1",
+   "concept": "to_make",
+   "draft": true,
+   "english": "to make",
+   "family": "general",
+   "forms": {
+    "du": "machst",
+    "er_sie": "macht",
+    "ich": "mache",
+    "imperativ": "mach"
+   },
+   "intro_quest": "q13",
+   "lemma": "machen",
+   "pos": "verb",
+   "word_id": "machen"
+  },
   "markt": {
    "article": "der",
    "cefr": "A1.1",
@@ -1374,6 +2182,23 @@
    "plural": "Märkte",
    "pos": "noun",
    "word_id": "markt"
+  },
+  "melken": {
+   "cefr": "A1.2",
+   "concept": "to_milk",
+   "draft": true,
+   "english": "to milk",
+   "family": "farm",
+   "forms": {
+    "du": "melkst",
+    "er_sie": "melkt",
+    "ich": "melke",
+    "imperativ": "melke"
+   },
+   "intro_quest": "q08",
+   "lemma": "melken",
+   "pos": "verb",
+   "word_id": "melken"
   },
   "milch": {
    "article": "die",
@@ -1457,6 +2282,23 @@
    "pos": "number",
    "word_id": "num_6"
   },
+  "pflanzen": {
+   "cefr": "A1.1",
+   "concept": "to_plant",
+   "draft": true,
+   "english": "to plant",
+   "family": "farm",
+   "forms": {
+    "du": "pflanzt",
+    "er_sie": "pflanzt",
+    "ich": "pflanze",
+    "imperativ": "pflanze"
+   },
+   "intro_quest": "q07",
+   "lemma": "pflanzen",
+   "pos": "verb",
+   "word_id": "pflanzen"
+  },
   "regen": {
    "article": "der",
    "cefr": "A1.1",
@@ -1474,6 +2316,24 @@
    "pos": "noun",
    "word_id": "regen"
   },
+  "salat": {
+   "article": "der",
+   "cefr": "A1.1",
+   "concept": "lettuce",
+   "distractors": [
+    "kartoffel",
+    "karotte",
+    "erdbeere"
+   ],
+   "draft": true,
+   "english": "lettuce",
+   "family": "food",
+   "intro_quest": "q07",
+   "lemma": "Salat",
+   "plural": "Salate",
+   "pos": "noun",
+   "word_id": "salat"
+  },
   "samen": {
    "article": "der",
    "cefr": "A1.1",
@@ -1489,6 +2349,23 @@
    "lemma": "Samen",
    "pos": "noun",
    "word_id": "samen"
+  },
+  "sammeln": {
+   "cefr": "A1.2",
+   "concept": "to_collect",
+   "draft": true,
+   "english": "to collect",
+   "family": "farm",
+   "forms": {
+    "du": "sammelst",
+    "er_sie": "sammelt",
+    "ich": "sammle",
+    "imperativ": "sammle"
+   },
+   "intro_quest": "q08",
+   "lemma": "sammeln",
+   "pos": "verb",
+   "word_id": "sammeln"
   },
   "schaf": {
    "article": "das",
@@ -1571,6 +2448,24 @@
    "pos": "noun",
    "word_id": "sonne"
   },
+  "stall": {
+   "article": "der",
+   "cefr": "A1.2",
+   "concept": "barn",
+   "distractors": [
+    "haus",
+    "feld",
+    "zaun"
+   ],
+   "draft": true,
+   "english": "barn",
+   "family": "farm",
+   "intro_quest": "q08",
+   "lemma": "Stall",
+   "plural": "Ställe",
+   "pos": "noun",
+   "word_id": "stall"
+  },
   "wasser": {
    "article": "das",
    "cefr": "A1.1",
@@ -1603,6 +2498,24 @@
    "lemma": "Wind",
    "pos": "noun",
    "word_id": "wind"
+  },
+  "zaun": {
+   "article": "der",
+   "cefr": "A1.2",
+   "concept": "fence",
+   "distractors": [
+    "stall",
+    "feld",
+    "haus"
+   ],
+   "draft": true,
+   "english": "fence",
+   "family": "farm",
+   "intro_quest": "q08",
+   "lemma": "Zaun",
+   "plural": "Zäune",
+   "pos": "noun",
+   "word_id": "zaun"
   }
  }
 }

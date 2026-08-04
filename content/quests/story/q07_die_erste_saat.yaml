@@ -1,0 +1,29 @@
+# Q07 "Die erste Saat" — Anna's farming chain, GDD Part 14 §4.
+#
+# The crop tutorial. Plant, water, come back tomorrow, harvest. Three verbs
+# introduced by DOING them (Part 3 §1, Tier I), and the coming-back is the
+# point: a quest you cannot finish today is what makes the player return to the
+# farm tomorrow with the words still in their head.
+#
+# It follows Q05 because seeds come from Petra's market — you cannot plant what
+# you have not learned to buy.
+
+quest_id: q07
+kind: story
+giver: npc_anna
+rep_gate: 10
+prereq: [q05]
+vocab_tags: [pflanzen, kartoffel, giessen, ernten]
+steps:
+  - line: anna_q07_ask
+    objective: {action: plant, target: obj_field, count: 3}
+    hint_line: anna_q07_hint_seed
+  - line: anna_q07_water
+    objective: {action: water, target: obj_field, count: 3}
+  - line: anna_q07_wait
+    objective: {action: harvest, target: obj_field, count: 1}
+    hint_line: anna_q07_hint_wait
+  - line: anna_q07_done
+rewards:
+  rep: {npc_anna: 5}
+  money: 10

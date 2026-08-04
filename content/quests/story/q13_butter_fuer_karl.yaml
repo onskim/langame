@@ -1,0 +1,22 @@
+# Q13 "Butter für Karl" — GDD Part 10 §5.3, verbatim from the quest table:
+# "Craft butter (Milch→Butter), deliver · Milch, Butter, machen/bringen".
+#
+# This is the first quest that spans the whole economy: an animal you fed gives
+# milk, a station turns milk into butter, and a villager across the map wants
+# it. Three systems, one errand, and the German for each step is a word the
+# player already earned on the farm.
+
+quest_id: q13
+kind: story
+giver: npc_karl
+rep_gate: 18
+prereq: [q08]
+vocab_tags: [milch, butter, machen]
+steps:
+  - line: karl_q13_ask
+    objective: {action: craft, target: obj_butterfass, item: butter}
+    hint_line: karl_q13_hint_milk
+  - line: karl_q13_done
+rewards:
+  rep: {npc_karl: 6}
+  money: 25

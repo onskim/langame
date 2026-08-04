@@ -1,0 +1,31 @@
+# Q08 "Milch und Ei" — Anna's farming chain, GDD Part 14 §4.
+#
+# The animal contract, taught by living it: feed today, collect tomorrow. Two of
+# the highest-frequency A1 nouns in the language attached to a ritual the player
+# will repeat every single morning for the rest of the game. Nothing a dialogue
+# tree can do competes with that for spacing.
+#
+# It deliberately spans two days. Feeding and collecting on the same day would
+# teach the words but not the contract.
+
+quest_id: q08
+kind: story
+giver: npc_anna
+rep_gate: 12
+prereq: [q07]
+vocab_tags: [milch, ei, melken, sammeln]
+steps:
+  - line: anna_q08_ask
+    objective: {action: feed, target: obj_cow}
+    hint_line: anna_q08_hint_feed
+  - line: anna_q08_hen
+    objective: {action: feed, target: obj_hen}
+  - line: anna_q08_tomorrow
+    objective: {action: collect, target: obj_cow}
+    hint_line: anna_q08_hint_wait
+  - line: anna_q08_egg
+    objective: {action: collect, target: obj_hen}
+  - line: anna_q08_done
+rewards:
+  rep: {npc_anna: 5}
+  money: 12

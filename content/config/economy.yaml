@@ -1,0 +1,142 @@
+# Farm economy — GDD Part 14 §4.3 (crop roster), §4.4 (growing rules), and the
+# animal products the farm's livestock yield.
+#
+# Every number here is a v0 guess to be balanced against the simulation
+# (Part 4 §10). They live in content, NOT in engine code, so tuning the farm is
+# a content edit and a recompile — never a code change.
+#
+# The roster is not chosen for farming: it IS the vocabulary. Each crop and each
+# product is a high-frequency A1 food word the player will meet in the shop, in
+# the café, in Oma Hilde's kitchen and on the market stall. Growing it is one
+# more meeting with the word.
+
+config_id: economy
+
+# --- growing rules (Part 14 §4.4) -------------------------------------------
+# Deliberately gentler than Stardew: a missed day pauses growth, it does not
+# destroy the plot. Punishing absence would make the farm a chore you dread,
+# and the farm exists to generate reasons to go and talk to people.
+growth:
+  # Days a plot may go unwatered before it wilts. Wilted is recoverable.
+  wilt_after_dry_days: 2
+  # ...and before it dies. Four days is roughly "you went to the city".
+  die_after_dry_days: 4
+  # Watering a wilted plot revives it but costs a day of growth.
+  revive_growth_penalty_days: 1
+  # Rain waters every plot overnight. This is the whole reason the Wetter app
+  # has stakes: reading tomorrow's forecast and deciding NOT to water is
+  # comprehension paying rent (Part 12 §5).
+  rain_waters: [regen, gewitter]
+  # How many visible growth stages a crop sprite has, seed to harvest.
+  stages: 4
+
+# --- crops (Part 14 §4.3) ----------------------------------------------------
+# `days` is days of WATERED growth, not calendar days.
+# `regrows` crops go back to their last stage after harvest instead of clearing.
+crops:
+  kartoffel:
+    season: fruehling
+    seed_price: 6
+    days: 5
+    sell: 12
+  karotte:
+    season: fruehling
+    seed_price: 5
+    days: 4
+    sell: 9
+  salat:
+    season: fruehling
+    seed_price: 4
+    days: 3
+    sell: 7
+  erdbeere:
+    season: fruehling
+    seed_price: 12
+    days: 7
+    sell: 15
+    regrows: true
+  tomate:
+    season: sommer
+    seed_price: 8
+    days: 6
+    sell: 13
+    regrows: true
+  gurke:
+    season: sommer
+    seed_price: 7
+    days: 5
+    sell: 11
+  mais:
+    season: sommer
+    seed_price: 10
+    days: 8
+    sell: 18
+  kuerbis:
+    season: herbst
+    seed_price: 15
+    days: 9
+    sell: 30
+  zwiebel:
+    season: herbst
+    seed_price: 6
+    days: 5
+    sell: 11
+  kohl:
+    season: herbst
+    seed_price: 9
+    days: 7
+    sell: 16
+
+# --- animals -----------------------------------------------------------------
+# The contract is the same for every animal and it is the lesson: FEED IT AND IT
+# GIVES. An animal fed today has something for you tomorrow; an unfed animal has
+# nothing, and says so. `feed_item` is what it eats, `product` what it yields.
+#
+# `interval_days` is how often it can be collected. The cow and the hen are
+# daily rituals — that daily-ness is what makes "die Milch" and "das Ei" stick.
+# The pig is on a slow cycle: the game never depicts slaughter, and the product
+# is simply an item that appears in the inventory. If a cosier reading is
+# wanted, swapping `fleisch` for `trueffel` here is a one-line content change.
+animals:
+  obj_cow:
+    animal_word: kuh
+    feed_item: heu
+    product: milch
+    interval_days: 1
+    sell: 14
+  obj_hen:
+    animal_word: huhn
+    feed_item: gras
+    product: ei
+    interval_days: 1
+    sell: 6
+  obj_pig:
+    animal_word: schwein
+    feed_item: heu
+    product: fleisch
+    interval_days: 6
+    sell: 40
+
+# --- crafting ----------------------------------------------------------------
+# Recipes are data so a new one is a content edit. Q13 in Part 10 §5.3 ("Butter
+# für Karl") depends on this existing.
+recipes:
+  butter:
+    station: obj_butterfass
+    inputs: {milch: 2}
+    output: butter
+    output_count: 1
+    sell: 22
+  kaese:
+    station: obj_butterfass
+    inputs: {milch: 3}
+    output: kaese
+    output_count: 1
+    sell: 30
+
+# --- what everything is worth ------------------------------------------------
+# Raw goods the player can sell that are not crops, animal products or crafts.
+sell_prices:
+  heu: 2
+  gras: 1
+  samen: 3

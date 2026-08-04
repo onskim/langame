@@ -37,6 +37,7 @@ run "week5" res://dev/acceptance_week5.tscn
 run "worlddeep" res://dev/acceptance_worlddeep.tscn
 run "world" res://dev/acceptance_world.tscn
 run "scenes" res://dev/acceptance_scenes.tscn
+run "farm" res://dev/acceptance_farm.tscn
 
 echo "=== content lint ==="
 (cd .. && .venv/bin/python tools/lint_content.py | tail -1) || fail=1

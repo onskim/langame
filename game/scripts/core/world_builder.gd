@@ -160,6 +160,17 @@ static func build_water_collision(parent: Node2D, width: int, height: int,
 
 ## Ground is two layers so material edges blend: lanes carved out of grass on
 ## the base, tilled soil stamped on top wherever a field is.
+## The player's crop field. Shared by the painter and the crop simulation for
+## the same reason the pond shares its predicate: soil you can see but not plant
+## in, or plant in but not see, is the same class of lie.
+static func in_player_field(x: int, y: int) -> bool:
+	return x >= 5 and x <= 19 and y >= 25 and y <= 33
+
+
+static func in_anna_field(x: int, y: int) -> bool:
+	return x >= 34 and x <= 46 and y >= 4 and y <= 9
+
+
 ## Where the farm's pond sits — shared by the painter and the collision pass so
 ## the water you see and the water that stops you can never disagree.
 static func farm_is_water(x: int, y: int) -> bool:
@@ -205,10 +216,8 @@ static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null,
 	if not soil.is_valid():
 		return
 	var is_soil := func(x: int, y: int) -> bool:
-		var player_field: bool = x >= 5 and x <= 19 and y >= 25 and y <= 33
 		# Anna's plot is tilled too, so the two holdings read as the same work.
-		var anna_field: bool = x >= 34 and x <= 46 and y >= 4 and y <= 9
-		return player_field or anna_field
+		return in_player_field(x, y) or in_anna_field(x, y)
 	stamp(crops, soil, FARM_W, FARM_H, is_soil, false)
 
 	if water == null:

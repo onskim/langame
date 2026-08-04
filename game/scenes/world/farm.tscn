@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm_map.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/actors/pet.tscn" id="19_pet"]
 [ext_resource type="Texture2D" path="res://assets/sprites/pet_cat.png" id="20_cat"]
 [ext_resource type="Texture2D" path="res://assets/sprites/field_wet_patch.png" id="21_fieldwet"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hen.png" id="22_hen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
@@ -47,6 +48,8 @@ default_spawn = Vector2(384, 336)
 [node name="Water" type="TileMapLayer" parent="."]
 
 [node name="Fence" type="TileMapLayer" parent="."]
+
+[node name="CropSprites" type="Node2D" parent="."]
 
 [node name="Locations" type="Node2D" parent="."]
 
@@ -98,7 +101,7 @@ shape = SubResource("RectangleShape2D_gate")
 position = Vector2(616, 368)
 script = ExtResource("5_worldobj")
 object_id = "obj_cow"
-action = "feed"
+action = "animal"
 requires_item = "heu"
 
 [node name="Sprite2D" type="Sprite2D" parent="Cow"]
@@ -113,7 +116,7 @@ shape = SubResource("RectangleShape2D_big")
 position = Vector2(616, 264)
 script = ExtResource("5_worldobj")
 object_id = "obj_pig"
-action = "feed"
+action = "animal"
 requires_item = "heu"
 
 [node name="Sprite2D" type="Sprite2D" parent="Pig"]
@@ -143,8 +146,7 @@ shape = SubResource("RectangleShape2D_small")
 position = Vector2(192, 464)
 script = ExtResource("5_worldobj")
 object_id = "obj_field"
-action = "water"
-requires_item = "wasser"
+action = "farm"
 consumes_item = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Field"]
@@ -154,6 +156,21 @@ texture = ExtResource("21_fieldwet")
 
 [node name="Shape" type="CollisionShape2D" parent="Field/Area2D"]
 shape = SubResource("RectangleShape2D_big")
+
+[node name="Hen" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(672, 296)
+script = ExtResource("5_worldobj")
+object_id = "obj_hen"
+action = "animal"
+requires_item = "gras"
+
+[node name="Sprite2D" type="Sprite2D" parent="Hen"]
+texture = ExtResource("22_hen")
+
+[node name="Area2D" type="Area2D" parent="Hen"]
+
+[node name="Shape" type="CollisionShape2D" parent="Hen/Area2D"]
+shape = SubResource("RectangleShape2D_small")
 
 [node name="Trough" type="Node2D" parent="." groups=["world_object"]]
 position = Vector2(600, 328)

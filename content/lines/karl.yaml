@@ -1,0 +1,36 @@
+# Karl's dialogue lines. Shape per GDD Part 11 §5.
+#
+# DRAFT GERMAN — every `de` field below is LLM-drafted and unreviewed.
+# Part 5 §4: nothing ships until a native/C2 reviewer clears it.
+#
+# Karl is the baker (Part 13). His Q13 is the first errand that spans the whole
+# economy — an animal you fed, a station you used, a person across the map.
+
+- line_id: karl_q13_ask
+  npc_id: npc_karl
+  de: "Ich brauche Butter. Machst du Butter aus Milch?"
+  en: "I need butter. Will you make butter from milk?"
+  focus_words: [butter, milch, machen]
+  gestures: []
+  response:
+    tier_1: {action: craft, target: obj_butterfass}
+  recasts:
+    wrong_action: "Nein — BUTTER. Aus Milch."
+    repeat_slow: "Machst du … Butter … aus Milch?"
+  draft: true
+
+- line_id: karl_q13_hint_milk
+  npc_id: npc_karl
+  de: "Zwei Milch, dann ein Butterfass."
+  en: "Two milk, then a churn."
+  focus_words: [milch, butter]
+  gestures: []
+  draft: true
+
+- line_id: karl_q13_done
+  npc_id: npc_karl
+  de: "Danke! Die Butter ist gut."
+  en: "Thank you! The butter is good."
+  focus_words: [butter, chunk_danke]
+  gestures: []
+  draft: true

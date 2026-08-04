@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://scripts/core/door.gd" id="3_door"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bed.png" id="4_bed"]
+[ext_resource type="Script" path="res://scripts/core/world_object.gd" id="5_worldobj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/butter_churn.png" id="6_churn"]
 [ext_resource type="Script" path="res://scripts/core/interactable.gd" id="5_interactable"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bed"]
@@ -41,6 +43,21 @@ arrival_marker = "from_farmhouse"
 sign_key = "exit"
 
 [node name="Shape" type="CollisionShape2D" parent="Doors/Exit"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="Churn" type="Node2D" parent="." groups=["world_object"]]
+position = Vector2(96, 152)
+script = ExtResource("5_worldobj")
+object_id = "obj_butterfass"
+action = "craft"
+consumes_item = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Churn"]
+texture = ExtResource("6_churn")
+
+[node name="Area2D" type="Area2D" parent="Churn"]
+
+[node name="Shape" type="CollisionShape2D" parent="Churn/Area2D"]
 shape = SubResource("RectangleShape2D_door")
 
 [node name="Furniture" type="Node2D" parent="."]

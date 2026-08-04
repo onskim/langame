@@ -85,3 +85,54 @@ diegetic:
     de: "Es ist dunkel…"
     en: "It's dark in here…"
     draft: true
+  # The farm explains itself in German rather than falling silent. A refusal
+  # that says nothing reads as a bug; a refusal that says "die Kuh hat Hunger"
+  # is one more meeting with the word (Part 3 §2 — teach, never punish).
+  animal_hungry:
+    de: "Das Tier hat Hunger."
+    en: "The animal is hungry."
+    draft: true
+  animal_not_yet:
+    de: "Morgen, ja? Heute nicht."
+    en: "Tomorrow, yes? Not today."
+    draft: true
+  animal_already_collected:
+    de: "Heute schon. Morgen wieder."
+    en: "Already today. Tomorrow again."
+    draft: true
+  missing_ingredients:
+    de: "Das reicht noch nicht."
+    en: "That's not enough yet."
+    draft: true
+  not_a_field:
+    de: "Hier ist kein Feld."
+    en: "There's no field here."
+    draft: true
+  no_seed:
+    de: "Du hast keinen Samen."
+    en: "You have no seed."
+    draft: true
+  already_planted:
+    de: "Hier wächst schon etwas."
+    en: "Something is already growing here."
+    draft: true
+  nothing_planted:
+    de: "Hier wächst nichts."
+    en: "Nothing is growing here."
+    draft: true
+  already_watered:
+    de: "Schon gegossen."
+    en: "Already watered."
+    draft: true
+  not_ripe:
+    de: "Das ist noch nicht reif."
+    en: "That isn't ripe yet."
+    draft: true
+  no_water:
+    de: "Du brauchst Wasser."
+    en: "You need water."
+    draft: true
+  rained_overnight:
+    de: "Es hat geregnet."
+    en: "It rained."
+    draft: true

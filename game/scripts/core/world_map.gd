@@ -213,15 +213,29 @@ func _door_in_reach() -> Door:
 
 func _on_world_object(who: WorldObject) -> void:
 	if who.is_pickup:
-		GameState.carrying = who.grants_item
+		# Pickups go into the inventory, which puts the item in hand if the
+		# hands are free. Setting `carrying` directly used to mean picking up a
+		# second bale replaced the first and the player owned neither.
+		Inventory.add(who.grants_item, 1)
 		HUD.refresh()
-		print("[map] picked up %s" % who.grants_item)
+		print("[map] picked up %s (now %d)"
+			% [who.grants_item, Inventory.count(who.grants_item)])
 		return
 
 	if who.action == "":
 		return
 
-	if who.requires_item != "" and GameState.carrying != who.requires_item:
+	# --- the farm's own verbs -------------------------------------------------
+	# These resolve against the simulation rather than the dialogue runner,
+	# because their answer depends on the state of the world (is the cow fed, is
+	# the plot ready) and not on what an NPC just asked for. They still report
+	# to the dialogue runner afterwards, so a quest step listening for "milk the
+	# cow" still hears it.
+	if _handle_farm_action(who):
+		HUD.refresh()
+		return
+
+	if who.requires_item != "" and not Inventory.has(who.requires_item):
 		var hint: String = Quests.current_step().get("hint_line", "")
 		if hint != "" and not Dialogue.is_open:
 			Dialogue.play_line(hint)
@@ -229,8 +243,132 @@ func _on_world_object(who: WorldObject) -> void:
 
 	var correct: bool = Dialogue.submit_action(who.action, who.object_id, GameState.carrying)
 	if correct and who.requires_item != "" and who.consumes_item:
-		GameState.carrying = ""
+		Inventory.remove(who.requires_item, 1)
 	HUD.refresh()
+
+
+## Farm verbs the simulation owns. Returns true if this action was handled here.
+func _handle_farm_action(who: WorldObject) -> bool:
+	match who.action:
+		"animal":
+			return _handle_animal_action(who)
+		"farm":
+			return _handle_field_action(who)
+		"craft":
+			var recipes := Crafting.recipes_at(who.object_id)
+			for recipe_id in recipes:
+				if Crafting.can_craft(recipe_id):
+					var made := Crafting.craft(recipe_id)
+					DayEndCard.note_word(made)
+					Dialogue.submit_action("craft", who.object_id, made)
+					return true
+			_say_sign("missing_ingredients")
+			return true
+	return false
+
+
+## An animal answers ONE key, and what it does depends on what it needs. Take
+## first, feed second: the player who walks up to a cow with milk waiting wants
+## the milk, and making them press E twice to get past a feeding they did not
+## ask for is the kind of friction that ends a daily ritual.
+func _handle_animal_action(who: WorldObject) -> bool:
+	if not Livestock.is_animal(who.object_id):
+		return false
+	if Livestock.can_collect(who.object_id):
+		var item := Livestock.collect(who.object_id)
+		DayEndCard.note_word(item)
+		Dialogue.submit_action("collect", who.object_id, item)
+		return true
+	if not Livestock.was_fed_today(who.object_id):
+		var feed := Livestock.feed_item(who.object_id)
+		if feed != "" and not Inventory.has(feed):
+			# Naming what is missing is the teaching moment: "die Kuh hat
+			# Hunger" while you stand there holding nothing is a vocabulary
+			# lesson delivered exactly when it lands.
+			_say_sign("animal_hungry")
+			return true
+		if Livestock.feed(who.object_id):
+			# Feeding is also the comprehension event a quest may be waiting on.
+			Dialogue.submit_action("feed", who.object_id, feed)
+			return true
+	_say_sign(Livestock.refusal_reason(who.object_id))
+	return true
+
+
+## The field is worked a PLOT at a time, and the plot is the one the player is
+## standing on. Using the player's own tile rather than the object's means the
+## field is a place you walk around in, not a single button.
+func _handle_field_action(who: WorldObject) -> bool:
+	var cell := Vector2i(
+		int(floor(_player.global_position.x / float(WangTileset.TILE))),
+		int(floor(_player.global_position.y / float(WangTileset.TILE))))
+	if not Farm.is_plot(cell):
+		_say_sign("not_a_field")
+		return true
+
+	# ONE verb, chosen by what the plot needs. A field with three buttons makes
+	# the player think about the interface; a field with one makes them think
+	# about the field. The German the action reports differs per branch, which
+	# is what turns a single keypress into three different words.
+	if not Farm.is_planted(cell):
+		var seed_crop := _seed_in_hand()
+		if seed_crop == "":
+			_say_sign("no_seed")
+			return true
+		if not Farm.plant(cell, seed_crop):
+			_say_sign("already_planted")
+			return true
+		Inventory.remove(seed_crop, 1)
+		DayEndCard.note_word(seed_crop)
+		Dialogue.submit_action("plant", who.object_id, seed_crop)
+	elif Farm.is_ready(cell):
+		var picked := Farm.harvest(cell)
+		if picked == "":
+			_say_sign("not_ripe")
+			return true
+		DayEndCard.note_word(picked)
+		Dialogue.submit_action("harvest", who.object_id, picked)
+	elif Farm.is_dead(cell):
+		Farm.clear_plot(cell)
+	else:
+		if not Inventory.has("wasser"):
+			_say_sign("no_water")
+			return true
+		if not Farm.water(cell):
+			_say_sign("already_watered")
+			return true
+		Dialogue.submit_action("water", who.object_id, "wasser")
+	_refresh_crops()
+	return true
+
+
+## A held item that names a crop is a seed for it. Seeds are not separate items:
+## "die Kartoffel" in your bag IS the potato you plant and the potato you sell,
+## which keeps one word doing all the work instead of inventing "Kartoffelsamen".
+func _seed_in_hand() -> String:
+	if GameState.carrying != "" and not Farm.crop_def(GameState.carrying).is_empty():
+		return GameState.carrying
+	for row in Inventory.contents():
+		var item := str(row["item"])
+		if not Farm.crop_def(item).is_empty():
+			return item
+	return ""
+
+
+func _refresh_crops() -> void:
+	if has_method("repaint_crops"):
+		call("repaint_crops")
+
+
+## Say a diegetic one-liner by content key. The world explains itself in German
+## rather than falling silent, which is the difference between a refusal that
+## teaches and one that just feels broken (Part 3 §2).
+func _say_sign(key: String) -> void:
+	if key == "" or Dialogue.is_open:
+		return
+	var entry := Config.diegetic(key)
+	if not entry.is_empty():
+		Dialogue.play_diegetic(entry)
 
 
 func _on_interactable(who: Interactable) -> void:

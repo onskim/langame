@@ -1,0 +1,220 @@
+# What the farm produces, and the verbs that produce it — GDD Part 10 §5.1
+# farm family, Part 14 §4.
+#
+# EVERY German field here is LLM-drafted and carries `draft: true`.
+# Nothing loses that flag until a native/C2 reviewer clears it (Part 5 §4 step 4).
+#
+# These are chosen to be earned rather than taught. A word you meet because you
+# milked a cow this morning, and will meet again tomorrow morning, is doing the
+# spacing work by itself — the roster IS the curriculum (Part 14 §4.3).
+
+# --- what the animals give ---------------------------------------------------
+- word_id: butter
+  concept: butter
+  lemma: Butter
+  article: die
+  pos: noun
+  english: butter
+  family: farm
+  cefr: A1.1
+  intro_quest: q13
+  distractors: [milch, kaese, ei]
+  draft: true
+
+- word_id: kaese
+  concept: cheese
+  lemma: Käse
+  article: der
+  pos: noun
+  english: cheese
+  family: farm
+  cefr: A1.1
+  intro_quest: q13
+  distractors: [butter, milch, brot]
+  draft: true
+
+- word_id: fleisch
+  concept: meat
+  lemma: Fleisch
+  article: das
+  pos: noun
+  english: meat
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  distractors: [brot, kaese, ei]
+  draft: true
+
+- word_id: eimer
+  concept: bucket
+  lemma: Eimer
+  article: der
+  plural: Eimer
+  pos: noun
+  english: bucket
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  distractors: [wasser, milch]
+  draft: true
+
+- word_id: stall
+  concept: barn
+  lemma: Stall
+  article: der
+  plural: Ställe
+  pos: noun
+  english: barn
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  distractors: [haus, feld, zaun]
+  draft: true
+
+# --- the crops (Part 14 §4.3 Frühling roster) --------------------------------
+- word_id: kartoffel
+  concept: potato
+  lemma: Kartoffel
+  article: die
+  plural: Kartoffeln
+  pos: noun
+  english: potato
+  family: food
+  cefr: A1.1
+  intro_quest: q07
+  distractors: [karotte, salat, erdbeere]
+  draft: true
+
+- word_id: karotte
+  concept: carrot
+  lemma: Karotte
+  article: die
+  plural: Karotten
+  pos: noun
+  english: carrot
+  family: food
+  cefr: A1.1
+  intro_quest: q07
+  distractors: [kartoffel, salat, erdbeere]
+  draft: true
+
+- word_id: salat
+  concept: lettuce
+  lemma: Salat
+  article: der
+  plural: Salate
+  pos: noun
+  english: lettuce
+  family: food
+  cefr: A1.1
+  intro_quest: q07
+  distractors: [kartoffel, karotte, erdbeere]
+  draft: true
+
+- word_id: erdbeere
+  concept: strawberry
+  lemma: Erdbeere
+  article: die
+  plural: Erdbeeren
+  pos: noun
+  english: strawberry
+  family: food
+  cefr: A1.1
+  intro_quest: q07
+  distractors: [karotte, salat, apfel]
+  draft: true
+
+# --- the verbs of the farm loop ----------------------------------------------
+- word_id: pflanzen
+  concept: to_plant
+  lemma: pflanzen
+  pos: verb
+  forms: {ich: pflanze, du: pflanzt, er_sie: pflanzt, imperativ: pflanze}
+  english: to plant
+  family: farm
+  cefr: A1.1
+  intro_quest: q07
+  draft: true
+
+- word_id: ernten
+  concept: to_harvest
+  lemma: ernten
+  pos: verb
+  forms: {ich: ernte, du: erntest, er_sie: erntet, imperativ: ernte}
+  english: to harvest
+  family: farm
+  cefr: A1.1
+  intro_quest: q07
+  draft: true
+
+- word_id: melken
+  concept: to_milk
+  lemma: melken
+  pos: verb
+  forms: {ich: melke, du: melkst, er_sie: melkt, imperativ: melke}
+  english: to milk
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  draft: true
+
+- word_id: sammeln
+  concept: to_collect
+  lemma: sammeln
+  pos: verb
+  forms: {ich: sammle, du: sammelst, er_sie: sammelt, imperativ: sammle}
+  english: to collect
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  draft: true
+
+- word_id: machen
+  concept: to_make
+  lemma: machen
+  pos: verb
+  forms: {ich: mache, du: machst, er_sie: macht, imperativ: mach}
+  english: to make
+  family: general
+  cefr: A1.1
+  intro_quest: q13
+  draft: true
+
+- word_id: apfel
+  concept: apple
+  lemma: Apfel
+  article: der
+  plural: Äpfel
+  pos: noun
+  english: apple
+  family: food
+  cefr: A1.1
+  intro_quest: q07
+  distractors: [brot, erdbeere, kartoffel]
+  draft: true
+
+- word_id: haus
+  concept: house
+  lemma: Haus
+  article: das
+  plural: Häuser
+  pos: noun
+  english: house
+  family: places
+  cefr: A1.1
+  intro_quest: q01
+  distractors: [stall, laden, dorf]
+  draft: true
+
+- word_id: zaun
+  concept: fence
+  lemma: Zaun
+  article: der
+  plural: Zäune
+  pos: noun
+  english: fence
+  family: farm
+  cefr: A1.2
+  intro_quest: q08
+  distractors: [stall, feld, haus]
+  draft: true
