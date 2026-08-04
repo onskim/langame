@@ -1,0 +1,375 @@
+{
+ "source": "founder-reference",
+ "source_file": "farmland_reference.png",
+ "lower": "tilled crop soil, furrowed and clodded, ready for planting",
+ "upper": "lush meadow grass with wildflowers, leafy clumps and stones",
+ "tile_size": 16,
+ "grid": {
+  "cols": 6,
+  "rows": 13
+ },
+ "tiles": [
+  {
+   "atlas_coords": [
+    0,
+    0
+   ],
+   "variants": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ],
+    [
+     3,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     5,
+     0
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    1
+   ],
+   "variants": [
+    [
+     0,
+     1
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    2
+   ],
+   "variants": [
+    [
+     0,
+     2
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    3
+   ],
+   "variants": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    4
+   ],
+   "variants": [
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    5
+   ],
+   "variants": [
+    [
+     0,
+     5
+    ]
+   ],
+   "corners": {
+    "NE": "lower",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    6
+   ],
+   "variants": [
+    [
+     0,
+     6
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     2,
+     6
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    7
+   ],
+   "variants": [
+    [
+     0,
+     7
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     4,
+     7
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    8
+   ],
+   "variants": [
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     8
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "lower",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    9
+   ],
+   "variants": [
+    [
+     0,
+     9
+    ],
+    [
+     1,
+     9
+    ],
+    [
+     2,
+     9
+    ],
+    [
+     3,
+     9
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     5,
+     9
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    10
+   ],
+   "variants": [
+    [
+     0,
+     10
+    ],
+    [
+     1,
+     10
+    ],
+    [
+     2,
+     10
+    ],
+    [
+     3,
+     10
+    ],
+    [
+     4,
+     10
+    ],
+    [
+     5,
+     10
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "lower",
+    "SW": "upper"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    11
+   ],
+   "variants": [
+    [
+     0,
+     11
+    ],
+    [
+     1,
+     11
+    ],
+    [
+     2,
+     11
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "lower"
+   }
+  },
+  {
+   "atlas_coords": [
+    0,
+    12
+   ],
+   "variants": [
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     12
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     3,
+     12
+    ],
+    [
+     4,
+     12
+    ],
+    [
+     5,
+     12
+    ]
+   ],
+   "corners": {
+    "NE": "upper",
+    "NW": "upper",
+    "SE": "upper",
+    "SW": "upper"
+   }
+  }
+ ]
+}

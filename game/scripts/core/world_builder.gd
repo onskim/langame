@@ -25,8 +25,8 @@ const VILLAGE_W := 46
 const VILLAGE_H := 34
 
 const PACK_PATH_GRASS := "res://assets/tilesets/ground_ref"
-const PACK_GRASS_SOIL := "res://assets/tilesets/ground_grass_soil"
-const PACK_SOIL_WATERED := "res://assets/tilesets/ground_soil_watered"
+const PACK_GRASS_SOIL := "res://assets/tilesets/ground_soil_ref"
+const PACK_SOIL_WATERED := "res://assets/tilesets/ground_wetsoil_ref"
 const PACK_GRASS_WILD := "res://assets/tilesets/ground_grass_wild"
 const PACK_GRASS_WATER := "res://assets/tilesets/ground_water_ref"
 
@@ -94,16 +94,32 @@ static func pack_layer(layer: TileMapLayer, base_path: String) -> WangTileset:
 
 ## Stamp only cells that touch the region, leaving the rest of the layer
 ## transparent so whatever is painted below shows through at the seams.
+##
+## `region_is_upper` exists because packs disagree about which terrain they call
+## "upper". The PixelLab sets treat the stamped material as upper; packs cut from
+## a founder reference always treat GRASS as upper, so for those the region — the
+## soil — is the LOWER terrain and every corner flag has to be flipped. Getting
+## this backwards paints a field of grass inside a meadow and reads as "nothing
+## happened", which is exactly how the first ground tileset shipped inverted.
 static func stamp(layer: TileMapLayer, pack: WangTileset, width: int, height: int,
-		in_region: Callable) -> void:
+		in_region: Callable, region_is_upper: bool = true) -> void:
 	for y in range(height):
 		for x in range(width):
 			var nw: bool = in_region.call(x, y)
 			var ne: bool = in_region.call(x + 1, y)
 			var sw: bool = in_region.call(x, y + 1)
 			var se: bool = in_region.call(x + 1, y + 1)
-			if nw or ne or sw or se:
-				layer.set_cell(Vector2i(x, y), 0, pack.atlas_for(ne, nw, se, sw))
+			if not (nw or ne or sw or se):
+				continue
+			var cell := Vector2i(x, y)
+			# `cell` seeds the variant pick. Omitting it — as this did — pins
+			# every cell to variant 0, so a plot tiles as visibly as wallpaper
+			# no matter how many variants the pack carries.
+			if region_is_upper:
+				layer.set_cell(cell, 0, pack.atlas_for(ne, nw, se, sw, cell))
+			else:
+				layer.set_cell(cell, 0,
+					pack.atlas_for(not ne, not nw, not se, not sw, cell))
 
 
 ## An irregular pond. Round ponds read as decals; the reference's water has
@@ -182,7 +198,9 @@ static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null,
 
 	if crops == null:
 		return
-	# ground_grass_soil: lower = grass, upper = tilled soil.
+	# ground_soil_ref is cut from the founder's farmland reference, so GRASS is
+	# the upper terrain and the tilled soil is lower — hence region_is_upper
+	# false below.
 	var soil := pack_layer(crops, PACK_GRASS_SOIL)
 	if not soil.is_valid():
 		return
@@ -191,7 +209,7 @@ static func paint_ground(layer: TileMapLayer, crops: TileMapLayer = null,
 		# Anna's plot is tilled too, so the two holdings read as the same work.
 		var anna_field: bool = x >= 34 and x <= 46 and y >= 4 and y <= 9
 		return player_field or anna_field
-	stamp(crops, soil, FARM_W, FARM_H, is_soil)
+	stamp(crops, soil, FARM_W, FARM_H, is_soil, false)
 
 	if water == null:
 		return

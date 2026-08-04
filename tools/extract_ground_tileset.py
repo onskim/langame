@@ -52,11 +52,21 @@ def is_grass(rgb):
     return g > r and g > 70 and not is_water(rgb)
 
 
+# Tilled soil is browner and DARKER than a dry path — `is_dirt`'s r > 110 floor
+# rejects most of it, and the watered state is darker still. One predicate covers
+# both: any pixel that is warm, brown, and not green. It is safe to be this loose
+# because a pack is always extracted from a crop containing only two materials.
+def is_soil(rgb):
+    r, g, b = rgb[:3]
+    return r > g + 12 and r > 60 and b < r - 25
+
+
 # The non-grass terrain a pack blends against.
-LOWER_TESTS = {"dirt": is_dirt, "water": is_water}
+LOWER_TESTS = {"dirt": is_dirt, "water": is_water, "soil": is_soil}
 LOWER_LABELS = {
     "dirt": "warm tan hard-packed dirt path with pebbles",
     "water": "clear blue pond water with lily pads and a rocky shore",
+    "soil": "tilled crop soil, furrowed and clodded, ready for planting",
 }
 
 
@@ -134,6 +144,10 @@ def main():
                     help="max tiles kept per corner combination")
     ap.add_argument("--lower", choices=sorted(LOWER_TESTS), default="dirt",
                     help="the terrain grass blends against in this reference")
+    # A reference sheet often stacks several materials in bands. Cropping to one
+    # band keeps the classifier honest: within a band there really are only two
+    # terrains, which is the assumption corner-Wang classification rests on.
+    ap.add_argument("--crop", help="left,top,right,bottom in SOURCE pixels")
     ap.add_argument("--name", default="ground_ref")
     args = ap.parse_args()
 
@@ -144,6 +158,8 @@ def main():
     is_lower = LOWER_TESTS[args.lower]
 
     im = Image.open(args.source).convert("RGB")
+    if args.crop:
+        im = im.crop(tuple(int(v) for v in args.crop.split(",")))
     im = downsample(im, args.scale)
     im = quantise(im, args.colors)
     w, h = im.size

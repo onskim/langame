@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/farm_map.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/bld_anna_house.png" id="18_annahouse"]
 [ext_resource type="PackedScene" path="res://scenes/actors/pet.tscn" id="19_pet"]
 [ext_resource type="Texture2D" path="res://assets/sprites/pet_cat.png" id="20_cat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/field_wet_patch.png" id="21_fieldwet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_big"]
 size = Vector2(32, 26)
@@ -147,9 +148,7 @@ requires_item = "wasser"
 consumes_item = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Field"]
-texture = ExtResource("8_hay")
-modulate = Color(0.55, 0.78, 0.45, 1)
-scale = Vector2(3, 3)
+texture = ExtResource("21_fieldwet")
 
 [node name="Area2D" type="Area2D" parent="Field"]
 
