@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://dev/shot_harness_week2.gd" id="1_h2"]
+
+[node name="ShotHarnessWeek2" type="Node"]
+script = ExtResource("1_h2")

@@ -37,6 +37,10 @@ C = {
     "cow_body": (238, 238, 232, 255),
     "cow_spot": (52, 48, 46, 255),
     "cow_udder": (226, 150, 154, 255),
+    "pig_body": (222, 146, 152, 255),
+    "pig_ear": (198, 122, 130, 255),
+    "pig_snout": (176, 104, 114, 255),
+    "pig_hoof": (86, 62, 62, 255),
     "hay": (214, 182, 96, 255),
     "hay_dark": (184, 152, 74, 255),
     "water": (86, 152, 196, 255),
@@ -205,6 +209,39 @@ def cow():
     return px
 
 
+def pig():
+    """32x32, side view facing left. Deliberately NOT a recoloured cow: shorter
+    legs, rounder body, snout, curly tail. The Tier I wrong-action mechanic
+    (feed the pig instead of the cow) only works if they read apart instantly.
+    """
+    px = blank(32, 32)
+
+    def rect(x0, y0, x1, y1, col):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if 0 <= x < 32 and 0 <= y < 32:
+                    px[y][x] = C[col]
+
+    rect(7, 13, 25, 24, "pig_body")      # body: low and round
+    rect(5, 12, 11, 21, "pig_body")      # head
+    rect(4, 11, 5, 13, "pig_ear")        # ears (forward, floppy)
+    rect(8, 10, 10, 12, "pig_ear")
+    rect(3, 17, 6, 20, "pig_snout")      # snout
+    px[18][4] = C["outline"]             # nostrils
+    px[18][5] = C["outline"]
+    px[14][8] = C["outline"]             # eye
+    rect(9, 25, 11, 29, "pig_body")      # legs: short, stubby
+    rect(13, 25, 15, 29, "pig_body")
+    rect(19, 25, 21, 29, "pig_body")
+    rect(22, 25, 24, 29, "pig_body")
+    for x in (9, 13, 19, 22):
+        rect(x, 29, x + 2, 30, "pig_hoof")
+    rect(26, 15, 27, 17, "pig_body")     # curly tail
+    rect(27, 14, 28, 15, "pig_body")
+    rect(26, 13, 27, 14, "pig_body")
+    return px
+
+
 def hay_bale():
     px = blank(16, 16)
     for y in range(5, 15):
@@ -264,6 +301,7 @@ def main():
     write_png(os.path.join(s, "player.png"), 64, 128, spritesheet("shirt"))
     write_png(os.path.join(s, "npc_anna.png"), 64, 128, spritesheet("shirt_n"))
     write_png(os.path.join(s, "cow.png"), 32, 32, cow())
+    write_png(os.path.join(s, "pig.png"), 32, 32, pig())
     write_png(os.path.join(s, "hay_bale.png"), 16, 16, hay_bale())
     write_png(os.path.join(s, "trough.png"), 16, 16, trough())
     write_png(os.path.join(s, "bed.png"), 32, 32, bed())

@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/dialogue/dialogue_runner.gd" id="1_runner"]
+
+[node name="DialogueRunner" type="CanvasLayer"]
+layer = 4
+script = ExtResource("1_runner")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 20.0
+offset_top = 246.0
+offset_right = 620.0
+offset_bottom = 340.0
+
+[node name="Speaker" type="Label" parent="Panel"]
+offset_left = 12.0
+offset_top = 6.0
+offset_right = 300.0
+offset_bottom = 26.0
+theme_override_colors/font_color = Color(0.78, 0.85, 1, 1)
+
+[node name="DraftMark" type="Label" parent="Panel"]
+offset_left = 430.0
+offset_top = 6.0
+offset_right = 590.0
+offset_bottom = 24.0
+text = "DRAFT — unreviewed"
+horizontal_alignment = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.28, 0.9)
+theme_override_font_sizes/font_size = 12
+
+[node name="Line" type="RichTextLabel" parent="Panel"]
+bbcode_enabled = true
+offset_left = 12.0
+offset_top = 30.0
+offset_right = 588.0
+offset_bottom = 70.0
+theme_override_font_sizes/normal_font_size = 18
+
+[node name="Repair" type="Label" parent="Panel"]
+offset_left = 12.0
+offset_top = 70.0
+offset_right = 400.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.72, 0.76, 0.85, 0.75)
+theme_override_font_sizes/font_size = 12

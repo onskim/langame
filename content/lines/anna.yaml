@@ -1,0 +1,46 @@
+# Anna's dialogue lines. Shape per GDD Part 11 §5.
+#
+# DRAFT GERMAN — every `de` field below is LLM-drafted and unreviewed.
+# Part 5 §4: nothing ships until a native/C2 reviewer clears it.
+
+- line_id: anna_q01_greet
+  npc_id: npc_anna
+  de: "Guten Morgen! Ich bin Anna."
+  en: "Good morning! I am Anna."
+  focus_words: [chunk_guten_morgen, kuh]
+  gestures:
+    - {word: kuh, point_at: obj_cow}
+  response:
+    tier_1: {action: approach, target: obj_cow}
+  draft: true
+
+- line_id: anna_q02_ask
+  npc_id: npc_anna
+  de: "Kannst du die Kuh füttern?"
+  en: "Can you feed the cow?"
+  focus_words: [kuh, fuettern]
+  gestures:
+    - {word: kuh, point_at: obj_cow}
+  response:
+    tier_1: {action: feed, target: obj_cow}
+  recasts:
+    wrong_action: "Nein, nein — die KUH! Muuuh!"
+    repeat_slow: "Kannst du … die Kuh … füttern?"
+  draft: true
+
+- line_id: anna_q02_hint_hay
+  npc_id: npc_anna
+  de: "Das Heu ist da."
+  en: "The hay is over there."
+  focus_words: [heu]
+  gestures:
+    - {word: heu, point_at: obj_hay}
+  draft: true
+
+- line_id: anna_q02_done
+  npc_id: npc_anna
+  de: "Danke! Die Kuh ist glücklich."
+  en: "Thanks! The cow is happy."
+  focus_words: [kuh, chunk_danke]
+  gestures: []
+  draft: true

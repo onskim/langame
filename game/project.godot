@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+ContentDB="*res://scripts/language/content_db.gd"
 GameState="*res://scripts/core/game_state.gd"
 DayCycle="*res://scripts/core/day_cycle.gd"
 SaveService="*res://scripts/core/save_service.gd"

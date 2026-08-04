@@ -37,7 +37,7 @@ func _pass1() -> void:
 	var player: CharacterBody2D = farm.get_node("Player")
 	var cow: Node2D = farm.get_node("Cow")
 	var bed: Node2D = farm.get_node("Bed")
-	var dialogue: CanvasLayer = farm.get_node("DialogueBox")
+	var dialogue: CanvasLayer = farm.get_node("DialogueRunner")
 
 	_check("starts on day 1", GameState.day == 1, "day=%d" % GameState.day)
 
@@ -70,9 +70,10 @@ func _pass1() -> void:
 	var target: Node = player.current_interactable()
 	_check("cow is in interact range", target == cow,
 		"found=%s" % (target.name if target else "<none>"))
-	cow.interact()
-	await get_tree().process_frame
-	_check("cow opens dialogue", dialogue.is_open)
+	# From Week 2 the cow is a quest objective, so "interacting works" means the
+	# dialogue runner is showing Anna's line, not a placeholder box.
+	_check("cow interaction drives dialogue", dialogue.is_open,
+		"line=%s" % dialogue.current_line_id)
 	dialogue.close()
 
 	# --- day/night curve ---------------------------------------------------

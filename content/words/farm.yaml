@@ -1,0 +1,125 @@
+# Farm vocabulary family — GDD Part 10 §5 slice list, format per Part 11 §5.
+#
+# EVERY German field here is LLM-drafted and carries `draft: true`.
+# Nothing loses that flag until a native/C2 reviewer clears it (Part 5 §4 step 4).
+# The compiler stamps draft content with an in-game watermark in dev builds.
+
+- word_id: kuh
+  concept: cow
+  lemma: Kuh
+  article: die
+  plural: Kühe
+  pos: noun
+  english: cow
+  family: farm
+  cefr: A1.1
+  intro_quest: q01
+  distractors: [schwein, schaf, huhn]
+  draft: true
+
+- word_id: heu
+  concept: hay
+  lemma: Heu
+  article: das
+  pos: noun
+  english: hay
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [gras, brot]
+  draft: true
+
+- word_id: fuettern
+  concept: to_feed
+  lemma: füttern
+  pos: verb
+  forms: {ich: füttere, du: fütterst, er_sie: füttert, imperativ: füttere}
+  english: to feed
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  draft: true
+
+- word_id: schwein
+  concept: pig
+  lemma: Schwein
+  article: das
+  plural: Schweine
+  pos: noun
+  english: pig
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [kuh, schaf, huhn]
+  draft: true
+
+- word_id: schaf
+  concept: sheep
+  lemma: Schaf
+  article: das
+  plural: Schafe
+  pos: noun
+  english: sheep
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [kuh, schwein, huhn]
+  draft: true
+
+- word_id: huhn
+  concept: chicken
+  lemma: Huhn
+  article: das
+  plural: Hühner
+  pos: noun
+  english: chicken
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [kuh, schwein, schaf]
+  draft: true
+
+- word_id: gras
+  concept: grass
+  lemma: Gras
+  article: das
+  pos: noun
+  english: grass
+  family: farm
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [heu, brot]
+  draft: true
+
+- word_id: brot
+  concept: bread
+  lemma: Brot
+  article: das
+  plural: Brote
+  pos: noun
+  english: bread
+  family: food
+  cefr: A1.1
+  intro_quest: q02
+  distractors: [heu, gras]
+  draft: true
+
+- word_id: chunk_guten_morgen
+  concept: greeting_morning
+  lemma: Guten Morgen
+  pos: phrase
+  english: good morning
+  family: social
+  cefr: A1.1
+  intro_quest: q01
+  draft: true
+
+- word_id: chunk_danke
+  concept: thanks
+  lemma: Danke
+  pos: phrase
+  english: thanks
+  family: social
+  cefr: A1.1
+  intro_quest: q01
+  draft: true

@@ -1,0 +1,337 @@
+{
+ "lines": {
+  "anna_q01_greet": {
+   "de": "Guten Morgen! Ich bin Anna.",
+   "draft": true,
+   "en": "Good morning! I am Anna.",
+   "focus_words": [
+    "chunk_guten_morgen",
+    "kuh"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_cow",
+     "word": "kuh"
+    }
+   ],
+   "line_id": "anna_q01_greet",
+   "npc_id": "npc_anna",
+   "response": {
+    "tier_1": {
+     "action": "approach",
+     "target": "obj_cow"
+    }
+   }
+  },
+  "anna_q02_ask": {
+   "de": "Kannst du die Kuh füttern?",
+   "draft": true,
+   "en": "Can you feed the cow?",
+   "focus_words": [
+    "kuh",
+    "fuettern"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_cow",
+     "word": "kuh"
+    }
+   ],
+   "line_id": "anna_q02_ask",
+   "npc_id": "npc_anna",
+   "recasts": {
+    "repeat_slow": "Kannst du … die Kuh … füttern?",
+    "wrong_action": "Nein, nein — die KUH! Muuuh!"
+   },
+   "response": {
+    "tier_1": {
+     "action": "feed",
+     "target": "obj_cow"
+    }
+   }
+  },
+  "anna_q02_done": {
+   "de": "Danke! Die Kuh ist glücklich.",
+   "draft": true,
+   "en": "Thanks! The cow is happy.",
+   "focus_words": [
+    "kuh",
+    "chunk_danke"
+   ],
+   "gestures": [],
+   "line_id": "anna_q02_done",
+   "npc_id": "npc_anna"
+  },
+  "anna_q02_hint_hay": {
+   "de": "Das Heu ist da.",
+   "draft": true,
+   "en": "The hay is over there.",
+   "focus_words": [
+    "heu"
+   ],
+   "gestures": [
+    {
+     "point_at": "obj_hay",
+     "word": "heu"
+    }
+   ],
+   "line_id": "anna_q02_hint_hay",
+   "npc_id": "npc_anna"
+  }
+ },
+ "npcs": {
+  "npc_anna": {
+   "home": "farmhouse",
+   "name": "Anna",
+   "npc_id": "npc_anna",
+   "rep_gate": 0,
+   "role": "farmer",
+   "schedule": [
+    {
+     "at": "farm_yard",
+     "from": "06:00",
+     "to": "12:00"
+    },
+    {
+     "at": "field",
+     "from": "12:00",
+     "to": "18:00"
+    },
+    {
+     "at": "farmhouse",
+     "from": "18:00",
+     "to": "22:00"
+    }
+   ],
+   "shop": null,
+   "voice_preset": "anna_warm_mid",
+   "wants": "help_on_the_farm"
+  }
+ },
+ "quests": {
+  "q01": {
+   "giver": "auto",
+   "kind": "story",
+   "prereq": [],
+   "quest_id": "q01",
+   "rep_gate": 0,
+   "rewards": {
+    "rep": {
+     "npc_anna": 1
+    }
+   },
+   "steps": [
+    {
+     "line": "anna_q01_greet",
+     "objective": {
+      "action": "approach",
+      "target": "obj_cow"
+     },
+     "presentation": "scene"
+    }
+   ],
+   "vocab_tags": [
+    "kuh",
+    "chunk_guten_morgen"
+   ]
+  },
+  "q02": {
+   "giver": "npc_anna",
+   "kind": "story",
+   "prereq": [
+    "q01"
+   ],
+   "quest_id": "q02",
+   "rep_gate": 0,
+   "rewards": {
+    "money": 5,
+    "rep": {
+     "npc_anna": 3
+    }
+   },
+   "steps": [
+    {
+     "hint_line": "anna_q02_hint_hay",
+     "line": "anna_q02_ask",
+     "objective": {
+      "action": "feed",
+      "item": "heu",
+      "target": "obj_cow"
+     },
+     "presentation": "scene"
+    },
+    {
+     "line": "anna_q02_done"
+    }
+   ],
+   "vocab_tags": [
+    "kuh",
+    "heu",
+    "fuettern"
+   ]
+  }
+ },
+ "schema": 1,
+ "words": {
+  "brot": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "bread",
+   "distractors": [
+    "heu",
+    "gras"
+   ],
+   "draft": true,
+   "english": "bread",
+   "family": "food",
+   "intro_quest": "q02",
+   "lemma": "Brot",
+   "plural": "Brote",
+   "pos": "noun",
+   "word_id": "brot"
+  },
+  "chunk_danke": {
+   "cefr": "A1.1",
+   "concept": "thanks",
+   "draft": true,
+   "english": "thanks",
+   "family": "social",
+   "intro_quest": "q01",
+   "lemma": "Danke",
+   "pos": "phrase",
+   "word_id": "chunk_danke"
+  },
+  "chunk_guten_morgen": {
+   "cefr": "A1.1",
+   "concept": "greeting_morning",
+   "draft": true,
+   "english": "good morning",
+   "family": "social",
+   "intro_quest": "q01",
+   "lemma": "Guten Morgen",
+   "pos": "phrase",
+   "word_id": "chunk_guten_morgen"
+  },
+  "fuettern": {
+   "cefr": "A1.1",
+   "concept": "to_feed",
+   "draft": true,
+   "english": "to feed",
+   "family": "farm",
+   "forms": {
+    "du": "fütterst",
+    "er_sie": "füttert",
+    "ich": "füttere",
+    "imperativ": "füttere"
+   },
+   "intro_quest": "q02",
+   "lemma": "füttern",
+   "pos": "verb",
+   "word_id": "fuettern"
+  },
+  "gras": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "grass",
+   "distractors": [
+    "heu",
+    "brot"
+   ],
+   "draft": true,
+   "english": "grass",
+   "family": "farm",
+   "intro_quest": "q02",
+   "lemma": "Gras",
+   "pos": "noun",
+   "word_id": "gras"
+  },
+  "heu": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "hay",
+   "distractors": [
+    "gras",
+    "brot"
+   ],
+   "draft": true,
+   "english": "hay",
+   "family": "farm",
+   "intro_quest": "q02",
+   "lemma": "Heu",
+   "pos": "noun",
+   "word_id": "heu"
+  },
+  "huhn": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "chicken",
+   "distractors": [
+    "kuh",
+    "schwein",
+    "schaf"
+   ],
+   "draft": true,
+   "english": "chicken",
+   "family": "farm",
+   "intro_quest": "q02",
+   "lemma": "Huhn",
+   "plural": "Hühner",
+   "pos": "noun",
+   "word_id": "huhn"
+  },
+  "kuh": {
+   "article": "die",
+   "cefr": "A1.1",
+   "concept": "cow",
+   "distractors": [
+    "schwein",
+    "schaf",
+    "huhn"
+   ],
+   "draft": true,
+   "english": "cow",
+   "family": "farm",
+   "intro_quest": "q01",
+   "lemma": "Kuh",
+   "plural": "Kühe",
+   "pos": "noun",
+   "word_id": "kuh"
+  },
+  "schaf": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "sheep",
+   "distractors": [
+    "kuh",
+    "schwein",
+    "huhn"
+   ],
+   "draft": true,
+   "english": "sheep",
+   "family": "farm",
+   "intro_quest": "q02",
+   "lemma": "Schaf",
+   "plural": "Schafe",
+   "pos": "noun",
+   "word_id": "schaf"
+  },
+  "schwein": {
+   "article": "das",
+   "cefr": "A1.1",
+   "concept": "pig",
+   "distractors": [
+    "kuh",
+    "schaf",
+    "huhn"
+   ],
+   "draft": true,
+   "english": "pig",
+   "family": "farm",
+   "intro_quest": "q02",
+   "lemma": "Schwein",
+   "plural": "Schweine",
+   "pos": "noun",
+   "word_id": "schwein"
+  }
+ }
+}
