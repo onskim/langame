@@ -106,6 +106,11 @@ def purity(tile, want_dirt):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("source")
+    # Tried 1, 2 and 4 against the founder's reference. 4 is right: the
+    # reference's flowers, leaf clumps and stones are sized to read as single
+    # features on a 16px tile at that scale. At 1 (the file's own resolution)
+    # one flower spans several tiles and dissolves into noise — the scatter,
+    # which is the whole charm of the reference, disappears.
     ap.add_argument("--scale", type=int, default=4,
                     help="upscale factor of the source (default 4)")
     ap.add_argument("--colors", type=int, default=48,
